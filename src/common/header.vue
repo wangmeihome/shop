@@ -39,15 +39,7 @@ export default {
 }
 </script>
 
-<style>
-  .putItAsh{
-    background: #ccc;
-    border-radius: 25px;
-  }
-  .putItRed{
-    background: red;
-    border-radius: 25px;
-  }
+<style scoped>
   .header_wrapper{
     background: #1a1a1a;
     width: 100%;
@@ -57,14 +49,14 @@ export default {
     float: left;
     width: 200px;
     height: 80px;
-    margin-left: 380px;
+    margin-left: 20%;
   }
   .left_wrapper img{
     width: 100%;
   }
   .right_wrapper{
     float: left;
-    margin-left: 700px;
+    margin-left: 37%;
   }
   .login{
     float: left;
@@ -110,6 +102,14 @@ export default {
   .shop_cart_num div{
     color: white;
     font-size: 14px;
+  }
+  .putItAsh{
+    background: #ccc;
+    border-radius: 25px;
+  }
+  .putItRed{
+    background: red;
+    border-radius: 25px;
   }
 </style>
 
