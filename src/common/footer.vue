@@ -1,5 +1,8 @@
 <template>
-    <div class="myFooter">凯金卓越科技发展有限公司</div>
+    <div class="myFooter">
+      <p>Copyright ©2017-2020北京凯金卓越科技发展有限公司 , All Rights Reserved.</p>
+      <p>京ICP备14056031号-1</p>
+    </div>
 </template>
 
 <script>
@@ -13,6 +16,9 @@
     background: #333;
     text-align: center;
     color: white;
-    line-height: 200px;
+    overflow: hidden;
+  }
+  .myFooter p{
+    margin-top: 50px;
   }
 </style>

@@ -9,11 +9,58 @@
       </div>
       <div class="right_wrapper">
         <div class="login">
-          <router-link to="/login"><img src="../assets/logo/login_logo.png"></router-link>
+          <router-link to="/login">
+            <el-popover ref="login_info" placement="bottom" width="200" trigger="hover" :disabled="showUserInfo">
+              <ul class="userInfoList">
+                <li><a href="#">用户名字</a></li>
+                <li><a href="#">我的订单</a></li>
+                <li><a href="#">账号资料</a></li>
+                <li><a href="#">收货地址</a></li>
+                <li><a href="#">售后服务</a></li>
+                <li><a href="#">我的优惠</a></li>
+                <li><a href="#">退出</a></li>
+              </ul>
+            </el-popover>
+            <el-button v-popover:login_info>
+              <img src="../assets/logo/login_logo.png">
+            </el-button>
+          </router-link>
         </div>
         <div class="shop_cart">
           <div class="shop_cart_logo">
-            <a href="#"><img src="../assets/logo/asd.png"></a>
+            <a href="#">
+              <el-popover ref="products_list" placement="bottom" width="300" trigger="hover">
+                <!-- 需要商品单子 -->
+                <div class="shop_cart_list" :class="totalNum > 4 ? 'showScroll':''">
+                  <a href="#" style="" @click="asd">
+                    <div class="goodImg"><img src="../assets/products/product.jpg"></div>
+                    <div class="goodName"><a href="#" style="color: #5079d9">这个商品叫啥</a></div>
+                    <div class="goodPrice"><span style="color: red">￥ 128</span><span style="color: lightgray"> × {{goodNum}}</span></div>
+                    <div class="delBtn" @click.stop="del"><img src="../assets/others/del.png"></div>
+                  </a>
+                  <a href="#" style="" @click="asd">
+                    <div class="goodImg"><img src="../assets/products/product.jpg"></div>
+                    <div class="goodName"><a href="#" style="color: #5079d9">这个商品叫啥</a></div>
+                    <div class="goodPrice"><span style="color: red">￥ 128</span><span style="color: lightgray"> × {{goodNum}}</span></div>
+                    <div class="delBtn" @click.stop="del"><img src="../assets/others/del.png"></div>
+                  </a>
+                  <a href="#" style="" @click="asd">
+                    <div class="goodImg"><img src="../assets/products/product.jpg"></div>
+                    <div class="goodName"><a href="#" style="color: #5079d9">这个商品叫啥</a></div>
+                    <div class="goodPrice"><span style="color: red">￥ 128</span><span style="color: lightgray"> × {{goodNum}}</span></div>
+                    <div class="delBtn" @click.stop="del"><img src="../assets/others/del.png"></div>
+                  </a>
+                  <div class="cart_total">
+                    <p style="color: lightgray;margin: 10px 0">共<strong>{{ totalNum }}</strong> 件商品</p>
+                    <h5>合计：<span style="color: red">￥</span><span style="color: red">999</span></h5>
+                    <h6>去购物车</h6>
+                  </div>
+                </div>
+              </el-popover>
+              <el-button v-popover:products_list>
+                <img src="../assets/logo/shop_cart_logo.png">
+              </el-button>
+            </a>
           </div>
           <div class="shop_cart_num">
             <div :class="totalNum === 0 ? 'putItAsh':'putItRed'">{{totalNum}}</div>
@@ -27,23 +74,35 @@
 export default {
   data(){
     return {
-      numBgc:""
+      numBgc:"",
+      showUserInfo:false,
+      goodNum:1,
     }
   },
   computed:{
     totalNum(){
-      let num = 1;
+      let num = 0;
       return num
+    }
+  },
+  methods:{
+    asd(){
+      alert(1)
+    },
+    del(){
+      alert(2)
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
   .header_wrapper{
     background: #1a1a1a;
     width: 100%;
     overflow: hidden;
+    position: fixed;
+    z-index: 20;
   }
   .left_wrapper{
     float: left;
@@ -56,7 +115,7 @@ export default {
   }
   .right_wrapper{
     float: left;
-    margin-left: 37%;
+    margin-left: 36%;
   }
   .login{
     float: left;
@@ -64,12 +123,24 @@ export default {
     height: 36px;
     margin-top: 22px;
     margin-right: 30px;
+    margin-left: 60px;
   }
-  .login a{
-    width: 36px;
-    height: 36px;
+  .login .el-button,.shop_cart .el-button{
+    background: #1a1a1a;
+    padding: 0;
+    border: none;
   }
-  .login a img{
+  .el-popover .userInfoList li{
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid gainsboro;
+  }
+  .el-popover .userInfoList li a{
+    display: inline-block;
+    width: 200px;
+    height: 20px;
+  }
+  .login span img{
     width: 100%;
     height: 100%;
   }
@@ -83,11 +154,71 @@ export default {
     width: 36px;
     height: 36px;
   }
-  .shop_cart_logo a{
-    width: 36px;
-    height: 36px;
-  }
   .shop_cart_logo a img{
+    width: 100%;
+    height: 100%;
+  }
+  .shop_cart_list{
+    width: 300px;
+    height: 156px;
+    overflow-x: hidden;
+    table-layout: fixed;
+    position: relative;
+  }
+  .shop_cart_list a{
+    width: 300px;
+    height: 88px;
+    display: inline-block;
+    border-bottom: 1px solid gainsboro;
+    position: relative;
+  }
+  .cart_total{
+    position: relative;
+    bottom: 0;
+    left: 0;
+  }
+  .cart_total h6{
+    position: absolute;
+    top: 10px;
+    right: 0;
+    background: #5c81e3;
+    color: white;
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 40px;
+  }
+  .showScroll{
+    overflow-y: scroll;
+  }
+  .goodImg{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+  }
+  .goodImg img{
+    width: 100%;
+  }
+  .goodName{
+    position: absolute;
+    top: 0;
+    left: 100px;
+    width: 180px;
+  }
+  .goodPrice{
+    position: absolute;
+    left: 100px;
+    bottom: 0;
+  }
+  .delBtn{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 30px;
+    right: 20px;
+  }
+  .delBtn img{
     width: 100%;
     height: 100%;
   }
