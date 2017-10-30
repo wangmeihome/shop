@@ -24,7 +24,7 @@
       	  <a @click="register">注册爱风商城</a>
       	</div>
       	<div class="bottom_box">
-      	  <button>登录</button>
+      	  <el-button type="info" class="button" disabled >登录</el-button> 	
       	</div>
       </div>
 
@@ -37,13 +37,28 @@
       </div>
       <div class="container_box">
         <ul>
-      	  <li><input type="text" placeholder="请输入公司名称"></li>
-      	  <li><input type="text" placeholder="请输入社会统一信用代码"></li>
-      	  <li><input type="text" placeholder="请输入用户名"></li>
-      	  <li><input type="text" placeholder="请输入密码"></li>
-      	  <li><input type="text" placeholder="确认密码"></li>
+      	  <li>
+      	  	<p class="el-icon-warning picture">提示的错误信息</p>
+      	  	<input type="text" placeholder="请输入公司名称"></li>
+      	  <li>
+      	  	<p class="el-icon-warning picture">提示的错误信息</p>
+      	  	<input type="text" placeholder="请输入社会统一信用代码">
+      	  </li>
+      	  <li>
+      	  	<p class="el-icon-warning picture">提示的错误信息</p>
+      	  	<input type="text" placeholder="请输入用户名">
+      	  </li>
+      	  <li>
+      	  	<p class="el-icon-warning picture">提示的错误信息</p>
+      	  	<input type="text" placeholder="请输入密码">
+      	  </li>
+      	  <li>
+      	  	<p class="el-icon-warning picture">提示的错误信息</p>
+      	  	<input type="text" placeholder="确认密码">
+      	  </li>
       	  <li>
       	  	<dl class="getter">
+      	  	  <dd><p class="el-icon-warning picture">提示的错误信息</p></dd>	
       	  	  <dd><input type="text" placeholder="请输入手机号码" style="width:210px;"></dd>
       	  	  <dd><button style="width:90px;height:34px;border-radius:6px;background:none;color:#333333;text-align:center;font-family:'Microsoft Yahei'">获取验证码</button></dd>
       	  	</dl>
@@ -51,7 +66,9 @@
       	 </ul>
     </div>
     <div class="footer_box">
-      <p class="radio"><el-radio v-model="xieyi" label="爱风用户注册协议和隐私政策" style="color:cornflowerblue"></el-radio></p>
+      <p class="radio">
+      	<el-checkbox v-model="checked" style="color:cornflowerblue">爱风用户注册协议和隐私政策</el-checkbox>
+      </p>
       <ul class="btn">
       	<li><button>注册</button></li>
       	<li><button>取消</button></li>
@@ -153,7 +170,6 @@ export default{
   border-radius:4px;
   font-size:16px;
   padding:10px 15px;
-
 }
 .input_boxx>input{
   width:301px;
@@ -167,7 +183,6 @@ export default{
   font-size:16px;
   padding:10px 15px;
 }
-
 .input_boxy{
 	overflow:hidden;
 }
@@ -189,7 +204,6 @@ export default{
   width:100%;
   margin-top:15px;
   margin-left:8px;
-
 }
 .character{
  box-sizing:border-box;
@@ -204,17 +218,11 @@ export default{
    float:right;
    cursor:pointer;
 }
-.bottom_box button{
+.bottom_box .button{
    width:300px;
    height:45px;
-   text-align:center;
-   background-color:#B1B1B1;
    margin-left:43px;
    margin-top:20px;
-   border:1px solid #afafaf;
-   border-radius:4px;
-   color:#FFFFFF;
-   font-size:18px;
 }
  /*注册*/
  .resign_box{
@@ -232,8 +240,7 @@ export default{
     0 18px 20px -10px rgba(0, 0, 0, 0.04),
     0 10px 20px -10px rgba(0, 0, 0, 0.04);
     background:linear-gradient(to bottom ,#FFFFFF,#F0F0EF);
-
- }
+}
  .welcome{
  	color:#333333;
  	font-family:'Microsoft Yahei';
@@ -246,31 +253,32 @@ export default{
  	margin-left:100px;
  	display:inline-block;
  	margin-top:15px;
-
- }
+}
  .radio_box div{
  	float:left;
  	padding:0px 15px;
-
-
- }
+}
  .container_box{
- 	margin-top:5px;
+ 	margin-top:-5px;
+ }
+ .el-icon-warning{
+   margin-left:8px;	
+ }
+ .container_box ul li .picture{
+ 	font-size:10px;
+ 	font-family:"microsoft yahei";
  }
  .container_box ul li{
- 	padding:5px 22px;
-
- }
+ 	padding:0px 22px;
+}
  .container_box ul li input{
  	width:301px;
  	height:32px;
  	border:1px solid #A9A9A9;
  	border-radius:4px;
  	padding:0px 15px;
-
- }
-
- .getter{
+}
+.getter{
    overflow:hidden;
  }
  .getter dd{
@@ -282,12 +290,14 @@ export default{
     text-align:center;
     line-height:25px;
     margin:5px 0px;
-
- }
+}
  .btn{
  	display:flex;
- 	justify-content:space-around;
- 	margin:10px 0px;
+ 	justify-content:center;
+ 	margin-top:-10px;
+ }
+ .btn>li{
+ 	padding:10px;
  }
  .btn>li button{
  	width:93px;
