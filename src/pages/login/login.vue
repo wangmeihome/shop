@@ -24,7 +24,7 @@
       	  <a @click="register">注册爱风商城</a>
       	</div>
       	<div class="bottom_box">
-      	  <el-button type="info" class="button" disabled >登录</el-button> 	
+      	  <el-button type="info" class="button" disabled >登录</el-button>
       	</div>
       </div>
 
@@ -58,7 +58,7 @@
       	  </li>
       	  <li>
       	  	<dl class="getter">
-      	  	  <dd><p class="el-icon-warning picture">提示的错误信息</p></dd>	
+      	  	  <dd><p class="el-icon-warning picture">提示的错误信息</p></dd>
       	  	  <dd><input type="text" placeholder="请输入手机号码" style="width:210px;"></dd>
       	  	  <dd><button style="width:90px;height:34px;border-radius:6px;background:none;color:#333333;text-align:center;font-family:'Microsoft Yahei'">获取验证码</button></dd>
       	  	</dl>
@@ -70,7 +70,7 @@
       	<el-checkbox v-model="checked" style="color:cornflowerblue">爱风用户注册协议和隐私政策</el-checkbox>
       </p>
       <ul class="btn">
-      	<li><button>注册</button></li>
+      	<li><button><router-link :to="{path:'/completeInfo'}">注册</router-link></button></li>
       	<li><button>取消</button></li>
       </ul>
     </div>
@@ -89,7 +89,8 @@ export default{
 	 		isHidden:true,
 	 		isShow:false,
       role:'',
-      xieyi:''
+      xieyi:'',
+      checked:''
 	 	}
 
 	},
@@ -262,7 +263,7 @@ export default{
  	margin-top:-5px;
  }
  .el-icon-warning{
-   margin-left:8px;	
+   margin-left:8px;
  }
  .container_box ul li .picture{
  	font-size:10px;

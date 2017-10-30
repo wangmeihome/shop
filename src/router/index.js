@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '../pages/index.vue'
 import Home from '../pages/Home/home.vue'
 import Login from '../pages/login/login.vue'
+import CompleteInfo from '../pages/completeInfo/completeInfo.vue'
 
 Vue.use(Router);
 
@@ -18,6 +19,7 @@ export default new Router({
         {path:'home',component:Home}
       ]
     },
-    {path:'/login',name:'login',component:Login}
+    {path:'/login',name:'login',component:Login},
+    {path:'/completeInfo',name:'complete',component:CompleteInfo}
   ]
 })
