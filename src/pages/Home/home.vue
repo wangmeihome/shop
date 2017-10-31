@@ -16,12 +16,14 @@
 
           <!-- 替代无数据 -->
           <div v-for="item in 3" class="hot_list_item">
-            <a href="#">
+            <!--<router-link :to="'goodsDetails?productId='+msg.productId">-->
+            <router-link :to="'goodDetails?productId='+msg">
               <img src="../../assets/products/product.jpg">
               <h3>风向仪</h3>
               <p>￥ 2799</p>
-            </a>
+            </router-link>
           </div>
+
 
         </div>
       </div>
@@ -60,6 +62,7 @@
           }
         ],
         queryInfo:'',
+        msg:123456,
         bgOpt: {
           px: 0,
           py: 0,
@@ -162,6 +165,11 @@
     float: left;
     width: 406px;
     height: 430px;
+    transition: all .5s;
+  }
+  .hot_list_item:hover{
+    transform: translateY(-3px);
+    box-shadow: 1px 1px 20px #999;
   }
   .hot_list_item img{
     width: 206px;

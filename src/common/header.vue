@@ -53,7 +53,7 @@
                   <div class="cart_total">
                     <p style="color: lightgray;margin: 10px 0">共<strong>{{ totalNum }}</strong> 件商品</p>
                     <h5>合计：<span style="color: red">￥</span><span style="color: red">999</span></h5>
-                    <h6>去购物车</h6>
+                    <h6><router-link style="width: 100px;height: 40px;color: white" to="/cart">去购物车</router-link></h6>
                   </div>
                 </div>
               </el-popover>

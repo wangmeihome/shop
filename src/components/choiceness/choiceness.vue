@@ -62,6 +62,11 @@ export default {
     width: 25%;
     height: 430px;
     float: left;
+    transition: all .5s;
+  }
+  .choice_list_item:hover{
+    transform: translateY(-3px);
+    box-shadow: 1px 1px 20px #999;
   }
   .choice_list_item img{
     width: 206px;

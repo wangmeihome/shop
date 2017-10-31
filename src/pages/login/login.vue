@@ -70,8 +70,8 @@
       	<el-checkbox v-model="checked" style="color:cornflowerblue">爱风用户注册协议和隐私政策</el-checkbox>
       </p>
       <ul class="btn">
-      	<li><button><router-link :to="{path:'/completeInfo'}">注册</router-link></button></li>
-      	<li><button>取消</button></li>
+      	<li><router-link :to="{path:'/completeInfo'}">注册</router-link></li>
+      	<li><a href="#">取消</a></li>
       </ul>
     </div>
    </div>
@@ -300,19 +300,17 @@ export default{
  .btn>li{
  	padding:10px;
  }
- .btn>li button{
- 	width:93px;
- 	height:31px;
- 	background:#169BD5;
- 	text-align:center;
- 	color:#FFFFFF;
- 	font-family:'Microsoft Yahei';
- 	border-radius:6px;
- 	border:0px;
- }
- .footer_box a{
- 	color:#5079d9;
- 	text-decoration:none;
+ .btn>li a{
+   display: inline-block;
+   width:93px;
+   height:31px;
+   line-height: 31px;
+   background:#169BD5;
+   text-align:center;
+   color:#FFFFFF;
+   font-family:'Microsoft Yahei';
+   border-radius:6px;
+   border:0px;
  }
 
 </style>
