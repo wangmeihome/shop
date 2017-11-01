@@ -130,6 +130,11 @@ export default {
       bankInfo:'',
       linkMan:'',
       gender:'',
+      duty:'',
+      tel:'',
+      email:'',
+      qq:'',
+      wc:'',
       options: [{
         value: '选项1',
         label: '黄金糕'

@@ -11,20 +11,20 @@
       		<p>欢迎登录爱风商城</p>
       	</div>
       	<div class="input_box">
-      		<input type="text" placeholder="用户名">
+      		<input type="text" v-model="username" placeholder="用户名">
       	</div>
       	<div class="input_boxx">
-      		<input type="text" placeholder="密码">
+      		<input type="password" v-model="password" placeholder="密码">
       	</div>
       	<ul class="input_boxy">
-      	  <li><input type="text" placeholder="验证码"></li>
+      	  <li><input type="text" v-model="vertify" placeholder="验证码"></li>
       	  <li><img src="../../assets/others/vertify.png"></li>
       	</ul>
       	<div class="character">
       	  <a @click="register">注册爱风商城</a>
       	</div>
       	<div class="bottom_box">
-      	  <el-button type="info" class="button" disabled >登录</el-button>
+          <el-button @click="login" type="primary" class="button">登录</el-button>
       	</div>
       </div>
 
@@ -71,7 +71,7 @@
       </p>
       <ul class="btn">
       	<li><router-link :to="{path:'/completeInfo'}">注册</router-link></li>
-      	<li><a href="#">取消</a></li>
+      	<li><router-link :to="{path:'/'}">取消</router-link></li>
       </ul>
     </div>
    </div>
@@ -90,19 +90,23 @@ export default{
 	 		isShow:false,
       role:'',
       xieyi:'',
-      checked:''
+      checked:'',
+
+
+      username:'',
+      password:'',
+      vertify:'',
 	 	}
-
 	},
-	//方法
 	methods:{
-	 register:function(){
-	 this.isHidden=!this.isHidden;
-	 this.isShow = !this.isShow;
-
-	 }
+	   login(){
+	     console.log(this.username + this.password + this.vertify)
+     },
+     register:function(){
+       this.isHidden=!this.isHidden;
+       this.isShow = !this.isShow;
+     }
 	}
-
    }
 </script>
 
