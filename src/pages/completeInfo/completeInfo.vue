@@ -108,6 +108,10 @@
           </el-upload>
         </div>
       </div>
+      <div class="control">
+        <div><a href="#">提交</a></div>
+        <div><a href="#">取消</a></div>
+      </div>
     </div>
 </template>
 
@@ -245,6 +249,25 @@ export default {
   .el-upload-list__item{
     width: 500px;
     margin-left: 150px;
+  }
+  .control{
+    width: 250px;
+    height: 40px;
+    margin: 0 auto;
+    overflow: hidden;
+    margin-top: 30px;
+  }
+  .control div a{
+    float: left;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    background: dodgerblue;
+    margin: 0 10px;
   }
 </style>
 
