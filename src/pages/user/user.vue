@@ -5,9 +5,10 @@
       <div class="user_asideMenu">
         <el-row class="tac">
           <el-col :span="12">
-            <el-menu default-active="2" active-text-color="#ffffff" text-color="#5079d9" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
               <el-submenu index="1">
                   <span slot="title">皮皮虾用户</span>
+                <!--active-text-color="#ffffff" text-color="#5079d9" -->
               </el-submenu>
               <el-menu-item :key="item.name" :index=item.index v-for="(item,index) in nav">
                 <span slot="title"><span :key="item.name" @click="tag(item)">{{ item.name }}</span></span>
@@ -47,9 +48,8 @@
         ],
       }
     },
-//    vue实例创建完成后调用的事件
     created(){
-      let path = this.$route.path;
+      let path = this.$route.path.split('/')[2];
       this.nav.forEach(item => {
         if (item.path === path){
           this.title = item.name;
@@ -63,11 +63,20 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
-//      指定a标签的精确跳转事件
       tag(e){
         this.$router.push({path:'/user/' + e.path})
       }
-    }
+    },
+//    watch:{
+//      $route(to){
+//        let path = to.path.split('/')[2];
+//        this.nav.forEach(item => {
+//          if (item.path === path) {
+//            this.title = item.name
+//          }
+//        })
+//      }
+//    }
   }
 </script>
 
@@ -99,7 +108,6 @@
   }
   .el-menu-item.is-active{
     background: #98AFEE;
-    color: white;
   }
   .el-submenu__title{
     height: 200px;
@@ -109,6 +117,7 @@
     display: inline-block;
     width: 209px;
     height: 56px;
+    color: #5079d9;
   }
 </style>
 
