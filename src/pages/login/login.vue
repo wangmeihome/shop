@@ -24,7 +24,7 @@
                   <img src="../../assets/others/vertify.png">
                 </div>
               </div>
-              <div class="register_enter"><span @click="reg" style="color: #169BD5;font-size: 14px;cursor: pointer">注册爱风商城</span></div>
+              <div class="register_enter"><span @click="showReg" style="color: #169BD5;font-size: 14px;cursor: pointer">注册爱风商城</span></div>
               <el-button type="primary">登录</el-button>
             </div>
           </div>
@@ -39,8 +39,8 @@
           <div class="regInfo">
             <div class="regInfoItem">
               <div style="text-align: center;margin: 15px 0 5px 0">
-                <el-radio v-model="role" label="采购商">采购商</el-radio>
-                <el-radio v-model="role" label="供应商">供应商</el-radio>
+                <el-radio v-model="role" label="1">采购商</el-radio>
+                <el-radio v-model="role" label="2">供应商</el-radio>
               </div>
               <div>
                 <p>
@@ -77,7 +77,8 @@
                   <i class="el-icon-warning"></i><span>显示的错误信息</span>
                 </p>
                 <el-input v-model="tel" placeholder="请输入手机号码"></el-input>
-                <el-button>60秒后可重新获取密码</el-button>
+                <el-button @click="getTelCode" :disabled="getOrNot">
+                  <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span></el-button>
               </div>
               <div>
                 <p>
@@ -89,7 +90,10 @@
                 <el-checkbox v-model="checked">爱风用户注册协议和隐私政策</el-checkbox>
               </div>
               <div class="regBtn">
-                <div style="margin-right: 10px"><router-link to="/completeInfo">注册</router-link></div>
+                <div style="margin-right: 10px">
+                  <!--<router-link to="/completeInfo">注册</router-link>-->
+                  <a href="#" @click="register">注册</a>
+                </div>
                 <div><router-link to="/">取消</router-link></div>
               </div>
             </div>
@@ -108,7 +112,7 @@ export default {
       loginPassword:'',
       vertify:'',
 //      注册所需参数
-      role:'采购商',
+      role:'1',
       companyName:'',
       creditCode:'',
       regUsername:'',
@@ -118,7 +122,10 @@ export default {
       telVertify:'',
       checked: true,
 //      其他参数
-      loginOrReg:false
+      loginOrReg:true,
+      second:10,
+      isShowVertify:false,
+      getOrNot:false
     }
   },
   methods:{
@@ -127,8 +134,51 @@ export default {
       console.log(this.loginPassword);
       console.log(this.vertify);
     },
-    reg(){
+    showReg(){
       this.loginOrReg = true;
+    },
+//    点击按钮获取手机验证码
+    getTelCode(){
+      this.isShowVertify = true;
+      this.getOrNot = true;
+      this.inv = setInterval(() => {
+        this.second --;
+        if (this.second === 0){
+          clearInterval(this.inv);
+          this.isShowVertify = false;
+          this.getOrNot = false;
+          this.second = 10;
+        }
+      },1000);
+      this.$axios.get('/regist/tostortmessage.ajax',{
+        params:{
+          mobile:this.tel
+        }
+      }).then((res) => {
+        console.log(res.data.data)
+      }).catch((err) => {
+        console.log("请求失败")
+      })
+    },
+//    注册
+    register(){
+      let reqParams = {
+        typei:this.role,
+        afwindEnterprise:{
+          enterpriseName:this.companyName,
+          creditCode:this.creditCode
+        },
+        userName:this.regUsername,
+        userPassword:this.regPassword,
+        mobile:this.tel,
+        validateCode:this.telVertify,
+      };
+      this.$axios.post('/regist/saveregist.ajax',reqParams)
+        .then( (res) => {
+          console.log(res);
+        }).catch(() => {
+          console.log('请求失败')
+      })
     }
   }
 }

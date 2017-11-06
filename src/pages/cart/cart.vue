@@ -91,22 +91,22 @@
 
 <style scoped>
   .cart_wrapper{
-    width: 1218px;
+    overflow: hidden;
+    padding-bottom: 78px;
     margin: 120px auto 30px;
+    width: 1218px;
     background: white;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
-    overflow: hidden;
-    padding-bottom: 78px;
   }
   .cart{
+    padding-left: 30px;
     width: 1218px;
     height: 60px;
     border-bottom: 1px solid #d4d4d4;
     border-radius:8px 8px 0 0;
     line-height: 60px;
     background:linear-gradient(#fbfbfb, #ececec);
-    padding-left: 30px;
   }
   .cart_table_title{
     position: relative;
@@ -130,16 +130,16 @@
     color: #838383;
   }
   .cart_table{
+    overflow: hidden;
     width: 1218px;
     height: 140px;
-    overflow: hidden;
   }
   .cartCheckbox{
+    float: left;
     width: 74px;
     height: 140px;
     line-height: 140px;
     text-align: center;
-    float: left;
   }
   .cartCheckbox span{
     display: inline-block;
@@ -157,9 +157,9 @@
     height: 80px;
   }
   .productImg a{
+    display: block;
     width: 80px;
     height: 80px;
-    display: block;
   }
   .productImg a img{
     width: 100%;
@@ -167,10 +167,10 @@
   }
   .productInfo{
     float: left;
+    margin-left: 30px;
     width: 380px;
     height: 140px;
     line-height: 140px;
-    margin-left: 30px;
   }
   .productPrice,.subTotal{
     overflow: hidden;
@@ -182,9 +182,9 @@
   }
   .productNum{
     float: right;
+    display: flex;
     width: 137px;
     height: 140px;
-    display: flex;
     align-items: center;
     justify-content: center;
   }

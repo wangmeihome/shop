@@ -23,21 +23,21 @@
 
 <style scoped>
   .order_wrapper{
+    overflow: hidden;
     width: 954px;
     background: white;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
-    overflow: hidden;
   }
   .order_title_details{
+    padding-left: 30px;
+    overflow: hidden;
     width: 954px;
     height: 36px;
     border-bottom: 1px solid #d4d4d4;
     border-radius:8px 8px 0 0;
     line-height: 36px;
     background:linear-gradient(#fbfbfb, #ececec);
-    padding-left: 30px;
-    overflow: hidden;
   }
   .basicInfo{
     float: left;
@@ -55,12 +55,12 @@
     text-align: center;
   }
   .order_title_name{
+    padding-left: 80px;
     width: 874px;
     height: 60px;
     border-bottom: 1px solid #d4d4d4;
     border-radius:8px 8px 0 0;
     line-height: 60px;
     background:linear-gradient(#fbfbfb, #ececec);
-    padding-left: 80px;
   }
 </style>

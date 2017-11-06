@@ -3,19 +3,12 @@
     <myHeader></myHeader>
     <div class="user_wrapper">
       <div class="user_asideMenu">
-        <el-row class="tac">
-          <el-col :span="12">
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-              <el-submenu index="1">
-                  <span slot="title">皮皮虾用户</span>
-                <!--active-text-color="#ffffff" text-color="#5079d9" -->
-              </el-submenu>
-              <el-menu-item :key="item.name" :index=item.index v-for="(item,index) in nav">
-                <span slot="title"><span :key="item.name" @click="tag(item)">{{ item.name }}</span></span>
-              </el-menu-item>
-            </el-menu>
-          </el-col>
-        </el-row>
+        <div class="menu_wrapper">
+          <div class="personalCenter">用户皮皮虾的个人中心</div>
+          <ul v-for="item in nav">
+            <li><router-link @click="tag(item)" :to="{path:item.path}" :class="{menu_a_Active:item.name === title}">{{ item.name }}</router-link></li>
+          </ul>
+        </div>
       </div>
       <div class="user_right">
         <router-view></router-view>
@@ -39,15 +32,16 @@
       return {
         title: '我的订单',
         nav: [
-          {name: '我的订单', path: 'order',index:"2"},
-          {name: '账户资料', path: 'accountData',index:"3"},
-          {name: '收货地址', path: 'shipAddress',index:"4"},
-          {name: '我的优惠', path: 'coupon',index:"5"},
-          {name: '售后服务', path: 'saleService',index:"6"},
-          {name: '以旧换新', path: 'oldForNew',index:"7"}
+          {name: '我的订单', path: 'order'},
+          {name: '账户资料', path: 'accountData'},
+          {name: '收货地址', path: 'shipAddress'},
+          {name: '我的优惠', path: 'coupon'},
+          {name: '售后服务', path: 'saleService'},
+          {name: '以旧换新', path: 'oldForNew'}
         ],
       }
     },
+//    初始化，结合:class 对锚点的样式进行对应
     created(){
       let path = this.$route.path.split('/')[2];
       this.nav.forEach(item => {
@@ -56,27 +50,25 @@
         }
       })
     },
+//    点击方法切换路由
     methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
       tag(e){
         this.$router.push({path:'/user/' + e.path})
       }
     },
-//    watch:{
-//      $route(to){
-//        let path = to.path.split('/')[2];
-//        this.nav.forEach(item => {
-//          if (item.path === path) {
-//            this.title = item.name
-//          }
-//        })
-//      }
-//    }
+//    观察$route的变化  传进去的to参数指的是将要跳转页面的信息  其中包含path
+//    例如将要跳转到 127.0.0.1:8080/user/coupon  to.path指的就是/user/coupon
+    watch:{
+      $route(to){
+        console.log(to);
+        let path = to.path.split('/')[2];
+        this.nav.forEach(item => {
+          if (item.path === path) {
+            this.title = item.name
+          }
+        })
+      }
+    }
   }
 </script>
 
@@ -85,39 +77,51 @@
     padding-top: 120px;
     padding-bottom: 92px;
     overflow: hidden;
-    width: 1220px;
     margin: 0 auto;
+    width: 1220px;
   }
   .user_asideMenu,.user_right{
     float: left;
   }
-  .el-submenu__title i{
-    display: none;
+  .user_asideMenu{
+    width: 208px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+  }
+  .menu_wrapper{
+    padding-top: 20px;
+    width: 210px;
+    height: 538px;
   }
   .user_right{
     margin-left: 10px;
   }
-  .el-menu{
-    width: 249px;
+  .menu_wrapper ul{
+    border-radius: 6px;
+  }
+  .menu_wrapper li{
+    width: 208px;
+    height: 48px;
     text-align: center;
-    border: 1px solid #e6e6e6;
-    border-radius: 10px;
+    background: white;
+    line-height: 48px
   }
-  .el-menu .el-menu-item{
-    padding-left: 0;
-  }
-  .el-menu-item.is-active{
-    background: #98AFEE;
-  }
-  .el-submenu__title{
-    height: 200px;
-    line-height: 200px;
-  }
-  .el-menu-item span{
-    display: inline-block;
-    width: 209px;
-    height: 56px;
+  .menu_wrapper li a{
+    display: block;
+    width: 208px;
+    height: 48px;
     color: #5079d9;
+  }
+  .menu_a_Active{
+    background: #98AFEE;
+    color: white;
+  }
+  .menu_wrapper .personalCenter{
+    overflow: hidden;
+    width: 208px;
+    height: 120px;
+    text-align: center;
+    line-height: 120px;
   }
 </style>
 
