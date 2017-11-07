@@ -1,7 +1,8 @@
 <template>
   <div class="g-form-checkbox">
     <el-checkbox v-model="checked"><el-button type="text" @click="dialogVisible = true">同意爱风商城协议</el-button></el-checkbox>
-    <el-dialog title="爱风协议" :visible.sync="dialogVisible" size="large" :before-close="handleClose">
+    <!--<el-dialog title="爱风协议" :visible.sync="dialogVisible" size="large" :before-close="handleClose">-->
+    <el-dialog :modal="hiddenModal" top="topValue" title="爱风协议" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
       <h3>第一章 爱风商城注册协议</h3>
       <h4>第一条 在使用爱风商城（以下简称“本商城”，注册网址是：http://www.afwind.com/）服务之前，用户（以下简称“您”）应当认真阅读并遵守《电商金融平台用户注册协议》（以下简称“本协议”）。请您仔细阅读本协议，充分理解各条款内容，如您对协议有任何疑问的，应向本商城客服咨询。您点击"立即注册"按钮后，即视为您接受并同意遵守本协议的约定。</h4>
       <h4>第二条 当您按照注册页面提示填写信息、阅读并同意本协议且完成全部注册程序后，或您按照激活页面提示填写信息、阅读并同意本协议且完成全部激活程序后，或您以其他平台允许的方式实际使用本商城服务时，即表示您已充分阅读、理解并接受本协议的全部内容，并与本商城达成协议。您承诺接受并遵守本协议的约定，届时您不应以未阅读本协议的内容或者未获得本商城对您问询的解答等理由，主张本协议无效，或要求撤销本协议。</h4>
@@ -132,8 +133,10 @@
   export default {
     data(){
       return {
-        checked: true,
-        dialogVisible: false
+        checked: false,
+        dialogVisible: false,
+        hiddenModal:false,
+        topValue:'0'
       }
     },
     watch:{
@@ -154,6 +157,9 @@
 </script>
 
 <style>
+  .el-dialog__wrapper .el-dialog{
+    margin-top: 0;
+  }
   .el-dialog__title{
     font-size: 30px;
   }
@@ -177,34 +183,3 @@
     line-height: 28px;
   }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

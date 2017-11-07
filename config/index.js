@@ -80,7 +80,21 @@ module.exports = {
         pathRewrite:{
           '^/regist/countmobile.ajax': '/regist/countmobile.ajax'
         }
-      }
+      },
+      '/xuan/verifyCode.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/xuan/verifyCode.ajax':'/xuan/verifyCode.ajax'
+        }
+      },
+      '/login.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^login.ajax':'login.ajax'
+        }
+      },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

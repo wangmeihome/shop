@@ -9,23 +9,25 @@
           <h1>欢迎登录爱风商城</h1>
         </div>
         <div class="login_bottom">
-          <div class="login_err">
-            <p>
-              <i class="el-icon-warning"></i><span>显示的错误信息</span>
-            </p>
-          </div>
           <div class="login_info">
             <div class="login_info_item">
-              <el-input v-model="loginUsername" placeholder="请输入用户名"></el-input>
-              <el-input v-model="loginPassword" placeholder="请输入密码"></el-input>
+              <div style="margin: 0 auto;width: 300px">
+                <p style="height: 16px;color: red;"><span v-show="usernameErr.errorText"><i class="el-icon-warning"></i><span>{{ usernameErr.errorText }}</span></span></p>
+                <el-input v-model="loginUsername" placeholder="请输入用户名"></el-input>
+              </div>
+              <div style="margin: 0 auto;width: 300px">
+                <p style="height: 16px;color: red;"><span v-show="pwdErr.errorText"><i class="el-icon-warning"></i><span>{{ pwdErr.errorText }}</span></span></p>
+                <el-input type="password" v-model="loginPassword" placeholder="请输入密码"></el-input>
+              </div>
               <div class="vertifyInfo">
+                <p style="height: 16px;"><span></span></p>
                 <el-input v-model="vertify" placeholder="请输入验证码"></el-input>
                 <div class="vertifyImg">
-                  <img src="../../assets/others/vertify.png">
+                  <img @click="toggleVerify" :src="vertifySrc">
                 </div>
               </div>
               <div class="register_enter"><span @click="showReg" style="color: #169BD5;font-size: 14px;cursor: pointer">注册爱风商城</span></div>
-              <el-button type="primary">登录</el-button>
+              <div class="loginBtn" @click="login"><el-button type="primary">登录</el-button></div>
             </div>
           </div>
         </div>
@@ -57,9 +59,6 @@
               <div>
                 <p style="color:red;height: 16px"><span v-show="telTip"><i class="el-icon-warning"></i><span>{{ telTip }}</span></span></p>
                 <el-input @blur="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
-                <!--<el-button @click="getTelCode" :disabled="getOrNot">-->
-                  <!--<span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>-->
-                <!--</el-button>-->
               </div>
               <div>
                 <p style="color: red;height: 16px"><span v-show="companyTip"><i class="el-icon-warning"></i><span>{{ companyTip }}</span></span></p>
@@ -72,17 +71,15 @@
               <div class="vertify_wrapper">
                 <p style="color:red;height: 16px"><span v-show="telVertifyTip"><i class="el-icon-warning"></i><span>{{ telVertifyTip }}</span></span></p>
                 <el-input @blur="telvertifyCheck" v-model="telVertify" placeholder="请输入手机验证码"></el-input>
-                <el-button @click="getTelCode" :disabled="getOrNot || telStatus">
+                <el-button @click="getTelCode" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&!regdisable===false?false:true">
                   <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>
                 </el-button>
               </div>
               <div style="text-align: center;margin: 5px 0">
-                <!--<el-checkbox v-model="checked">爱风用户注册协议和隐私政策</el-checkbox>-->
-                <protocol @regstatus="editstatus"></protocol>
+                <protocol style="z-index: 100" @regstatus="editstatus"></protocol>
               </div>
               <div class="regBtn">
-                <el-button type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&telVertifyStatus===false&&regdisable===false?false:true">注册</el-button>
-                <!--<a href="#" @click="register">注册</a>-->
+                <el-button type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&!regdisable===false?false:true">注册</el-button>
                 <el-button type="primary" @click="register">取消</el-button>
               </div>
             </div>
@@ -104,6 +101,7 @@ export default {
       loginUsername:'',
       loginPassword:'',
       vertify:'',
+      vertifySrc:'',
 //      注册所需参数
       role:'1',
       companyName:'',
@@ -113,12 +111,10 @@ export default {
       confirmPassword:'',
       tel:'',
       telVertify:'',
-      checked: true,
 //      其他参数
-      loginOrReg:true,
+      loginOrReg:false,
       second:10,
       isShowVertify:false,
-      getOrNot:false,
       regdisable:false,
 //      注册验证提示
       companyTip:'',
@@ -137,11 +133,66 @@ export default {
       telVertifyStatus:true
     }
   },
+  created(){
+    this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
+  },
+  computed:{
+    usernameErr(){
+      let errorText,status;
+      if (!/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.loginUsername)){
+        status = false;
+        errorText = '您输入的用户名格式不正确';
+      }else{
+        status = true;
+        errorText = '';
+      }
+      if (!this.usernameFlag){
+        errorText = '';
+        this.usernameFlag = true;
+      }
+      return {
+        status,errorText
+      }
+    },
+    pwdErr(){
+      let errorText,status
+      if (!/^\w{6,12}$/g.test(this.loginPassword)) {
+        status = false;
+        errorText = '请至少输入六位密码';
+      }else{
+        status = true;
+        errorText = '';
+      }
+      if (!this.pwdFlag) {
+        errorText = '';
+        this.pwdFlag = true
+      }
+      return {
+        status,errorText
+      }
+    }
+  },
   methods:{
+//    登录页面图片验证码
+    toggleVerify() {
+      let timestamp = (+new Date());
+      this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN&useful='+timestamp;
+    },
     login(){
-      console.log(this.loginUsername);
-      console.log(this.loginPassword);
-      console.log(this.vertify);
+      let reqParams = {
+        userName:this.loginUsername,
+        userPassword:this.loginPassword,
+        validateCode:this.vertify
+      }
+      this.$axios.post("/login.ajax",reqParams)
+        .then((res) => {
+          console.log(res)
+//          this.vipname = JSON.parse(res.data.data).userName
+//          sessionStorage.setItem("vipname",this.vipname)
+//          this.$router.push('/')
+        }).catch((res) => {
+        console.log(res)
+      })
     },
     showReg(){
       this.loginOrReg = true;
@@ -152,13 +203,11 @@ export default {
 //    点击按钮获取手机验证码   并且判断手机号是否被注册或为空
     getTelCode(){
       this.isShowVertify = true;
-      this.getOrNot = true;
       this.inv = setInterval(() => {
         this.second --;
         if (this.second === 0){
           clearInterval(this.inv);
           this.isShowVertify = false;
-          this.getOrNot = false;
           this.second = 10;
         }
       },1000);
@@ -168,7 +217,7 @@ export default {
         }
       }).then((res) => {
         let errCode = res.data.data.error_code;
-        console.log(res.data.data)
+        console.log(res)
       }).catch((err) => {
         console.log("请求失败")
       })
@@ -189,6 +238,9 @@ export default {
       this.$axios.post('/regist/saveregist.ajax',reqParams)
         .then( (res) => {
           console.log(res);
+          if (res.data.data.code === 1){
+            window.location.reload();
+          }
         }).catch(() => {
           console.log('请求失败')
       })
@@ -311,7 +363,7 @@ export default {
         this.confirmPwdStatus = false;
       }
     },
-//    验证用户输入的手机号是否被注册或是否为空            !!!!!!!!!!!应该把电话号码的检测放置点击获取验证码的时候
+//    验证用户输入的手机号是否被注册或是否为空
     telCheck(){
       let status;
       this.$axios.get('/regist/countmobile.ajax',{
@@ -319,7 +371,7 @@ export default {
           mobile:this.tel
         }
       }).then((res) => {
-        console.log(res.data.data)
+        console.log(res)
         if (res.data.data&&/^1[34578]\d{9}$/.test(this.tel)){
           status = true;
           this.telTip = "";
@@ -416,10 +468,6 @@ export default {
     font-weight:400;
     font-family:'Microsoft Yahei';
   }
-  .login_err{
-    margin-top: 30px;
-    text-align: center;
-  }
   .login_logo{
     margin: 0 auto;
     width: 200px;
@@ -429,17 +477,10 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .login_info_item{
+  .vertifyInfo{
     overflow: hidden;
     margin: 0 auto;
     width: 300px;
-    line-height: 40px;
-  }
-  .login_info_item .el-input{
-    padding-bottom: 5px;
-  }
-  .vertifyInfo{
-    overflow: hidden;
   }
   .vertifyInfo .el-input{
     float: left;
@@ -455,7 +496,13 @@ export default {
     height: 100%;
   }
   .register_enter{
+    margin: 5px 0;
+    width: 365px;
     text-align: right;
+  }
+  .loginBtn{
+    margin: 0 auto;
+    width: 300px;
   }
   .el-button{
     width: 300px;
