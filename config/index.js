@@ -52,6 +52,34 @@ module.exports = {
         pathRewrite:{
           '^/test/upload.ajax': '/test/upload.ajax'
         }
+      },
+      '/regist/countenterprisename.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/regist/countenterprisename.ajax': '/regist/countenterprisename.ajax'
+        }
+      },
+      '/regist/countcreditcode.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/regist/countcreditcode.ajax': '/regist/countcreditcode.ajax'
+        }
+      },
+      '/regist/countusename.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/regist/countusename.ajax': '/regist/countusename.ajax'
+        }
+      },
+      '/regist/countmobile.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/regist/countmobile.ajax': '/regist/countmobile.ajax'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
