@@ -43,14 +43,6 @@
                 <el-radio v-model="role" label="2">供应商</el-radio>
               </div>
               <div>
-                <p style="color: red;height: 16px"><span v-show="companyTip"><i class="el-icon-warning"></i><span>{{ companyTip }}</span></span></p>
-                <el-input @blur="comNameCheck" v-model="companyName" placeholder="请输入公司名称"></el-input>
-              </div>
-              <div>
-                <p style="color:red;height: 16px"><span v-show="creditCodeTip"><i class="el-icon-warning"></i><span>{{ creditCodeTip }}</span></span></p>
-                <el-input @blur="creditCodeCheck" v-model="creditCode" placeholder="请输入社会统一信用代码"></el-input>
-              </div>
-              <div>
                 <p style="color:red;height: 16px"><span v-show="usernameTip"><i class="el-icon-warning"></i><span>{{ usernameTip }}</span></span></p>
                 <el-input @blur="usernameCheck" v-model="regUsername" placeholder="请输入用户名"></el-input>
               </div>
@@ -62,15 +54,27 @@
                 <p style="color:red;height: 16px"><span v-show="confirmPwdTip"><i class="el-icon-warning"></i><span>{{ confirmPwdTip }}</span></span></p>
                 <el-input @blur="confirmPwdCheck" type="password" v-model="confirmPassword" placeholder="确认密码"></el-input>
               </div>
-              <div class="tel_wrapper">
+              <div>
                 <p style="color:red;height: 16px"><span v-show="telTip"><i class="el-icon-warning"></i><span>{{ telTip }}</span></span></p>
                 <el-input @blur="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
-                <el-button @click="getTelCode" :disabled="getOrNot">
-                  <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span></el-button>
+                <!--<el-button @click="getTelCode" :disabled="getOrNot">-->
+                  <!--<span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>-->
+                <!--</el-button>-->
               </div>
               <div>
+                <p style="color: red;height: 16px"><span v-show="companyTip"><i class="el-icon-warning"></i><span>{{ companyTip }}</span></span></p>
+                <el-input @blur="comNameCheck" v-model="companyName" placeholder="请输入公司名称"></el-input>
+              </div>
+              <div>
+                <p style="color:red;height: 16px"><span v-show="creditCodeTip"><i class="el-icon-warning"></i><span>{{ creditCodeTip }}</span></span></p>
+                <el-input @blur="creditCodeCheck" v-model="creditCode" placeholder="请输入社会统一信用代码"></el-input>
+              </div>
+              <div class="vertify_wrapper">
                 <p style="color:red;height: 16px"><span v-show="telVertifyTip"><i class="el-icon-warning"></i><span>{{ telVertifyTip }}</span></span></p>
                 <el-input @blur="telvertifyCheck" v-model="telVertify" placeholder="请输入手机验证码"></el-input>
+                <el-button @click="getTelCode" :disabled="getOrNot || telStatus">
+                  <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>
+                </el-button>
               </div>
               <div style="text-align: center;margin: 5px 0">
                 <!--<el-checkbox v-model="checked">爱风用户注册协议和隐私政策</el-checkbox>-->
@@ -307,11 +311,6 @@ export default {
         this.confirmPwdStatus = false;
       }
     },
-
-
-
-
-
 //    验证用户输入的手机号是否被注册或是否为空            !!!!!!!!!!!应该把电话号码的检测放置点击获取验证码的时候
     telCheck(){
       let status;
@@ -320,38 +319,27 @@ export default {
           mobile:this.tel
         }
       }).then((res) => {
-        if (!res.data.data){
-          status = false;
-          this.telTip = "此手机号码已被注册";
-          this.telStatus = true
-        }
-        if (!/^1[34578]\d{9}$/.test(this.tel)){
-          status = false;
-          this.telTip = "您输入的手机号码格式不正确";
-          this.telStatus = true;
-        }
-        if(!this.tel){
-          status = false;
-          this.telTip = "手机号不能为空";
-          this.telStatus = true;
-        }
+        console.log(res.data.data)
         if (res.data.data&&/^1[34578]\d{9}$/.test(this.tel)){
           status = true;
           this.telTip = "";
           this.telStatus = false
-        }else{
+        }else if(!res.data.data){
+          status = false;
+          this.telTip = "此手机号码已被注册";
+          this.telStatus = true
+        }else if(!this.tel || !/^1[34578]\d{9}$/.test(this.tel)){
+          status = false;
+          this.telTip = "手机号码不能为空或输入的手机号格式不正确";
+          this.telStatus = true;
+        } else{
           this.telStatus = true
         }
-        console.log(this.telStatus)
+        console.log(this.telStatus+"true是成功")
       }).catch(() => {
         console.log("请求失败")
       })
     },
-
-
-
-
-
 //    验证用户输入的验证码是否符合规则
     telvertifyCheck(){
       let status;
@@ -472,14 +460,14 @@ export default {
   .el-button{
     width: 300px;
   }
-  .tel_wrapper{
+  .vertify_wrapper{
     overflow: hidden;
   }
-  .tel_wrapper .el-input{
+  .vertify_wrapper .el-input{
     float: left;
     width: 245px;
   }
-  .tel_wrapper .el-button{
+  .vertify_wrapper .el-button{
     float: left;
     width: 183px;
   }
