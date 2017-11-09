@@ -101,6 +101,13 @@ module.exports = {
         pathRewrite:{
           '^/region/region.ajax':'/region/region.ajax'
         }
+      },
+      '/entanduser/updateEntAndUser.html':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/entanduser/updateEntAndUser.html':'/entanduser/updateEntAndUser.html'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

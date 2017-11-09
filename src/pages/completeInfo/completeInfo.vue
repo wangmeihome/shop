@@ -77,7 +77,7 @@
         </div>
         <div class="companyInfo_item">
           <p>供货范围：</p>
-          <el-select v-model="industry" placeholder="请选择供货范围">
+          <el-select v-model="supplyScope" placeholder="请选择供货范围">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
@@ -93,6 +93,14 @@
           <p>开户行信息：</p>
           <el-input placeholder="请输入开户行信息" v-model="bankInfo"></el-input>
         </div>
+        <div class="personalInfo_item">
+          <p>其他附件：</p>
+          <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/test/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+          </el-upload>
+        </div>
       </div>
       <div class="personalInfo">
         <h1>②请您完善个人信息</h1>
@@ -100,9 +108,11 @@
           <p>联系人姓名：</p>
           <el-input placeholder="请输入联系人姓名" v-model="linkMan"></el-input>
         </div>
-        <div class="personalInfo_item">
+        <div class="personalInfo_item" style="line-height: 42px">
           <p>性别：</p>
-          <el-input placeholder="请输入性别" v-model="gender"></el-input>
+          <!--<el-input placeholder="请输入性别" v-model="gender"></el-input>-->
+          <el-radio v-model="gender" label="1">男</el-radio>
+          <el-radio v-model="gender" label="2">女</el-radio>
         </div>
         <div class="personalInfo_item">
           <p>职务：</p>
@@ -124,18 +134,10 @@
           <p>QQ号码：</p>
           <el-input placeholder="请输入QQ号码" v-model="qq"></el-input>
         </div>
-        <div class="personalInfo_item">
-          <p>微信：</p>
-          <el-input placeholder="请输入微信号码" v-model="wc"></el-input>
-        </div>
-        <div class="personalInfo_item">
-          <p>其他附件：</p>
-          <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/test/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-          </el-upload>
-        </div>
+        <!--<div class="personalInfo_item">-->
+          <!--<p>微信：</p>-->
+          <!--<el-input placeholder="请输入微信号码" v-model="wc"></el-input>-->
+        <!--</div>-->
       </div>
       <div class="control">
         <div><a href="#" @click="submitInfo">提交</a></div>
@@ -161,7 +163,6 @@
 </template>
 
 <script>
-  import VDistpicker from 'v-distpicker'
 export default {
   data(){
     return {
@@ -174,21 +175,21 @@ export default {
       bankAccount:'',
       bankInfo:'',
       linkMan:'',
-      gender:'',
+      gender:'1',
       duty:'',
       tel:'',
       email:'',
       qq:'',
       wc:'',
       options: [
-          {value: '选项1', label: '黄金糕'},
-          {value: '选项2', label: '双皮奶'},
-          {value: '选项3', label: '蚵仔煎'},
-          {value: '选项4', label: '龙须面'},
-          {value: '选项5', label: '北京烤鸭'}
+          {value: '1', label: '1'},
+          {value: '2', label: '2'},
+          {value: '3', label: '3'},
         ],
 //      所属行业
       industry: '',
+//      供货范围
+      supplyScope:'',
 //    公司营业执照的路径
       licenseUrlArr:[],
 //    判断上传营业执照图片大小的文字提示框
@@ -239,7 +240,7 @@ export default {
     chooseRegPro(){
       this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.regProValue)
         .then((res) => {
-          console.log(res);
+//          console.log(res);
           this.regCityOptions = JSON.parse(res.data.data);
         }).catch(() => {
         console.log("请求失败");
@@ -248,21 +249,21 @@ export default {
     chooseRegCity(){
       this.$axios.get('/region/region.ajax?typei=AREA&provinceId='+this.regCityValue)
         .then((res) => {
-          console.log(res);
+//          console.log(res);
           this.regAreaOptions = JSON.parse(res.data.data);
         }).catch(() => {
         console.log("请求失败");
       })
     },
     chooseRegArea(){
-      console.log(this.regAreaValue);
+//      console.log(this.regAreaValue);
     },
 //    结束
 //    公司办公地址
     chooseWorkPro(){
       this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.workProValue)
         .then((res) => {
-          console.log(res);
+//          console.log(res);
           this.workCityOptions = JSON.parse(res.data.data);
         }).catch(() => {
         console.log("请求失败");
@@ -271,14 +272,14 @@ export default {
     chooseWorkCity(){
       this.$axios.get('/region/region.ajax?typei=AREA&provinceId='+this.workCityValue)
         .then((res) => {
-          console.log(res);
+//          console.log(res);
           this.workAreaOptions = JSON.parse(res.data.data);
         }).catch(() => {
         console.log("请求失败");
       })
     },
     chooseWorkArea(){
-      console.log(this.workAreaValue);
+//      console.log(this.workAreaValue);
     },
 //    当选取的文件大小超过2M的时候的钩子函数
     licenseOnChange(file, fileList) {
@@ -302,11 +303,11 @@ export default {
 //    上传营业执照成功后的钩子函数
     licenseSuccess(response, file, fileList) {
       this.licenseUrlArr.push(response.data);
-      console.log(this.licenseUrlArr);
+//      console.log(this.licenseUrlArr);
     },
 //    移除列表文件时的钩子函数
     licenseHandleRemove(file, fileList) {
-      console.log(file, fileList);
+//      console.log(file, fileList);
       this.licenseBtn = true;
     },
 //    点击已上传文件的钩子函数
@@ -334,11 +335,11 @@ export default {
     },
     otherSuccess(response, file, fileList) {
       this.otherUrlArr.push(response.data);
-      console.log(this.licenseUrlArr);
+//      console.log(this.licenseUrlArr);
     },
 //    移除列表文件时的钩子函数
     otherHandleRemove(file, fileList) {
-      console.log(file, fileList);
+//      console.log(file, fileList);
       this.otherBtn = true;
     },
 //    点击已上传文件的钩子函数
@@ -355,12 +356,97 @@ export default {
     },
 //    提交完善信息按钮
     submitInfo(){
+//      法人
+      console.log(this.legalPerson);
+//      公司固定电话
+      console.log(this.fixedLine);
+//      公司传真
+      console.log(this.fax);
+//      所属行业
+      console.log(this.industry);
+//      公司注册地址
+      console.log(this.regAreaValue);
+      console.log(this.comRegAddrDetail);
+//      公司办公地址
+      console.log(this.workAreaValue);
+      console.log(this.workAddrDetail);
+//      公司营业执照
       console.log(this.licenseUrlArr.pop(this.licenseUrlArr.length - 1));
+//      供货范围
+      console.log(this.supplyScope);
+//      开户行名称
+      console.log(this.bankName);
+//      开户行账号
+      console.log(this.bankAccount);
+//      开户行信息
+      console.log(this.bankInfo);
+//      其他附件
       console.log(this.otherUrlArr.reverse().slice(0,5));
+//      联系人姓名
+      console.log(this.linkMan);
+//      性别
+      console.log(this.gender);
+//      职务
+      console.log(this.duty);
+//      办公电话
+      console.log(this.tel);
+//      邮箱
+      console.log(this.email);
+//      qq号码
+      console.log(this.qq);
+      let reqParams = {
+        afwindEnterprise:{
+          owner:this.legalPerson,
+          phone:this.fixedLine,
+          fax:this.fax,
+          typei:this.industry,
+          addresseList:[
+            {
+              regionId:this.regAreaValue,
+              address:this.comRegAddrDetail,
+              typei:'REGISTERADD'
+            },
+            {
+              regionId:this.workAreaValue,
+              address:this.workAddrDetail,
+              typei:'WORKADD'
+            }
+          ],
+          enterprisePicsList:[
+            {
+              url:this.licenseUrlArr.pop(this.licenseUrlArr.length - 1),
+              typei:1
+            }
+          ],
+          entityIndustry:this.supplyScope,
+          accountList:[
+            {
+              bank_name:this.bankName,
+              account:this.bankAccount,
+              bank_remark:this.bankInfo
+            }
+          ],
+          enterprisePicsList:[
+            {
+              url:this.otherUrlArr.reverse().slice(0,5),
+              typei:1
+            }
+          ],
+          realname:this.linkMan,
+          sex:this.gender,
+          user_post:this.duty,
+          telphone:this.tel,
+          email:this.email,
+          qq_code:this.qq
+        }
+      }
+      this.$axios.post('/entanduser/updateEntAndUser.html',reqParams)
+        .then((res) => {
+          console.log(res)
+        }).catch(() => {
+
+      })
     }
-  },
-  components:{
-    VDistpicker
   }
 }
 </script>
