@@ -95,6 +95,13 @@ module.exports = {
           '^login.ajax':'login.ajax'
         }
       },
+      '/region/region.ajax':{
+        target:'http://192.168.1.100:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/region/region.ajax':'/region/region.ajax'
+        }
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

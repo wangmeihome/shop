@@ -30,12 +30,41 @@
         </div>
         <div class="companyInfo_item">
           <p>公司注册地址：</p>
-          <v-distpicker @selected="comRegAddr"></v-distpicker>
+
+
+          <!-- 将此段代码写成一个组件 -->
+          <el-select @change="chooseRegPro(regProValue)" v-model="regProValue" placeholder="省">
+            <el-option v-for="item in regProvinceOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+          <el-select @change="chooseRegCity(regCityValue)" v-model="regCityValue" placeholder="市">
+            <el-option v-for="item in regCityOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+          <el-select @change="chooseRegArea(regAreaValue)" v-model="regAreaValue" placeholder="区">
+            <el-option v-for="item in regAreaOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+          <!-- 结束 -->
+
+
+
           <el-input class="regRoad" placeholder="请输入街道地址" v-model="comRegAddrDetail"></el-input>
         </div>
         <div class="companyInfo_item">
           <p>办公地址：</p>
-          <v-distpicker @selected="workAddr"></v-distpicker>
+
+
+
+          <el-select @change="chooseWorkPro(workProValue)" v-model="workProValue" placeholder="省">
+            <el-option v-for="item in workProvinceOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+          <el-select @change="chooseWorkCity(workCityValue)" v-model="workCityValue" placeholder="市">
+            <el-option v-for="item in workCityOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+          <el-select @change="chooseWorkArea(workAreaValue)" v-model="workAreaValue" placeholder="区">
+            <el-option v-for="item in workAreaOptions" :key="item.id" :label="item.regionName" :value="item.id"></el-option>
+          </el-select>
+
+
+
           <el-input class="workRoad" placeholder="请输入街道地址" v-model="workAddrDetail"></el-input>
         </div>
         <div class="companyInfo_item">
@@ -172,16 +201,84 @@ export default {
       otherDialogVisible: false,
 //    判断上传其他附件大小的按钮
       otherBtn: true,
+//      注册地址所需信息
+      regProValue:'',
+      regCityValue:'',
+      regAreaValue:'',
+      regProvinceOptions:{},
+      regCityOptions:{},
+      regAreaOptions:{},
+//      办公地址所需信息
+      workProValue:'',
+      workCityValue:'',
+      workAreaValue:'',
+      workProvinceOptions:{},
+      workCityOptions:{},
+      workAreaOptions:{},
     }
   },
+  created(){
+    this.$axios.get('/region/region.ajax?provinceId=0&typei=PROVINCE')
+      .then((res) => {
+        this.regProvinceOptions = JSON.parse(res.data.data);
+      }).catch(() => {
+      console.log("请求失败");
+    });
+    this.$axios.get('/region/region.ajax?provinceId=0&typei=PROVINCE')
+      .then((res) => {
+        this.workProvinceOptions = JSON.parse(res.data.data);
+      }).catch(() => {
+      console.log("请求失败");
+    });
+  },
   methods:{
-//    公司注册地址
-    comRegAddr(data){
-      console.log(data)
+
+
+
+//    公司注册地址   需要独立出来一个组件
+    chooseRegPro(){
+      this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.regProValue)
+        .then((res) => {
+          console.log(res);
+          this.regCityOptions = JSON.parse(res.data.data);
+        }).catch(() => {
+        console.log("请求失败");
+      })
     },
+    chooseRegCity(){
+      this.$axios.get('/region/region.ajax?typei=AREA&provinceId='+this.regCityValue)
+        .then((res) => {
+          console.log(res);
+          this.regAreaOptions = JSON.parse(res.data.data);
+        }).catch(() => {
+        console.log("请求失败");
+      })
+    },
+    chooseRegArea(){
+      console.log(this.regAreaValue);
+    },
+//    结束
 //    公司办公地址
-    workAddr(data){
-      console.log(data)
+    chooseWorkPro(){
+      this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.workProValue)
+        .then((res) => {
+          console.log(res);
+          this.workCityOptions = JSON.parse(res.data.data);
+        }).catch(() => {
+        console.log("请求失败");
+      })
+    },
+    chooseWorkCity(){
+      this.$axios.get('/region/region.ajax?typei=AREA&provinceId='+this.workCityValue)
+        .then((res) => {
+          console.log(res);
+          this.workAreaOptions = JSON.parse(res.data.data);
+        }).catch(() => {
+        console.log("请求失败");
+      })
+    },
+    chooseWorkArea(){
+      console.log(this.workAreaValue);
     },
 //    当选取的文件大小超过2M的时候的钩子函数
     licenseOnChange(file, fileList) {
@@ -302,25 +399,9 @@ export default {
   .companyInfo_item .el-input .el-input__inner,.personalInfo_item .el-input .el-input__inner{
     text-align: center;
   }
-  .address{
-    float: left;
-    margin-top: -1px;
-    width: 650px;
-  }
   .regRoad input,.workRoad input{
-    margin-left: -7px;
-    margin-top: -1px;
-  }
-  .address select:first-child{
-    width: 300px;
-  }
-  .address select:nth-child(2){
-    margin-left: -6px;
-    width: 230px;
-  }
-  .address select:nth-child(3){
-    margin-left: -5px;
-    width: 115px;
+    margin-left: 150px;
+    width: 604px;
   }
   .el-upload__tip{
     height: 15px;

@@ -58,7 +58,7 @@
               </div>
               <div>
                 <p style="color:red;height: 16px"><span v-show="telTip"><i class="el-icon-warning"></i><span>{{ telTip }}</span></span></p>
-                <el-input @blur="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
+                <el-input @input="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
               </div>
               <div>
                 <p style="color: red;height: 16px"><span v-show="companyTip"><i class="el-icon-warning"></i><span>{{ companyTip }}</span></span></p>
@@ -71,7 +71,7 @@
               <div class="vertify_wrapper">
                 <p style="color:red;height: 16px"><span v-show="telVertifyTip"><i class="el-icon-warning"></i><span>{{ telVertifyTip }}</span></span></p>
                 <el-input @blur="telvertifyCheck" v-model="telVertify" placeholder="请输入手机验证码"></el-input>
-                <el-button @click="getTelCode" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&!regdisable===false?false:true">
+                <el-button @click="getTelCode" :disabled="getTelCodeActive">
                   <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>
                 </el-button>
               </div>
@@ -79,7 +79,8 @@
                 <protocol style="z-index: 100" @regstatus="editstatus"></protocol>
               </div>
               <div class="regBtn">
-                <el-button type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&!regdisable===false?false:true">注册</el-button>
+                <!-- companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&& -->
+                <el-button type="primary" @click="register" :disabled="regdisable===false?false:true">注册</el-button>
                 <el-button type="primary" @click="register">取消</el-button>
               </div>
             </div>
@@ -116,6 +117,9 @@ export default {
       second:10,
       isShowVertify:false,
       regdisable:false,
+      getTelCodeActive:true,
+
+
 //      注册验证提示
       companyTip:'',
       companyStatus:true,
@@ -187,9 +191,7 @@ export default {
       this.$axios.post("/login.ajax",reqParams)
         .then((res) => {
           console.log(res)
-//          this.vipname = JSON.parse(res.data.data).userName
-//          sessionStorage.setItem("vipname",this.vipname)
-//          this.$router.push('/')
+          this.$router.go(-1)
         }).catch((res) => {
         console.log(res)
       })
@@ -366,31 +368,34 @@ export default {
 //    验证用户输入的手机号是否被注册或是否为空
     telCheck(){
       let status;
-      this.$axios.get('/regist/countmobile.ajax',{
-        params:{
-          mobile:this.tel
-        }
-      }).then((res) => {
-        console.log(res)
-        if (res.data.data&&/^1[34578]\d{9}$/.test(this.tel)){
-          status = true;
-          this.telTip = "";
-          this.telStatus = false
-        }else if(!res.data.data){
-          status = false;
-          this.telTip = "此手机号码已被注册";
-          this.telStatus = true
-        }else if(!this.tel || !/^1[34578]\d{9}$/.test(this.tel)){
-          status = false;
-          this.telTip = "手机号码不能为空或输入的手机号格式不正确";
-          this.telStatus = true;
-        } else{
-          this.telStatus = true
-        }
-        console.log(this.telStatus+"true是成功")
-      }).catch(() => {
-        console.log("请求失败")
-      })
+
+      if (this.tel.length === 11){
+        this.$axios.get('/regist/countmobile.ajax',{
+          params:{
+            mobile:this.tel
+          }
+        }).then((res) => {
+          if (res.data.data&&/^1[34578]\d{9}$/.test(this.tel)){
+            status = true;
+            this.telTip = "";
+            this.telStatus = false;
+            this.getTelCodeActive = false;
+          }else if(!res.data.data){
+            status = false;
+            this.telTip = "此手机号码已被注册";
+            this.telStatus = true
+          }else if(!this.tel || !/^1[34578]\d{9}$/.test(this.tel)){
+            status = false;
+            this.telTip = "手机号码不能为空或输入的手机号格式不正确";
+            this.telStatus = true;
+          } else{
+            this.telStatus = true
+          }
+//        console.log(this.telStatus+"true是成功")
+        }).catch(() => {
+          console.log("请求失败")
+        })
+      }
     },
 //    验证用户输入的验证码是否符合规则
     telvertifyCheck(){
