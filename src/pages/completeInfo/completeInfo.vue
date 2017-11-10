@@ -303,7 +303,7 @@ export default {
 //    上传营业执照成功后的钩子函数
     licenseSuccess(response, file, fileList) {
       this.licenseUrlArr.push(response.data);
-//      console.log(this.licenseUrlArr);
+      console.log(this.licenseUrlArr);
     },
 //    移除列表文件时的钩子函数
     licenseHandleRemove(file, fileList) {
@@ -335,7 +335,7 @@ export default {
     },
     otherSuccess(response, file, fileList) {
       this.otherUrlArr.push(response.data);
-//      console.log(this.licenseUrlArr);
+      console.log(this.otherUrlArr);
     },
 //    移除列表文件时的钩子函数
     otherHandleRemove(file, fileList) {
@@ -432,13 +432,13 @@ export default {
               typei:1
             }
           ],
-          realname:this.linkMan,
-          sex:this.gender,
-          user_post:this.duty,
-          telphone:this.tel,
-          email:this.email,
-          qq_code:this.qq
-        }
+        },
+        realname:this.linkMan,
+        sex:this.gender,
+        user_post:this.duty,
+        telphone:this.tel,
+        email:this.email,
+        qq_code:this.qq
       }
       this.$axios.post('/entanduser/updateEntAndUser.html',reqParams)
         .then((res) => {
