@@ -416,6 +416,10 @@ export default {
             {
               url:this.licenseUrlArr.pop(this.licenseUrlArr.length - 1),
               typei:1
+            },
+            {
+              url:this.otherUrlArr.reverse().slice(0,5),
+              typei:1
             }
           ],
           entityIndustry:this.supplyScope,
@@ -426,19 +430,13 @@ export default {
               bank_remark:this.bankInfo
             }
           ],
-          enterprisePicsList:[
-            {
-              url:this.otherUrlArr.reverse().slice(0,5),
-              typei:1
-            }
-          ],
         },
         realname:this.linkMan,
         sex:this.gender,
-        user_post:this.duty,
+        userPost:this.duty,
         telphone:this.tel,
         email:this.email,
-        qq_code:this.qq
+        qqCode:this.qq
       }
       this.$axios.post('/entanduser/updateEntAndUser.ajax',reqParams)
         .then((res) => {
