@@ -69,7 +69,7 @@
         </div>
         <div class="companyInfo_item">
           <p>公司营业执照：</p>
-          <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/test/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
+          <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
@@ -95,7 +95,7 @@
         </div>
         <div class="personalInfo_item">
           <p>其他附件：</p>
-          <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/test/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
+          <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
@@ -440,7 +440,7 @@ export default {
         email:this.email,
         qq_code:this.qq
       }
-      this.$axios.post('/entanduser/updateEntAndUser.html',reqParams)
+      this.$axios.post('/entanduser/updateEntAndUser.ajax',reqParams)
         .then((res) => {
           console.log(res)
         }).catch(() => {

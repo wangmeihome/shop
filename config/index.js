@@ -46,11 +46,11 @@ module.exports = {
           '^/regist/tostortmessage.ajax': '/regist/tostortmessage.ajax'
         }
       },
-      '/test/upload.ajax':{
+      '/entanduser/upload.ajax':{
         target:'http://192.168.1.100:8082/commerce-web',
         changeOrigin: true,
         pathRewrite:{
-          '^/test/upload.ajax': '/test/upload.ajax'
+          '^/entanduser/upload.ajax': '/entanduser/upload.ajax'
         }
       },
       '/regist/countenterprisename.ajax':{
@@ -102,11 +102,11 @@ module.exports = {
           '^/region/region.ajax':'/region/region.ajax'
         }
       },
-      '/entanduser/updateEntAndUser.html':{
+      '/entanduser/updateEntAndUser.ajax':{
         target:'http://192.168.1.100:8082/commerce-web',
         changeOrigin: true,
         pathRewrite:{
-          '^/entanduser/updateEntAndUser.html':'/entanduser/updateEntAndUser.html'
+          '^/entanduser/updateEntAndUser.ajax':'/entanduser/updateEntAndUser.ajax'
         }
       }
     },

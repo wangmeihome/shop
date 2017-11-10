@@ -113,7 +113,7 @@ export default {
       tel:'',
       telVertify:'',
 //      其他参数
-      loginOrReg:false,
+      loginOrReg:true,
       second:10,
       isShowVertify:false,
       regdisable:false,
@@ -182,6 +182,7 @@ export default {
       let timestamp = (+new Date());
       this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN&useful='+timestamp;
     },
+//    登录
     login(){
       let reqParams = {
         userName:this.loginUsername,
@@ -239,8 +240,9 @@ export default {
       };
       this.$axios.post('/regist/saveregist.ajax',reqParams)
         .then( (res) => {
-          console.log(res);
+          console.log(res.data.data.code);
           if (res.data.data.code === 1){
+            console.log("注册成功");
             window.location.reload();
           }
         }).catch(() => {
@@ -249,32 +251,31 @@ export default {
     },
 //    验证公司名称是否被注册或是否为空
     comNameCheck(){
-      this.$axios.get('/regist/countenterprisename.ajax',{
-        params:{
-          enterpriseName:this.companyName
-        }
-      }).then((res) => {
-        let status;
-        if (!res.data.data){
-          status = false;
-          this.companyTip = "此公司名称已被注册";
-          this.companyStatus = true;
-        }
-        if (!this.companyName){
-          status = false;
-          this.companyTip = "您输入的公司名称不能为空";
-          this.companyStatus = true;
-        }
-        if (res.data.data&&this.companyName){
-          status = true;
-          this.companyTip = '';
-          this.companyStatus = false;
-        }else{
-          this.companyStatus = true;
-        }
-      }).catch(() => {
-        console.log("请求失败");
-      })
+      let status;
+      if (this.companyName === ''){
+        status = false;
+        this.companyTip = "公司名称不能为空";
+        this.companyStatus = true;
+      }
+      if (this.companyName !== ''){
+        this.$axios.get('/regist/countenterprisename.ajax',{
+          params:{
+            enterpriseName:this.companyName
+          }
+        }).then((res) => {
+          if (!res.data.data){
+            status = false;
+            this.companyTip = "公司名称已被注册";
+            this.companyStatus = true;
+          }else{
+            status = true;
+            this.companyTip = "";
+            this.companyStatus = false;
+          }
+        }).catch(() => {
+          console.log("请求失败");
+        })
+      }
     },
 //    验证社会统一信用代码是否被注册或是否为空
     creditCodeCheck(){
@@ -365,10 +366,14 @@ export default {
         this.confirmPwdStatus = false;
       }
     },
-//    验证用户输入的手机号是否被注册或是否为空
+//    验证用户输入的手机号是否被注册或是否为空  手机验证码修改完毕
     telCheck(){
       let status;
-
+      if (this.tel.length < 11){
+        status = false;
+        this.telTip = "";
+        this.telStatus = true;
+      }
       if (this.tel.length === 11){
         this.$axios.get('/regist/countmobile.ajax',{
           params:{
@@ -380,21 +385,20 @@ export default {
             this.telTip = "";
             this.telStatus = false;
             this.getTelCodeActive = false;
-          }else if(!res.data.data){
+          }
+          if(!res.data.data){
             status = false;
             this.telTip = "此手机号码已被注册";
-            this.telStatus = true
-          }else if(!this.tel || !/^1[34578]\d{9}$/.test(this.tel)){
-            status = false;
-            this.telTip = "手机号码不能为空或输入的手机号格式不正确";
             this.telStatus = true;
-          } else{
-            this.telStatus = true
           }
-//        console.log(this.telStatus+"true是成功")
         }).catch(() => {
           console.log("请求失败")
         })
+      }
+      if (this.tel.length > 11){
+        status = false;
+        this.telTip = "您输入的手机号码位数不正确";
+        this.telStatus = true;
       }
     },
 //    验证用户输入的验证码是否符合规则
