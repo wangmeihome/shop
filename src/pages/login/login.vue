@@ -45,43 +45,42 @@
                 <el-radio v-model="role" label="2">供应商</el-radio>
               </div>
               <div>
-                <p style="color:red;height: 16px"><span v-show="usernameTip"><i class="el-icon-warning"></i><span>{{ usernameTip }}</span></span></p>
-                <el-input @blur="usernameCheck" v-model="regUsername" placeholder="请输入用户名"></el-input>
-              </div>
-              <div>
-                <p style="color:red;height: 16px"><span v-show="pwdTip"><i class="el-icon-warning"></i><span>{{ pwdTip }}</span></span></p>
-                <el-input @blur="pwdCheck" type="password" v-model="regPassword" placeholder="请输入密码"></el-input>
-              </div>
-              <div>
-                <p style="color:red;height: 16px"><span v-show="confirmPwdTip"><i class="el-icon-warning"></i><span>{{ confirmPwdTip }}</span></span></p>
-                <el-input @blur="confirmPwdCheck" type="password" v-model="confirmPassword" placeholder="确认密码"></el-input>
-              </div>
-              <div>
-                <p style="color:red;height: 16px"><span v-show="telTip"><i class="el-icon-warning"></i><span>{{ telTip }}</span></span></p>
-                <el-input @input="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
-              </div>
-              <div>
                 <p style="color: red;height: 16px"><span v-show="companyTip"><i class="el-icon-warning"></i><span>{{ companyTip }}</span></span></p>
-                <el-input @blur="comNameCheck" v-model="companyName" placeholder="请输入公司名称"></el-input>
+                <el-input @input="comNameCheck" v-model="companyName" placeholder="请输入公司名称"></el-input>
               </div>
               <div>
                 <p style="color:red;height: 16px"><span v-show="creditCodeTip"><i class="el-icon-warning"></i><span>{{ creditCodeTip }}</span></span></p>
-                <el-input @blur="creditCodeCheck" v-model="creditCode" placeholder="请输入社会统一信用代码"></el-input>
+                <el-input @input="creditCodeCheck" v-model="creditCode" placeholder="请输入社会统一信用代码"></el-input>
+              </div>
+              <div>
+                <p style="color:red;height: 16px"><span v-show="usernameTip"><i class="el-icon-warning"></i><span>{{ usernameTip }}</span></span></p>
+                <el-input @input="usernameCheck" v-model="regUsername" placeholder="请输入用户名"></el-input>
+              </div>
+              <div>
+                <p style="color:red;height: 16px"><span v-show="pwdTip"><i class="el-icon-warning"></i><span>{{ pwdTip }}</span></span></p>
+                <el-input @input="pwdCheck" type="password" v-model="regPassword" placeholder="请输入密码"></el-input>
+              </div>
+              <div>
+                <p style="color:red;height: 16px"><span v-show="confirmPwdTip"><i class="el-icon-warning"></i><span>{{ confirmPwdTip }}</span></span></p>
+                <el-input @input="confirmPwdCheck" type="password" v-model="confirmPassword" placeholder="确认密码"></el-input>
               </div>
               <div class="vertify_wrapper">
-                <p style="color:red;height: 16px"><span v-show="telVertifyTip"><i class="el-icon-warning"></i><span>{{ telVertifyTip }}</span></span></p>
-                <el-input @blur="telvertifyCheck" v-model="telVertify" placeholder="请输入手机验证码"></el-input>
+                <p style="color:red;height: 16px"><span v-show="telTip"><i class="el-icon-warning"></i><span>{{ telTip }}</span></span></p>
+                <el-input @input="telCheck" v-model="tel" placeholder="请输入手机号码"></el-input>
                 <el-button @click="getTelCode" :disabled="getTelCodeActive">
                   <span v-show="isShowVertify">{{ second }}秒后可重新获取</span><span v-show="!isShowVertify">获取验证码</span>
                 </el-button>
+              </div>
+              <div>
+                <p style="color:red;height: 16px"><span v-show="telVertifyTip"><i class="el-icon-warning"></i><span>{{ telVertifyTip }}</span></span></p>
+                <el-input @input="telvertifyCheck" v-model="telVertify" placeholder="请输入手机验证码"></el-input>
               </div>
               <div style="text-align: center;margin: 5px 0">
                 <protocol style="z-index: 100" @regstatus="editstatus"></protocol>
               </div>
               <div class="regBtn">
-                <!-- companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&& -->
-                <el-button type="primary" @click="register" :disabled="regdisable===false?false:true">注册</el-button>
-                <el-button type="primary" @click="register">取消</el-button>
+                <el-button type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&telVertifyStatus===false&&regdisable===false?false:true">注册</el-button>
+                <el-button type="primary" @click="">取消</el-button>
               </div>
             </div>
           </div>
@@ -113,13 +112,11 @@ export default {
       tel:'',
       telVertify:'',
 //      其他参数
-      loginOrReg:true,
+      loginOrReg:false,
       second:10,
       isShowVertify:false,
       regdisable:false,
       getTelCodeActive:true,
-
-
 //      注册验证提示
       companyTip:'',
       companyStatus:true,
@@ -138,7 +135,8 @@ export default {
     }
   },
   created(){
-    this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
+//    this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
+    this.getLoginCode();
   },
   computed:{
     usernameErr(){
@@ -177,7 +175,7 @@ export default {
     }
   },
   methods:{
-//    登录页面图片验证码
+//    点击更换登录页面图片验证码
     toggleVerify() {
       let timestamp = (+new Date());
       this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN&useful='+timestamp;
@@ -227,27 +225,28 @@ export default {
     },
 //    注册
     register(){
-      let reqParams = {
-        typei:this.role,
-        afwindEnterprise:{
-          enterpriseName:this.companyName,
-          creditCode:this.creditCode
-        },
-        userName:this.regUsername,
-        userPassword:this.regPassword,
-        mobile:this.tel,
-        validateCode:this.telVertify,
-      };
-      this.$axios.post('/regist/saveregist.ajax',reqParams)
-        .then( (res) => {
-          console.log(res.data.data.code);
-          if (res.data.data.code === 1){
-            console.log("注册成功");
-            window.location.reload();
-          }
-        }).catch(() => {
-          console.log('请求失败')
-      })
+//      let reqParams = {
+//        typei:this.role,
+//        afwindEnterprise:{
+//          enterpriseName:this.companyName,
+//          creditCode:this.creditCode
+//        },
+//        userName:this.regUsername,
+//        userPassword:this.regPassword,
+//        mobile:this.tel,
+//        validateCode:this.telVertify,
+//      };
+//      this.$axios.post('/regist/saveregist.ajax',reqParams)
+//        .then( (res) => {
+//          console.log(res.data.data.code);
+//          if (res.data.data.code === 1){
+//            console.log("注册成功");
+//            window.location.reload();
+//          }
+//        }).catch(() => {
+//          console.log('请求失败')
+//      })
+      this.$router.go(0)
     },
 //    验证公司名称是否被注册或是否为空
     comNameCheck(){
@@ -279,69 +278,110 @@ export default {
     },
 //    验证社会统一信用代码是否被注册或是否为空
     creditCodeCheck(){
-      this.$axios.get('/regist/countcreditcode.ajax',{
-        params:{
-          creditCode:this.creditCode
-        }
-      }).then((res) => {
-        let status;
-        if (!res.data.data){
-          status = false;
-          this.creditCodeTip = "此社会统一信用代码已被注册";
-          this.creditCodeStatus = true;
-        }
-        if (!/^\d{18}$/.test(this.creditCode)){
-          status = false;
-          this.creditCodeTip = "社会统一信用代码不能为空";
-          this.creditCodeStatus = true;
-        }
-        if (res.data.data&&/^\d{18}$/.test(this.creditCode)){
-          status = true;
-          this.creditCodeTip = '';
-          this.creditCodeStatus = false;
-        }else{
-          this.creditCodeStatus = true;
-        }
-      }).catch(() => {
-        console.log("请求失败");
-      })
+      let status;
+      if (this.creditCode.length < 18){
+        status = false;
+        this.creditCodeTip = "";
+        this.creditCodeStatus = true;
+      }
+      if (this.creditCode.length === 18){
+        this.$axios.get('/regist/countcreditcode.ajax',{
+          params:{
+            creditCode:this.creditCode
+          }
+        }).then((res) => {
+          if (!res.data.data){
+            status = false;
+            this.creditCodeTip = "社会统一信用代码已被注册";
+            this.creditCodeStatus = true;
+          }else if(/^\d{18}$/.test(this.creditCode)){
+            status = true;
+            this.creditCodeTip = "";
+            this.creditCodeStatus = false;
+          }
+        }).catch(() => {
+          console.log("请求失败");
+        })
+      }
+      if (this.creditCode.length > 18){
+        status = false;
+        this.creditCodeTip = "您输入的社会统一信用代码位数不正确";
+        this.creditCodeStatus = true;
+      }
+
+
+
+//      this.$axios.get('/regist/countcreditcode.ajax',{
+//        params:{
+//          creditCode:this.creditCode
+//        }
+//      }).then((res) => {
+//        let status;
+//        if (!res.data.data){
+//          status = false;
+//          this.creditCodeTip = "此社会统一信用代码已被注册";
+//          this.creditCodeStatus = true;
+//        }
+//        if (!/^\d{18}$/.test(this.creditCode)){
+//          status = false;
+//          this.creditCodeTip = "社会统一信用代码不能为空";
+//          this.creditCodeStatus = true;
+//        }
+//        if (res.data.data&&/^\d{18}$/.test(this.creditCode)){
+//          status = true;
+//          this.creditCodeTip = '';
+//          this.creditCodeStatus = false;
+//        }else{
+//          this.creditCodeStatus = true;
+//        }
+//      }).catch(() => {
+//        console.log("请求失败");
+//      })
     },
 //    验证用户名是否被注册或是否为空
     usernameCheck(){
-      this.$axios.get('/regist/countusename.ajax',{
-        params:{
-          userName:this.regUsername
-        }
-      }).then((res) => {
-        let status;
-        if (!res.data.data){
-          status = false;
-          this.usernameTip = "此用户名已被注册";
-          this.usernameStatus = true;
-        }
-        if (!/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.regUsername)){
-          status = false;
-          this.usernameTip = "您输入的用户名格式不正确";
-          this.usernameStatus = true;
-        }
-        if (res.data.data&&/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.regUsername)){
-          status = true;
-          this.usernameTip = '';
-          this.usernameStatus = false;
-        }else{
-          this.usernameStatus = true;
-        }
-      })
+      let status;
+      if (this.regUsername === ''){
+        status = false;
+        this.usernameTip = "用户名不能为空";
+        this.usernameStatus = true;
+      }
+      if (this.regUsername !== ''){
+        this.$axios.get('/regist/countusename.ajax',{
+          params:{
+            userName:this.regUsername
+          }
+        }).then((res) => {
+          if (!res.data.data){
+            status = false;
+            this.usernameTip = "此用户名已被注册";
+            this.usernameStatus = true;
+          }
+          if (!/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.regUsername)){
+            status = false;
+            this.usernameTip = "您输入的用户名格式不正确";
+            this.usernameStatus = true;
+          }
+          if (res.data.data&&/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.regUsername)){
+            status = true;
+            this.usernameTip = '';
+            this.usernameStatus = false;
+          }else{
+            this.usernameStatus = true;
+          }
+        })
+      }
+
     },
 //    验证用户密码是否符合规则
     pwdCheck(){
       let status;
-      if (!/^\w{6,12}$/g.test(this.regPassword)){
+      if (!/^\w{6,20}$/g.test(this.regPassword)){
         status = false;
-        this.pwdTip = '请至少输入六位密码';
+        this.pwdTip = '请输入6-20位密码';
         this.pwdStatus = true;
       }
-      if (/^\w{6,12}$/g.test(this.regPassword)){
+      if (/^\w{6,20}$/g.test(this.regPassword)){
         status = true;
         this.pwdTip = '';
         this.pwdStatus = false;
@@ -373,6 +413,7 @@ export default {
         status = false;
         this.telTip = "";
         this.telStatus = true;
+        this.getTelCodeActive = true;
       }
       if (this.tel.length === 11){
         this.$axios.get('/regist/countmobile.ajax',{
@@ -380,16 +421,16 @@ export default {
             mobile:this.tel
           }
         }).then((res) => {
+          if(!res.data.data){
+            status = false;
+            this.telTip = "此手机号码已被注册";
+            this.telStatus = true;
+          }
           if (res.data.data&&/^1[34578]\d{9}$/.test(this.tel)){
             status = true;
             this.telTip = "";
             this.telStatus = false;
             this.getTelCodeActive = false;
-          }
-          if(!res.data.data){
-            status = false;
-            this.telTip = "此手机号码已被注册";
-            this.telStatus = true;
           }
         }).catch(() => {
           console.log("请求失败")
@@ -399,6 +440,7 @@ export default {
         status = false;
         this.telTip = "您输入的手机号码位数不正确";
         this.telStatus = true;
+        this.getTelCodeActive = true;
       }
     },
 //    验证用户输入的验证码是否符合规则
@@ -421,8 +463,16 @@ export default {
       }else{
         this.telVertifyStatus = true;
       }
+    },
+//    获取登录页面的验证码方法
+    getLoginCode(){
+      this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
     }
-  }
+  },
+  watch: {
+    // 如果路由有变化，会再次执行该方法
+    '$route': 'getLoginCode'
+  },
 }
 </script>
 

@@ -371,7 +371,7 @@ export default {
       console.log(this.workAreaValue);
       console.log(this.workAddrDetail);
 //      公司营业执照
-      console.log(this.licenseUrlArr.pop(this.licenseUrlArr.length - 1));
+      console.log(this.licenseUrlArr.reverse().slice(0,1));
 //      供货范围
       console.log(this.supplyScope);
 //      开户行名称
@@ -414,20 +414,20 @@ export default {
           ],
           enterprisePicsList:[
             {
-              url:this.licenseUrlArr.pop(this.licenseUrlArr.length - 1),
+              urlList:this.licenseUrlArr.reverse().slice(0,1),
               typei:1
             },
             {
-              url:this.otherUrlArr.reverse().slice(0,5),
-              typei:1
+              urlList:this.otherUrlArr.reverse().slice(0,5),
+              typei:2
             }
           ],
           entityIndustry:this.supplyScope,
           accountList:[
             {
-              bank_name:this.bankName,
+              bankName:this.bankName,
               account:this.bankAccount,
-              bank_remark:this.bankInfo
+              bankNemark:this.bankInfo
             }
           ],
         },
