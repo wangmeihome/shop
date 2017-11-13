@@ -122,8 +122,9 @@
       <h4>第四十条 本协议之效力、解释、变更、执行与争议解决均适用中华人民共和国大陆地区法律，如无相关法律规定的，则应参照通用国际商业惯例和行业惯例。</h4>
       <h4>第四十一条 因本协议产生之争议需根据您使用的服务归属的本商城确定具体的争议对象，例如因您使用本商城服务所产生的争议应由本商城的经营者与您沟通并处理。一旦产生争议，您与本商城的经营者均同意以被告住所地人民法院为第一审管辖法院。</h4>
       <span slot="footer" class="dialog-footer">
+      	    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+
           </span>
     </el-dialog>
   </div>
@@ -164,22 +165,31 @@
     font-size: 30px;
   }
   .el-dialog__body h3{
-    font-size: 22px;
+    font-size: 16px;
     font-family: "Microsoft YaHei UI";
     font-weight: bolder;
     margin: 10px 0;
   }
   .el-dialog__body h4{
-    font-size: 18px;
+    font-size: 14px;
     line-height: 36px;
     margin: 5px 0;
+    font-family:"microsoft yahei" ;
+    text-align:left;
   }
   .el-dialog__body h5{
-    font-size: 16px;
+    font-size: 14px;
     line-height: 32px;
+    text-align:left;
+    font-family:"microsoft yahei" ;
   }
   .el-dialog__body p{
     font-size: 14px;
     line-height: 28px;
+    text-align:left;
+    font-family:"microsoft yahei" ;
+  }
+  .el-dialog__footer{
+    text-align:center;
   }
 </style>

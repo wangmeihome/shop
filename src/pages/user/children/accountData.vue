@@ -22,91 +22,94 @@
       </div>
       <!-- 修改企业信息弹框 -->
       <el-dialog :visible.sync="editComInfo" size="full" :before-close="handleClose">
-        <ul class="factory_list">
-          <li>
-            <div class="com_account_tit">企业名称:</div>
-            <el-input style="width:300px" disabled :value="conpanyName" v-model="conpanyName"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit" >统一社会信用代码:</div>
-            <el-input style="width:300px" disabled :value="creditCode" v-model="creditCode"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">法人:</div>
-            <el-input style="width:300px" :value="legalPerson" v-model="legalPerson"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">公司固定电话:</div>
-            <el-input style="width:300px" :value="fixedLine" v-model="fixedLine"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">公司传真:</div>
-            <el-input style="width:300px" :value="fax" v-model="fax"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">所属行业:</div>
-            <el-input style="width:300px" :value="industry" v-model="industry"></el-input>
-          </li>
-          <li>
-            <ul class="select_collen">
-              <li>
-                <div class="com_account_tit">公司注册地址:</div>
-                <linkage @getAreaId="getRegAddr"></linkage>
-              </li>
-              <el-input class="regRoad" :value="comRegAddrDetail" v-model="comRegAddrDetail" style="width:605px;margin-left:155px;"></el-input>
-            </ul>
-          </li>
-          <li>
-            <ul class="select_collen">
-              <li>
-                <div class="com_account_tit">办公地址:</div>
-                <linkage @getAreaId="getWorkAddr"></linkage>
-              </li>
-              <!-- 结束 -->
-              <el-input class="regRoad" :value="workAddrDetail" v-model="workAddrDetail" style="width:605px;margin-left:155px;"></el-input>
-            </ul>
-          </li>
-          <li>
-            <div class="com_account_tit" style="vertical-align:top">公司营业执照:</div>
-            <img :src="license" style="width:200px;height:200px">
-            <div style="margin-left: 150px">
-              <p>更换公司营业执照：</p>
+        <div class="editComInfoList">
+          <div class="editComInfoList_item">
+            <p>企业名称：</p>
+            <el-input disabled :value="conpanyName" v-model="conpanyName"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>社会统一信用代码：</p>
+            <el-input disabled :value="creditCode" v-model="creditCode"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>法人：</p>
+            <el-input :value="legalPerson" v-model="legalPerson"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司固定电话：</p>
+            <el-input :value="fixedLine" v-model="fixedLine"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司传真：</p>
+            <el-input :value="fax" v-model="fax"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司传真：</p>
+            <el-input :value="fax" v-model="fax"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>所属行业：</p>
+            <el-select v-model="industry">
+              <el-option v-for="item in industries" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司注册地址：</p>
+            <linkage @getAreaId="getRegAddr"></linkage>
+            <el-input :value="comRegAddrDetail" v-model="comRegAddrDetail"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司办公地址：</p>
+            <linkage @getAreaId="getWorkAddr"></linkage>
+            <el-input :value="workAddrDetail" v-model="workAddrDetail"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>公司营业执照：</p>
+            <div>
+              <img :src="license" style="width:200px;height:200px">
+            </div>
+            <div style="margin-left: 130px">
+              <div>更换公司营业执照：</div>
               <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">上传到服务器</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
               </el-upload>
             </div>
-          </li>
-          <li>
-            <div class="com_account_tit" style="vertical-align:top">其他附件:</div>
-            <img v-for="item in others" :src="item.src" class="groundphoto">
-            <div style="margin-left: 150px">
-              <p>更换其他附件：</p>
+          </div>
+          <div class="editComInfoList_item">
+            <p>供货范围：</p>
+            <el-select v-model="supplyScope">
+              <el-option v-for="item in supplyScopes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <div class="editComInfoList_item">
+            <p>开户行名称：</p>
+            <el-input :value="bankName" v-model="bankName"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>开户行账号：</p>
+            <el-input :value="bankAccount" v-model="bankAccount"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>开户行信息：</p>
+            <el-input :value="bankInfo" v-model="bankInfo"></el-input>
+          </div>
+          <div class="editComInfoList_item">
+            <p>其他附件：</p>
+            <div>
+              <img v-for="item in others" :src="item.src" style="width: 100px;height: 100px;">
+            </div>
+            <div style="margin-left: 130px">
+              <div>更换其他附件：</div>
               <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
               </el-upload>
             </div>
-          </li>
-          <li>
-            <div class="com_account_tit">供货范围:</div>
-            <el-input style="width:300px" :value="supplyScope" v-model="supplyScope"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">开户行名称:</div>
-            <el-input style="width:300px" :value="bankName" v-model="bankName"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">开户行账号:</div>
-            <el-input style="width:300px" :value="bankAccount" v-model="bankAccount"></el-input>
-          </li>
-          <li>
-            <div class="com_account_tit">开户行信息:</div>
-            <el-input style="width:300px" :value="bankInfo" v-model="bankInfo"></el-input>
-          </li>
-        </ul>
+          </div>
+        </div>
         <div class="el-dialog__footer">
            <span slot="footer" class="dialog-footer">
              <el-button @click="editComInfo = false" style="text-align:center !important" class="cancel">取 消</el-button>
@@ -128,49 +131,47 @@
       </ul>
       <div style="width: 126px;height: 40px;margin-left: 160px">
         <el-button @click="editPerInfoBtn=true" type="primary">修改个人信息</el-button>
-        <el-dialog class="box" :visible.sync="editPerInfoBtn" size="tiny" :before-close="handleClose">
-          <ul class="connent_list">
-            <li>
-              <div class="com_account_tit">联系人姓名:</div>
-              <el-input style="width:300px" :value="linkMan" v-model="linkMan"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit" >性别:</div>
-              <el-input style="width:300px" :value="gender" v-model="gender"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">职务:</div>
-              <el-input style="width:300px" :value="duty" v-model="duty"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">手机号:</div>
-              <el-input style="width:300px" :value="personalTel" v-model="personalTel"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">办公电话:</div>
-              <el-input style="width:300px" :value="tel" v-model="tel"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">邮箱:</div>
-              <el-input style="width:300px" :value="email" v-model="email"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">QQ号码:</div>
-              <el-input style="width:300px" :value="qq"></el-input>
-            </li>
-            <li>
-              <div class="com_account_tit">微信:</div>
-              <el-input style="width:300px" value="123455"></el-input>
-            </li>
-          </ul>
-          <div class="el-dialog__footer">
+      </div>
+      <!-- 修改个人信息弹框 -->
+      <el-dialog class="personalDialog" :visible.sync="editPerInfoBtn" size="tiny" :before-close="handleClose">
+        <div class="editPerInfoList">
+          <div class="editPerInfoList_item">
+            <p>联系人姓名：</p>
+            <el-input :value="linkMan" v-model="linkMan"></el-input>
+          </div>
+          <div style="line-height: 40px" class="editPerInfoList_item">
+            <p>性别：</p>
+            <el-radio v-model="gender" label="1">男</el-radio>
+            <el-radio v-model="gender" label="2">女</el-radio>
+          </div>
+          <div class="editPerInfoList_item">
+            <p>职务：</p>
+            <el-input :value="duty" v-model="duty"></el-input>
+          </div>
+          <div class="editPerInfoList_item">
+            <p>手机号：</p>
+            <el-input disabled :value="personalTel" v-model="personalTel"></el-input>
+          </div>
+          <div class="editPerInfoList_item">
+            <p>办公电话：</p>
+            <el-input :value="tel" v-model="tel"></el-input>
+          </div>
+          <div class="editPerInfoList_item">
+            <p>邮箱：</p>
+            <el-input :value="email" v-model="email"></el-input>
+          </div>
+          <div class="editPerInfoList_item">
+            <p>QQ号码：</p>
+            <el-input :value="qq" v-model="qq"></el-input>
+          </div>
+        </div>
+        <div class="el-dialog__footer">
              <span slot="footer" class="dialog-footer">
               <el-button @click="editPerInfoBtn = false" class="cancel">取 消</el-button>
               <el-button type="primary" @click="editPerInfoBtn = false" class="ensure">确 定</el-button>
              </span>
-          </div>
-        </el-dialog>
-      </div>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -242,10 +243,48 @@
         legalPerson:'某法人',
         fixedLine:222222222,
         fax:333333333,
-        industry:'某行业',
+        industries: [{
+          value: '行业1',
+          label: '行业1'
+        }, {
+          value: '行业2',
+          label: '行业2'
+        }, {
+          value: '行业3',
+          label: '行业3'
+        }, {
+          value: '行业4',
+          label: '行业4'
+        }, {
+          value: '行业5',
+          label: '行业5'
+        }],
+        industry: '行业3',
+        supplyScopes: [{
+          value: '范围1',
+          label: '范围1'
+        }, {
+          value: '范围2',
+          label: '范围2'
+        }, {
+          value: '范围3',
+          label: '范围3'
+        }, {
+          value: '范围4',
+          label: '范围4'
+        }, {
+          value: '范围5',
+          label: '范围5'
+        }],
+        supplyScope: '范围2',
         comRegAddrDetail:'注册地址',
         workAddrDetail:'工作地址',
         license:require("../../../assets/others/add.png"),
+        bankName:'银行名称',
+        bankAccount:621700,
+        bankInfo:'银行具体信息',
+        regAreaValue:'',
+        workAreaValue:'',
         others:[
           {
             id:1,
@@ -280,13 +319,6 @@
         otherDialogVisible: false,
 //    判断上传其他附件大小的按钮
         otherBtn: true,
-
-        supplyScope:'供货范围',
-        bankName:'银行名称',
-        bankAccount:621700,
-        bankInfo:'银行具体信息',
-        regAreaValue:'',
-        workAreaValue:'',
         //个人信息修改参数
         linkMan:'某联系人',
         gender:'1',
@@ -410,67 +442,57 @@
     border-radius:8px 8px 0 0;
     line-height:60px;
     background:linear-gradient(#fbfbfb, #ececec);
-    font-family:"microsoft yahei" ;
+    font-family: "Microsoft YaHei UI";
   }
-  .account_wrapper .account_list,.account_wrapper .personal_list{
-    margin:20px 0px;
+  .account_wrapper .account_list,
+  .account_wrapper .personal_list{
+    margin:20px 0;
   }
-  .account_wrapper .account_list>li,.account_wrapper .personal_list>li{
+  .account_wrapper .account_list>li,
+  .account_wrapper .personal_list>li{
     width:80%;
-    padding:6px 0px;
+    padding:6px 0;
     overflow:hidden;
   }
-  .account_wrapper .account_list li div,.account_wrapper .personal_list li div{
+  .account_wrapper .account_list li div,
+  .account_wrapper .personal_list li div{
     float:left;
-    font-family:"microsoft yahei";
-    padding:0px 5px;
+    font-family: "Microsoft YaHei UI";
+    padding:0 5px;
   }
   .account_wrapper .com_account_title,.account_wrapper .per_account_title{
     width:150px;
     text-align-last:right;
     display:inline-block;
-    font-family:"microsoft yahei";
+    font-family: "Microsoft YaHei UI";
   }
-  .factory_list,.connent_list{
-    overflow:hidden;
+  .editComInfoList_item,
+  .editPerInfoList_item{
+    overflow: hidden;
   }
-  .factory_list li .groundphoto{
-    width:100px;
-    height:100px;
+  .editComInfoList_item p,
+  .editPerInfoList_item p{
+    float: left;
+    width: 130px;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
   }
-  .account_wrapper .factory_list li,.account_wrapper .connent_list li{
-    float:left;
-    width:100%;
-    padding:2px 3px;
+  .editComInfoList_item .el-input,
+  .editPerInfoList_item .el-input{
+    float: left;
+    width: 300px;
   }
-  .com_account_tit{
-    width:150px;
-    text-align-last:right;
-    display:inline-block;
-    font-family:"microsoft yahei";
-    margin-top:10px;
+  .editComInfoList_item .el-select{
+    float: left;
   }
-  .account_wrapper .el-dialog__footer{
-    text-align:center;
+  .account_detail .el-dialog{
+    width: 72%;
   }
-  .account_wrapper .el-select{
-    width:300px;
-    margin-left:3px;
+  .account_detail .personalDialog .el-dialog{
+    width: 30%;
   }
-  .select_collen li{
-    overflow:hidden;
-  }
-  .account_wrapper .select_collen li div,.account_wrapper .el-select{
-    float:left;
-  }
-  .account_wrapper .cancel,.account_wrapper .ensure{
-    margin-top:15px!important;
-  }
-  .account_wrapper .el-dialog__wrapper .el-dialog{
-    width: 85%;
-  }
-  .el-dialog,.box{
-    width:50%;
-    margin:0 auto;
+  .account_detail .el-dialog__footer{
+    text-align: center;
   }
 </style>
