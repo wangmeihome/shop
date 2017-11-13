@@ -91,7 +91,7 @@
         </div>
         <div class="personalInfo_item">
           <p>手机号：</p>
-          <el-input value="18888888888" :disabled="true"></el-input>
+          <el-input value="18888888888" disabled></el-input>
         </div>
         <div class="personalInfo_item">
           <p>办公电话：</p>
