@@ -12,12 +12,12 @@
           <div class="login_info">
             <div class="login_info_item">
               <div style="margin: 0 auto;width: 300px">
-                <p style="height: 16px;color: red;"><span v-show="usernameErr.errorText"><i class="el-icon-warning"></i><span>{{ usernameErr.errorText }}</span></span></p>
-                <el-input v-model="loginUsername" placeholder="请输入用户名"></el-input>
+                <p style="height: 16px;color: red;"><span v-show="loginUsernameTip"><i class="el-icon-warning"></i><span>{{ loginUsernameTip }}</span></span></p>
+                <el-input @input="loginUsernameCheck" v-model="loginUsername" placeholder="请输入用户名"></el-input>
               </div>
               <div style="margin: 0 auto;width: 300px">
-                <p style="height: 16px;color: red;"><span v-show="pwdErr.errorText"><i class="el-icon-warning"></i><span>{{ pwdErr.errorText }}</span></span></p>
-                <el-input type="password" v-model="loginPassword" placeholder="请输入密码"></el-input>
+                <p style="height: 16px;color: red;"><span v-show="loginPwdTip"><i class="el-icon-warning"></i><span>{{ loginPwdTip }}</span></span></p>
+                <el-input @input="loginPwdCheck" type="password" v-model="loginPassword" placeholder="请输入密码"></el-input>
               </div>
               <div class="vertifyInfo">
                 <p style="height: 16px;"><span></span></p>
@@ -27,7 +27,7 @@
                 </div>
               </div>
               <div class="register_enter"><span @click="showReg" style="color: #169BD5;font-size: 14px;cursor: pointer">注册爱风商城</span></div>
-              <div class="loginBtn" @click="login"><el-button type="primary">登录</el-button></div>
+              <div class="loginBtn" @click="login"><el-button :disabled="loginUsernameStatus===false&&loginPwdStatus===false?false:true" type="primary">登录</el-button></div>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-  import protocol from '../../components/protocol.vue'
+  import protocol from '../../components/protocol/protocol.vue'
 export default {
     components:{
       protocol
@@ -117,6 +117,11 @@ export default {
       isShowVertify:false,
       regdisable:false,
       getTelCodeActive:true,
+//      登录验证提示
+      loginUsernameTip:'',
+      loginUsernameStatus:true,
+      loginPwdTip:'',
+      loginPwdStatus:true,
 //      注册验证提示
       companyTip:'',
       companyStatus:true,
@@ -135,50 +140,46 @@ export default {
     }
   },
   created(){
-//    this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
     this.getLoginCode();
-  },
-  computed:{
-    usernameErr(){
-      let errorText,status;
-      if (!/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.loginUsername)){
-        status = false;
-        errorText = '您输入的用户名格式不正确';
-      }else{
-        status = true;
-        errorText = '';
-      }
-      if (!this.usernameFlag){
-        errorText = '';
-        this.usernameFlag = true;
-      }
-      return {
-        status,errorText
-      }
-    },
-    pwdErr(){
-      let errorText,status
-      if (!/^\w{6,12}$/g.test(this.loginPassword)) {
-        status = false;
-        errorText = '请至少输入六位密码';
-      }else{
-        status = true;
-        errorText = '';
-      }
-      if (!this.pwdFlag) {
-        errorText = '';
-        this.pwdFlag = true
-      }
-      return {
-        status,errorText
-      }
-    }
   },
   methods:{
 //    点击更换登录页面图片验证码
     toggleVerify() {
       let timestamp = (+new Date());
       this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN&useful='+timestamp;
+    },
+//    验证用户名是否为空或格式不正确
+    loginUsernameCheck(){
+      let status;
+      if (this.loginUsername.length < 6){
+        status = false;
+        this.loginUsernameTip = '';
+        this.loginUsernameStatus = true;
+      }
+      if (this.loginUsername.length >= 6){
+        if (!/^[a-zA-z][a-zA-Z0-9_]{5,11}$/.test(this.loginUsername)){
+          status = false;
+          this.loginUsernameTip = '您输入的用户名格式不正确';
+          this.loginUsernameStatus = true;
+        }else {
+          status = true;
+          this.loginUsernameTip = '';
+          this.loginUsernameStatus = false;
+        }
+      }
+    },
+//    验证密码是否小于6位
+    loginPwdCheck(){
+      let status;
+      if (this.loginPassword.length < 6){
+        status = false;
+        this.loginPwdTip = '请至少输入6位密码';
+        this.loginPwdStatus = true;
+      }else{
+        status = true;
+        this.loginPwdTip = '';
+        this.loginPwdStatus = false;
+      }
     },
 //    登录
     login(){
@@ -225,28 +226,28 @@ export default {
     },
 //    注册
     register(){
-//      let reqParams = {
-//        typei:this.role,
-//        afwindEnterprise:{
-//          enterpriseName:this.companyName,
-//          creditCode:this.creditCode
-//        },
-//        userName:this.regUsername,
-//        userPassword:this.regPassword,
-//        mobile:this.tel,
-//        validateCode:this.telVertify,
-//      };
-//      this.$axios.post('/regist/saveregist.ajax',reqParams)
-//        .then( (res) => {
-//          console.log(res.data.data.code);
-//          if (res.data.data.code === 1){
-//            console.log("注册成功");
-//            window.location.reload();
-//          }
-//        }).catch(() => {
-//          console.log('请求失败')
-//      })
-      this.$router.go(0)
+      let reqParams = {
+        typei:this.role,
+        afwindEnterprise:{
+          enterpriseName:this.companyName,
+          creditCode:this.creditCode
+        },
+        userName:this.regUsername,
+        userPassword:this.regPassword,
+        mobile:this.tel,
+        validateCode:this.telVertify,
+      };
+      this.$axios.post('/regist/saveregist.ajax',reqParams)
+        .then( (res) => {
+          console.log(res.data.data.code);
+          if (res.data.data.code === 1){
+            console.log("注册成功");
+            this.$router.go(0);
+          }
+        }).catch(() => {
+          console.log('请求失败')
+      })
+
     },
 //    验证公司名称是否被注册或是否为空
     comNameCheck(){
