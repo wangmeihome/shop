@@ -1,6 +1,6 @@
 <template>
   <div class="account_wrapper">
-    <div class="account_name">
+    <div class="myAccount">
       <h1>我的账户</h1>
     </div>
     <!--企业信息-->
@@ -9,10 +9,10 @@
         <li v-for="item in comInfo">
           <div class="com_account_title">{{item.title}}</div>
           <div>
-            <p>{{item.content}}</p>
-            <img v-if="item.content  === ''" :src="item.photo" class="picture">
-            <div v-for="photoDetails in item.phot">
-              <img v-if="item.content ===''" :src="photoDetails.url" style="width:100px;height:100px;">
+            <p v-if="item.content">{{item.content}}</p>
+            <img v-if="item.content  === ''&& item.hidden" :src="item.photo" style="width: 200px;height: 200px">
+            <div v-for="photoDetails in item.picture">
+              <img v-if="item.content ===''" :src="photoDetails" style="width:100px;height:100px;">
             </div>
           </div>
         </li>
@@ -183,59 +183,33 @@
     },
     data(){
       return{
-        //企业信息展示数据
+        //模拟企业信息展示数据
+        othersArr:[],
         comInfo:[
-          {"title":'企业名称:',"content":'北京凯金卓越科技发展有限公司'},
-          {"title":"统一社会信用代码:","content":"18位社会统一信用代码"},
-          {"title":"法人:","content":"某法人"},
-          {"title":"公司固定电话:","content":"010-88137916"},
-          {"title":"公司传真:","content":"010-88155997"},
-          {"title":"所属行业:","content":"科技"},
-          {"title":"公司注册地址:","content":"北京市海淀区玲珑琨御府9号楼2单元1002室"},
-          {"title":"办公地址:","content":"北京市海淀区玲珑琨御府9号楼2单元1002室"},
-          {"title":"公司营业执照:","content":"","photo":require("../../../assets/others/add.png")},
-          {
-            "title":"其他附件:",
-            "content":"",
-            "phot":[
-              {
-                id:1,
-                url:require('../../../assets/others/add.png')
-              },
-              {
-                id:2,
-                url:require('../../../assets/others/add.png')
-              },
-              {
-                id:3,
-                url:require('../../../assets/others/add.png')
-              },
-              {
-                id:4,
-                url:require('../../../assets/others/add.png')
-              },
-              {
-                id:5,
-                url:require('../../../assets/others/add.png')
-              },
-            ]
-          },
-          {"title":"供货范围:","content":"全宇宙"},
-          {"title":"开户行名称:","content":"中国建设银行北京恩济支行"},
-          {"title":"开户行账号:","content":"6217000000000000000"},
-          {"title":"开户行信息:","content":"开户行行号等"}
-
+          {"title":'企业名称:',"content":'',"hidden":true},
+          {"title":"统一社会信用代码:","content":"","hidden":true},
+          {"title":"法人:","content":"","hidden":true},
+          {"title":"公司固定电话:","content":"","hidden":true},
+          {"title":"公司传真:","content":"","hidden":true},
+          {"title":"所属行业:","content":"","hidden":true},
+          {"title":"公司注册地址:","content":"","hidden":true},
+          {"title":"办公地址:","content":"","hidden":true},
+          {"title":"公司营业执照:","content":"","photo":'',"hidden":true},
+          {"title":"其他附件:", "content":"","hidden":false,"picture":[]},
+          {"title":"供货范围:","content":"","hidden":true},
+          {"title":"开户行名称:","content":"","hidden":true},
+          {"title":"开户行账号:","content":"","hidden":true},
+          {"title":"开户行信息:","content":"","hidden":true}
         ],
-        //个人信息展示数据
+        //模拟个人信息展示数据
         perInfo:[
-          {"title":"联系人姓名:","content":"张三"},
-          {"title":"性别:","content":"男"},
-          {"title":"职务:","content":"董事长"},
-          {"title":"手机号:","content":"123456"},
-          {"title":"办公电话:","content":"123456789"},
-          {"title":"邮箱:","content":"123456@.com"},
-          {"title":"QQ号码:","content":"1232"},
-          {"title":"微信:","content":"123455"},
+          {"title":"联系人姓名:","content":""},
+          {"title":"性别:","content":""},
+          {"title":"职务:","content":""},
+          {"title":"手机号:","content":""},
+          {"title":"办公电话:","content":""},
+          {"title":"邮箱:","content":""},
+          {"title":"QQ号码:","content":""}
         ],
         //企业信息修改参数
         conpanyName:'公司名称',
@@ -243,7 +217,8 @@
         legalPerson:'某法人',
         fixedLine:222222222,
         fax:333333333,
-        industries: [{
+        industries: [
+          {
           value: '行业1',
           label: '行业1'
         }, {
@@ -260,7 +235,8 @@
           label: '行业5'
         }],
         industry: '行业3',
-        supplyScopes: [{
+        supplyScopes: [
+          {
           value: '范围1',
           label: '范围1'
         }, {
@@ -331,6 +307,53 @@
         editComInfo:false,
         editPerInfoBtn:false,
       }
+    },
+    created(){
+//      console.log(this.comInfo)
+      this.$axios.get('/entanduser/getEntAndUser.ajax')
+        .then((res) => {
+          let myData = JSON.parse(res.data.data);
+//          console.log(myData);
+          /* 企业信息的获取 */
+          this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
+          this.comInfo[1].content = myData.afwindEnterprise.creditCode;
+          this.comInfo[2].content = myData.afwindEnterprise.owner;
+          this.comInfo[3].content = myData.afwindEnterprise.phone;
+          this.comInfo[4].content = myData.afwindEnterprise.fax;
+          this.comInfo[5].content = myData.afwindEnterprise.typei;
+          for (let i = 0;i<myData.afwindEnterprise.addresseList.length;i++){
+            if (myData.afwindEnterprise.addresseList[i].typei === '1'){
+              this.comInfo[6].content = myData.afwindEnterprise.addresseList[i].address;
+            }else if(myData.afwindEnterprise.addresseList[i].typei === '2'){
+              this.comInfo[7].content = myData.afwindEnterprise.addresseList[i].address;
+            }
+          }
+          for (let i =0;i<myData.afwindEnterprise.enterprisePicsList.length;i++){
+            if (myData.afwindEnterprise.enterprisePicsList[i].typei === '1'){
+              this.comInfo[8].photo = myData.afwindEnterprise.enterprisePicsList[i].url;
+            }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
+              this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
+            }
+          }
+          this.comInfo[10].content = myData.afwindEnterprise.categorie.name;
+          this.comInfo[11].content = myData.afwindEnterprise.accountList[0].account;
+          this.comInfo[12].content = myData.afwindEnterprise.accountList[0].bankName;
+          this.comInfo[13].content = myData.afwindEnterprise.accountList[0].bankRemark;
+//          个人信息的获取
+          this.perInfo[0].content = myData.userName;
+          if (myData.sex === '1'){
+            this.perInfo[1].content = '男';
+          }else if(myData.sex === '2'){
+            this.perInfo[1].content = '女';
+          }
+          this.perInfo[2].content = myData.userPost;
+          this.perInfo[3].content = myData.mobile;
+          this.perInfo[4].content = myData.telphone;
+          this.perInfo[5].content = myData.email;
+          this.perInfo[6].content = myData.qqCode;
+        }).catch(() => {
+          console.log("数据请求失败");
+      })
     },
     methods:{
 //      获取公司注册地址
@@ -434,7 +457,7 @@
     border: 1px solid #dcdcdc;
     border-radius:8px;
   }
-  .account_wrapper .account_name{
+  .account_wrapper .myAccount{
     padding-left:80px;
     width: 874px;
     height: 60px;

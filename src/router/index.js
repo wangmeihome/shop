@@ -9,8 +9,8 @@ import goodDetails from '../pages/goods/goodDetails.vue'
 import User from '../pages/user/user.vue'
 import Order from '../pages/user/children/order.vue'
 import AccountData from '../pages/user/children/accountData.vue'
-import ShipAddress from '../pages/user/children/shipAddress.vue'
-import Coupon from '../pages/user/children/coupon.vue'
+import brandManagement from '../pages/user/children/brandManagement.vue'
+import storeManagement from '../pages/user/children/storeManagement.vue'
 import SaleService from '../pages/user/children/saleService.vue'
 import oldForNew from '../pages/user/children/oldForNew.vue'
 
@@ -40,8 +40,8 @@ export default new Router({
       children:[
         {path:'order',name:'订单列表',component:Order},
         {path:'accountData',name:'账号资料',component:AccountData},
-        {path:'shipAddress',name:'收货地址',component:ShipAddress},
-        {path:'coupon',name:'我的优惠',component:Coupon},
+        {path:'brandManagement',name:'品牌管理',component:brandManagement},
+        {path:'storeManagement',name:'店铺管理',component:storeManagement},
         {path:'saleService',name:'售后服务',component:SaleService},
         {path:'oldForNew',name:'以旧换新',component:oldForNew}
       ]

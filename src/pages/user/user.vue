@@ -34,8 +34,8 @@
         nav: [
           {name: '我的订单', path: 'order'},
           {name: '账户资料', path: 'accountData'},
-          {name: '收货地址', path: 'shipAddress'},
-          {name: '我的优惠', path: 'coupon'},
+          {name: '品牌管理', path: 'brandManagement'},
+          {name: '店铺管理', path: 'storeManagement'},
           {name: '售后服务', path: 'saleService'},
           {name: '以旧换新', path: 'oldForNew'}
         ],

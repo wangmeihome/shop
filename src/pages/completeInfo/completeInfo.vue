@@ -317,12 +317,12 @@ export default {
             {
               regionId:this.regAreaValue,
               address:this.comRegAddrDetail,
-              typei:'REGISTERADD'
+              typei:'1'
             },
             {
               regionId:this.workAreaValue,
               address:this.workAddrDetail,
-              typei:'WORKADD'
+              typei:'2'
             }
           ],
           enterprisePicsList:[
