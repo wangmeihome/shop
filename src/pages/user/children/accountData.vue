@@ -44,10 +44,6 @@
             <el-input :value="fax" v-model="fax"></el-input>
           </div>
           <div class="editComInfoList_item">
-            <p>公司传真：</p>
-            <el-input :value="fax" v-model="fax"></el-input>
-          </div>
-          <div class="editComInfoList_item">
             <p>所属行业：</p>
             <el-select v-model="industry">
               <el-option v-for="item in industries" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -98,7 +94,7 @@
           <div class="editComInfoList_item">
             <p>其他附件：</p>
             <div>
-              <img v-for="item in others" :src="item.src" style="width: 100px;height: 100px;">
+              <img v-for="item in others" :src="item" style="width: 100px;height: 100px;">
             </div>
             <div style="margin-left: 130px">
               <div>更换其他附件：</div>
@@ -211,77 +207,31 @@
           {"title":"QQ号码:","content":""}
         ],
         //企业信息修改参数
-        conpanyName:'公司名称',
-        creditCode:111111111111111111,
-        legalPerson:'某法人',
-        fixedLine:222222222,
-        fax:333333333,
+        conpanyName:'',
+        creditCode:'',
+        legalPerson:'',
+        fixedLine:'',
+        fax:'',
         industries: [
-          {
-          value: '行业1',
-          label: '行业1'
-        }, {
-          value: '行业2',
-          label: '行业2'
-        }, {
-          value: '行业3',
-          label: '行业3'
-        }, {
-          value: '行业4',
-          label: '行业4'
-        }, {
-          value: '行业5',
-          label: '行业5'
-        }],
-        industry: '行业3',
+          {value: '', label: ''},
+          {value: '', label: ''},
+          {value: '', label: ''},
+          {value: '', label: ''}],
+        industry: '',
         supplyScopes: [
-          {
-          value: '范围1',
-          label: '范围1'
-        }, {
-          value: '范围2',
-          label: '范围2'
-        }, {
-          value: '范围3',
-          label: '范围3'
-        }, {
-          value: '范围4',
-          label: '范围4'
-        }, {
-          value: '范围5',
-          label: '范围5'
-        }],
-        supplyScope: '范围2',
-        comRegAddrDetail:'注册地址',
-        workAddrDetail:'工作地址',
-        license:require("../../../assets/others/add.png"),
-        bankName:'银行名称',
-        bankAccount:621700,
-        bankInfo:'银行具体信息',
+          {value: '', label: ''},
+          {value: '', label: ''},
+          {value: '', label: ''}],
+        supplyScope: '',
+        comRegAddrDetail:'',
+        workAddrDetail:'',
+        license:'',
+        bankName:'',
+        bankAccount:'',
+        bankInfo:'',
         regAreaValue:'',
         workAreaValue:'',
-        others:[
-          {
-            id:1,
-            src:require("../../../assets/others/add.png")
-          },
-          {
-            id:2,
-            src:require("../../../assets/others/add.png")
-          },
-          {
-            id:3,
-            src:require("../../../assets/others/add.png")
-          },
-          {
-            id:4,
-            src:require("../../../assets/others/add.png")
-          },
-          {
-            id:5,
-            src:require("../../../assets/others/add.png")
-          },
-        ],
+        others:[],
 //    公司营业执照的路径
         licenseUrlArr:[],
 //    判断上传营业执照图片大小的文字提示框
@@ -295,13 +245,13 @@
 //    判断上传其他附件大小的按钮
         otherBtn: true,
         //个人信息修改参数
-        linkMan:'某联系人',
-        gender:'1',
-        duty:'职位信息',
-        personalTel:13111111111,
-        tel:444444444,
-        email:'wangmei_@163.com',
-        qq:'123456789',
+        linkMan:'',
+        gender:'',
+        duty:'',
+        personalTel:'',
+        tel:'',
+        email:'',
+        qq:'',
         //弹框控制参数
         editComInfo:false,
         editPerInfoBtn:false,
@@ -315,44 +265,90 @@
           console.log(myData);
           /* 企业信息的获取 */
           this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
+          this.conpanyName = myData.afwindEnterprise.enterpriseName;
           this.comInfo[1].content = myData.afwindEnterprise.creditCode;
+          this.creditCode = myData.afwindEnterprise.creditCode;
           this.comInfo[2].content = myData.afwindEnterprise.owner;
+          this.legalPerson = myData.afwindEnterprise.owner;
           this.comInfo[3].content = myData.afwindEnterprise.phone;
+          this.fixedLine = myData.afwindEnterprise.phone;
           this.comInfo[4].content = myData.afwindEnterprise.fax;
+          this.fax = myData.afwindEnterprise.fax;
           this.comInfo[5].content = myData.afwindEnterprise.config.valuei;
+          this.industry = myData.afwindEnterprise.config.valuei;
           for (let i = 0;i<myData.afwindEnterprise.addresseList.length;i++){
             if (myData.afwindEnterprise.addresseList[i].typei === '1'){
               this.comInfo[6].content = myData.afwindEnterprise.addresseList[i].address;
+              this.comRegAddrDetail = myData.afwindEnterprise.addresseList[i].address;
             }else if(myData.afwindEnterprise.addresseList[i].typei === '2'){
               this.comInfo[7].content = myData.afwindEnterprise.addresseList[i].address;
+              this.workAddrDetail = myData.afwindEnterprise.addresseList[i].address;
             }
           }
           for (let i =0;i<myData.afwindEnterprise.enterprisePicsList.length;i++){
             if (myData.afwindEnterprise.enterprisePicsList[i].typei === '1'){
               this.comInfo[8].photo = myData.afwindEnterprise.enterprisePicsList[i].url;
+              this.license = myData.afwindEnterprise.enterprisePicsList[i].url;
             }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
               this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
+              this.others.push(myData.afwindEnterprise.enterprisePicsList[i].url);
             }
           }
           this.comInfo[10].content = myData.afwindEnterprise.categorie.name;
+          this.supplyScope = myData.afwindEnterprise.categorie.name;
           this.comInfo[11].content = myData.afwindEnterprise.accountList[0].account;
+          this.bankAccount =  myData.afwindEnterprise.accountList[0].account;
           this.comInfo[12].content = myData.afwindEnterprise.accountList[0].bankName;
+          this.bankName = myData.afwindEnterprise.accountList[0].bankName;
           this.comInfo[13].content = myData.afwindEnterprise.accountList[0].bankRemark;
+          this.bankInfo = myData.afwindEnterprise.accountList[0].bankRemark;
 //          个人信息的获取
-          this.perInfo[0].content = myData.userName;
+          this.perInfo[0].content = myData.realname;
+          this.linkMan = myData.realname;
           if (myData.sex === '1'){
             this.perInfo[1].content = '男';
+            this.gender = '1';
           }else if(myData.sex === '2'){
             this.perInfo[1].content = '女';
+            this.gender = '2';
           }
           this.perInfo[2].content = myData.userPost;
+          this.duty = myData.userPost;
           this.perInfo[3].content = myData.mobile;
+          this.personalTel = myData.mobile;
           this.perInfo[4].content = myData.telphone;
+          this.tel = myData.telphone;
           this.perInfo[5].content = myData.email;
+          this.email = myData.email;
           this.perInfo[6].content = myData.qqCode;
+          this.qq = myData.qqCode;
         }).catch(() => {
           console.log("数据请求失败");
-      })
+      });
+      //    请求所属行业下拉列表数据
+      this.$axios.get('/entanduser/gettypei.ajax')
+        .then((res) => {
+          let INDUSTRY = JSON.parse(res.data.data);
+          for (let i = 0;i<INDUSTRY.length;i++){
+            this.industries[i].value = INDUSTRY[i].id;
+            this.industries[i].label = INDUSTRY[i].valuei;
+          }
+//        console.log(INDUSTRY);
+        }).catch(() => {
+        console.log("请求失败")
+      });
+//    请求供货范围下拉列表数据
+      this.$axios.get('/entanduser/getEntityIndustryList.ajax')
+        .then((res) => {
+          let INDUSTRY = JSON.parse(res.data.data);
+          for (let i = 0;i<INDUSTRY.length;i++){
+            this.supplyScopes[i].value = INDUSTRY[i].id;
+            this.supplyScopes[i].label = INDUSTRY[i].name;
+          }
+//        console.log(INDUSTRY);
+        }).catch(() => {
+        console.log("请求失败")
+      });
     },
     methods:{
 //      获取公司注册地址

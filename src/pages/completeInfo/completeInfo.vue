@@ -4,11 +4,11 @@
         <h1>①请您完善企业信息</h1>
         <div class="companyInfo_item">
           <p>企业名称：</p>
-          <el-input value="凯金卓越科技发展有限公司" :disabled="true"></el-input>
+          <el-input :value="companyName" v-model="companyName" :disabled="true"></el-input>
         </div>
         <div class="companyInfo_item">
           <p>社会统一信用代码：</p>
-          <el-input value="18位社会统一信用代码" :disabled="true"></el-input>
+          <el-input :value="creditCode" v-model="creditCode" :disabled="true"></el-input>
         </div>
         <div class="companyInfo_item">
           <p>法人：</p>
@@ -25,7 +25,7 @@
         <div class="companyInfo_item">
           <p>所属行业：</p>
           <el-select v-model="industry" placeholder="请选择行业">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in industries" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
         <div class="companyInfo_item">
@@ -45,7 +45,7 @@
         <div class="companyInfo_item">
           <p>供货范围：</p>
           <el-select v-model="supplyScope" placeholder="请选择供货范围">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in supplyScopes" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
         <div class="companyInfo_item">
@@ -82,7 +82,7 @@
         </div>
         <div class="personalInfo_item">
           <p>手机号：</p>
-          <el-input value="18888888888" disabled></el-input>
+          <el-input :value="personalTel" v-model="personalTel" disabled></el-input>
         </div>
         <div class="personalInfo_item">
           <p>办公电话：</p>
@@ -120,6 +120,8 @@ export default {
     },
   data(){
     return {
+      companyName:'',
+      creditCode:'',
       legalPerson:'',
       fixedLine:'',
       fax:'',
@@ -131,20 +133,64 @@ export default {
       linkMan:'',
       gender:'1',
       duty:'',
+      personalTel:'',
       tel:'',
       email:'',
       qq:'',
       wc:'',
-      options: [
-          {value: '1', label: '1'},
-          {value: '2', label: '2'},
-          {value: '3', label: '3'},
-        ],
+      industries: [
+        {value: '', label: ''},
+        {value: '', label: ''},
+        {value: '', label: ''},
+        {value: '', label: ''}
+      ],
+      supplyScopes: [
+        {value: '', label: ''},
+        {value: '', label: ''},
+        {value: '', label: ''}
+      ],
       industry: '',//      所属行业
       supplyScope:'',//      供货范围
       regAreaValue:'',//      注册地址所需信息
       workAreaValue:'',//      办公地址所需信息
     }
+  },
+  created(){
+//    请求所属行业下拉列表数据
+    this.$axios.get('/entanduser/gettypei.ajax')
+      .then((res) => {
+      let INDUSTRY = JSON.parse(res.data.data);
+      for (let i = 0;i<INDUSTRY.length;i++){
+        this.industries[i].value = INDUSTRY[i].id;
+        this.industries[i].label = INDUSTRY[i].valuei;
+      }
+//        console.log(INDUSTRY);
+      }).catch(() => {
+        console.log("请求失败")
+    });
+//    请求供货范围下拉列表数据
+    this.$axios.get('/entanduser/getEntityIndustryList.ajax')
+      .then((res) => {
+        let INDUSTRY = JSON.parse(res.data.data);
+        for (let i = 0;i<INDUSTRY.length;i++){
+          this.supplyScopes[i].value = INDUSTRY[i].id;
+          this.supplyScopes[i].label = INDUSTRY[i].name;
+        }
+//        console.log(INDUSTRY);
+      }).catch(() => {
+      console.log("请求失败")
+    });
+//    请求企业名称 社会统一信用代码 手机号
+    this.$axios.get('/entanduser/getEntAndUser.ajax')
+      .then((res) => {
+      let info = JSON.parse(res.data.data);
+      this.companyName = info.afwindEnterprise.enterpriseName;
+      this.creditCode = info.afwindEnterprise.creditCode;
+      this.personalTel = info.mobile;
+//        console.log(info)
+      }).catch(() => {
+        console.log("请求失败")
+    })
   },
   methods:{
 //    获取公司注册地址省市区的区id

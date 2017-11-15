@@ -79,8 +79,8 @@
                 <protocol style="z-index: 100" @regstatus="editstatus"></protocol>
               </div>
               <div class="regBtn">
-                <el-button type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&telVertifyStatus===false&&regdisable===false?false:true">注册</el-button>
-                <el-button type="primary" @click="">取消</el-button>
+                <el-button :plain="true" type="primary" @click="register" :disabled="companyStatus===false&&creditCodeStatus===false&&usernameStatus===false&&pwdStatus===false&&confirmPwdStatus===false&&telStatus===false&&telVertifyStatus===false&&regdisable===false?false:true">注册</el-button>
+                <el-button :plain="true" type="primary" @click="cancelReg">取消</el-button>
               </div>
             </div>
           </div>
@@ -224,6 +224,14 @@ export default {
         console.log("请求失败")
       })
     },
+//    取消注册
+    cancelReg(){
+      this.$message({
+        message: '对不起，暂时没有相关操作',
+        type: 'warning',
+        center:true
+      });
+    },
 //    注册
     register(){
       let reqParams = {
@@ -239,14 +247,23 @@ export default {
       };
       this.$axios.post('/regist/saveregist.ajax',reqParams)
         .then( (res) => {
-          console.log(res.data.data.code);
-          if (res.data.data.code === 1){
+          console.log(res.data.code);
+          if (res.data.code === 1){
             console.log("注册成功");
-            this.$router.go(0);
+            this.$message({
+              message: '恭喜您，注册成功',
+              type: 'success',
+              center:true
+            });
+            setTimeout(() => {
+              this.$router.go(0);
+            },3000)
+
           }
         }).catch(() => {
           console.log('请求失败')
       })
+
 
     },
 //    验证公司名称是否被注册或是否为空
@@ -309,35 +326,6 @@ export default {
         this.creditCodeTip = "您输入的社会统一信用代码位数不正确";
         this.creditCodeStatus = true;
       }
-
-
-
-//      this.$axios.get('/regist/countcreditcode.ajax',{
-//        params:{
-//          creditCode:this.creditCode
-//        }
-//      }).then((res) => {
-//        let status;
-//        if (!res.data.data){
-//          status = false;
-//          this.creditCodeTip = "此社会统一信用代码已被注册";
-//          this.creditCodeStatus = true;
-//        }
-//        if (!/^\d{18}$/.test(this.creditCode)){
-//          status = false;
-//          this.creditCodeTip = "社会统一信用代码不能为空";
-//          this.creditCodeStatus = true;
-//        }
-//        if (res.data.data&&/^\d{18}$/.test(this.creditCode)){
-//          status = true;
-//          this.creditCodeTip = '';
-//          this.creditCodeStatus = false;
-//        }else{
-//          this.creditCodeStatus = true;
-//        }
-//      }).catch(() => {
-//        console.log("请求失败");
-//      })
     },
 //    验证用户名是否被注册或是否为空
     usernameCheck(){
@@ -467,7 +455,8 @@ export default {
     },
 //    获取登录页面的验证码方法
     getLoginCode(){
-      this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN'
+      let timestamp = (+new Date());
+      this.vertifySrc = '/xuan/verifyCode.ajax?typei=LOGIN&useful='+timestamp;
     }
   },
   watch: {
