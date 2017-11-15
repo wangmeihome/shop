@@ -49,6 +49,7 @@ export default {
     },
     otherSuccess(response, file, fileList) {
       this.otherUrlArr.push(response.data);
+      this.$emit("getMorePics",this.otherUrlArr);
       console.log(this.otherUrlArr);
     },
 //    移除列表文件时的钩子函数

@@ -40,7 +40,7 @@
         </div>
         <div class="companyInfo_item">
           <p>公司营业执照：</p>
-          <businessLicense></businessLicense>
+          <businessLicense @getOnePic="getLicense"></businessLicense>
         </div>
         <div class="companyInfo_item">
           <p>供货范围：</p>
@@ -62,7 +62,7 @@
         </div>
         <div class="personalInfo_item">
           <p>其他附件：</p>
-          <others></others>
+          <others @getMorePics="getOthers"></others>
         </div>
       </div>
       <div class="personalInfo">
@@ -138,6 +138,8 @@ export default {
       email:'',
       qq:'',
       wc:'',
+      licenseUrlArr:[],
+      otherUrlArr:[],
       industries: [
         {value: '', label: ''},
         {value: '', label: ''},
@@ -203,6 +205,14 @@ export default {
       this.workAreaValue = AreaValue;
       console.log(this.workAreaValue)
     },
+//    获取公司营业执照
+    getLicense(licenseUrlArr){
+      this.licenseUrlArr = licenseUrlArr;
+    },
+//    获取附件
+    getOthers(otherUrlArr){
+      this.otherUrlArr = otherUrlArr;
+    },
 //    提交完善信息按钮
     submitInfo(){
       let reqParams = {
@@ -226,11 +236,11 @@ export default {
           enterprisePicsList:[
             {
               urlList:this.licenseUrlArr.reverse().slice(0,1),//公司营业执照
-              typei:1
+              typei:'1'
             },
             {
               urlList:this.otherUrlArr.reverse().slice(0,5),//公司附件
-              typei:2
+              typei:'2'
             }
           ],
           entityIndustry:this.supplyScope,//供货范围

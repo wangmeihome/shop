@@ -53,6 +53,7 @@
 //    上传图片成功后的钩子函数
       licenseSuccess(response, file, fileList) {
         this.licenseUrlArr.push(response.data);
+        this.$emit("getOnePic",this.licenseUrlArr);
         console.log(this.licenseUrlArr);
       },
 //    移除列表文件时的钩子函数
