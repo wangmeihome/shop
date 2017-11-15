@@ -282,7 +282,7 @@ export default {
       let status;
       if (this.creditCode.length < 18){
         status = false;
-        this.creditCodeTip = "";
+        this.creditCodeTip = "社会统一信用代码不足18位";
         this.creditCodeStatus = true;
       }
       if (this.creditCode.length === 18){
