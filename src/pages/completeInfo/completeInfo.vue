@@ -40,11 +40,7 @@
         </div>
         <div class="companyInfo_item">
           <p>公司营业执照：</p>
-          <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-          </el-upload>
+          <businessLicense></businessLicense>
         </div>
         <div class="companyInfo_item">
           <p>供货范围：</p>
@@ -66,11 +62,7 @@
         </div>
         <div class="personalInfo_item">
           <p>其他附件：</p>
-          <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-          </el-upload>
+          <others></others>
         </div>
       </div>
       <div class="personalInfo">
@@ -81,7 +73,6 @@
         </div>
         <div class="personalInfo_item" style="line-height: 42px">
           <p>性别：</p>
-          <!--<el-input placeholder="请输入性别" v-model="gender"></el-input>-->
           <el-radio v-model="gender" label="1">男</el-radio>
           <el-radio v-model="gender" label="2">女</el-radio>
         </div>
@@ -114,30 +105,18 @@
         <div><a href="#" @click="submitInfo">提交</a></div>
         <div><a href="#">取消</a></div>
       </div>
-      <!-- 营业执照文字提示框 -->
-      <el-dialog title="对不起" :visible.sync="licenseDialogVisible" width="30%" :before-close="licenseHandleClose">
-        <span>您所上传的图片大小超出2MB，请您更换图片。</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="licenseDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="licenseDialogVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
-      <!-- 其他附件文字提示框 -->
-      <el-dialog title="对不起" :visible.sync="otherDialogVisible" width="30%" :before-close="otherHandleClose">
-        <span>您所上传的图片中有大小超出2MB的图片，请您更换图片。</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="otherDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="otherDialogVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
     </div>
 </template>
 
 <script>
   import linkage from '../../components/linkage/linkage.vue'
+  import businessLicense from '../../components/upload/uploadOnePic.vue'
+  import others from '../../components/upload/uploadMorePics.vue'
 export default {
     components:{
-      linkage
+      linkage,
+      businessLicense,
+      others
     },
   data(){
     return {
@@ -161,195 +140,68 @@ export default {
           {value: '2', label: '2'},
           {value: '3', label: '3'},
         ],
-//      所属行业
-      industry: '',
-//      供货范围
-      supplyScope:'',
-//    公司营业执照的路径
-      licenseUrlArr:[],
-//    判断上传营业执照图片大小的文字提示框
-      licenseDialogVisible: false,
-//    判断上传营业执照大小的按钮
-      licenseBtn: true,
-//    其他附件的路径
-      otherUrlArr:[],
-//    判断上传其他附件图片大小的文字提示框
-      otherDialogVisible: false,
-//    判断上传其他附件大小的按钮
-      otherBtn: true,
-//      注册地址所需信息
-      regAreaValue:'',
-//      办公地址所需信息
-      workAreaValue:'',
+      industry: '',//      所属行业
+      supplyScope:'',//      供货范围
+      regAreaValue:'',//      注册地址所需信息
+      workAreaValue:'',//      办公地址所需信息
     }
   },
-  created(){
-  },
   methods:{
+//    获取公司注册地址省市区的区id
     getRegArea(AreaValue){
-      this.regAreaValue = this.AreaValue;
-      console.log(AreaValue);
+      this.regAreaValue = AreaValue;
+      console.log(this.regAreaValue);
     },
+//    获取公司办公地址省市区的区id
     getWorkArea(AreaValue){
-      this.workAreaValue = this.AreaValue;
-      console.log(AreaValue)
-    },
-//    当选取的文件大小超过2M的时候的钩子函数
-    licenseOnChange(file, fileList) {
-      if(file.size >= 2097152) {
-        this.licenseDialogVisible = true;
-        this.licenseBtn = true;
-        fileList.pop();
-        if(fileList.length === 0){
-          this.licenseBtn = true;
-        }else{
-          this.licenseBtn = false;
-        }
-      } else {
-        this.licenseBtn = false;
-      }
-    },
-//    上传公司营业执照
-    licenseSubmitUpload() {
-      this.$refs.licenseUpload.submit();
-    },
-//    上传营业执照成功后的钩子函数
-    licenseSuccess(response, file, fileList) {
-      this.licenseUrlArr.push(response.data);
-      console.log(this.licenseUrlArr);
-    },
-//    移除列表文件时的钩子函数
-    licenseHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-      this.licenseBtn = true;
-    },
-//    点击已上传文件的钩子函数
-    licenseHandlePreview(file) {
-//      目前无逻辑
-    },
-//    当选取的文件大小超过2M的时候的钩子函数
-    otherOnChange(file, fileList) {
-      if(file.size >= 2097152) {
-        this.otherDialogVisible = true;
-        this.otherBtn = true;
-        fileList.pop();
-        if(fileList.length === 0){
-          this.otherBtn = true;
-        }else{
-          this.otherBtn = false;
-        }
-      } else {
-        this.otherBtn = false;
-      }
-    },
-//    上传其他附件
-    otherSubmitUpload() {
-      this.$refs.otherUpload.submit();
-    },
-    otherSuccess(response, file, fileList) {
-      this.otherUrlArr.push(response.data);
-      console.log(this.otherUrlArr);
-    },
-//    移除列表文件时的钩子函数
-    otherHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-      this.otherBtn = true;
-    },
-//    点击已上传文件的钩子函数
-    otherHandlePreview(file) {
-
-    },
-//    点击营业执照大于2M的文字提示框的关闭按钮的钩子函数
-    licenseHandleClose() {
-      this.licenseDialogVisible = false;
-    },
-//    点击其他附件大于2M的文字提示框的关闭按钮的钩子函数
-    otherHandleClose() {
-      this.otherDialogVisible = false;
+      this.workAreaValue = AreaValue;
+      console.log(this.workAreaValue)
     },
 //    提交完善信息按钮
     submitInfo(){
-//      法人
-      console.log(this.legalPerson);
-//      公司固定电话
-      console.log(this.fixedLine);
-//      公司传真
-      console.log(this.fax);
-//      所属行业
-      console.log(this.industry);
-//      公司注册地址
-      console.log(this.regAreaValue);
-      console.log(this.comRegAddrDetail);
-//      公司办公地址
-      console.log(this.workAreaValue);
-      console.log(this.workAddrDetail);
-//      公司营业执照
-      console.log(this.licenseUrlArr.reverse().slice(0,1));
-//      供货范围
-      console.log(this.supplyScope);
-//      开户行名称
-      console.log(this.bankName);
-//      开户行账号
-      console.log(this.bankAccount);
-//      开户行信息
-      console.log(this.bankInfo);
-//      其他附件
-      console.log(this.otherUrlArr.reverse().slice(0,5));
-//      联系人姓名
-      console.log(this.linkMan);
-//      性别
-      console.log(this.gender);
-//      职务
-      console.log(this.duty);
-//      办公电话
-      console.log(this.tel);
-//      邮箱
-      console.log(this.email);
-//      qq号码
-      console.log(this.qq);
       let reqParams = {
         afwindEnterprise:{
-          owner:this.legalPerson,
-          phone:this.fixedLine,
-          fax:this.fax,
-          typei:this.industry,
+          owner:this.legalPerson,//法人
+          phone:this.fixedLine,//公司固定电话
+          fax:this.fax,//传真
+          typei:this.industry,//所属行业
           addresseList:[
             {
-              regionId:this.regAreaValue,
-              address:this.comRegAddrDetail,
+              regionId:this.regAreaValue,//公司注册地址省市区的区id
+              address:this.comRegAddrDetail,//公司详细的注册地址
               typei:'1'
             },
             {
-              regionId:this.workAreaValue,
-              address:this.workAddrDetail,
+              regionId:this.workAreaValue,//公司办公地址省市区的区id
+              address:this.workAddrDetail,//公司详细的办公地址
               typei:'2'
             }
           ],
           enterprisePicsList:[
             {
-              urlList:this.licenseUrlArr.reverse().slice(0,1),
+              urlList:this.licenseUrlArr.reverse().slice(0,1),//公司营业执照
               typei:1
             },
             {
-              urlList:this.otherUrlArr.reverse().slice(0,5),
+              urlList:this.otherUrlArr.reverse().slice(0,5),//公司附件
               typei:2
             }
           ],
-          entityIndustry:this.supplyScope,
+          entityIndustry:this.supplyScope,//供货范围
           accountList:[
             {
-              bankName:this.bankName,
-              account:this.bankAccount,
-              bankNemark:this.bankInfo
+              bankName:this.bankName,//银行名称
+              account:this.bankAccount,//银行账号
+              bankNemark:this.bankInfo//银行信息
             }
           ],
         },
-        realname:this.linkMan,
-        sex:this.gender,
-        userPost:this.duty,
-        telphone:this.tel,
-        email:this.email,
-        qqCode:this.qq
+        realname:this.linkMan,//联系人姓名
+        sex:this.gender,//性别
+        userPost:this.duty,//职务
+        telphone:this.tel,//办公电话
+        email:this.email,//右键
+        qqCode:this.qq//qq号码
       }
       this.$axios.post('/entanduser/updateEntAndUser.ajax',reqParams)
         .then((res) => {
@@ -400,13 +252,6 @@ export default {
     margin-left: 150px;
     width: 604px;
   }
-  .el-upload__tip{
-    height: 15px;
-  }
-  .el-upload-list__item{
-    margin-left: 150px;
-    width: 500px;
-  }
   .control{
     margin: 0 auto;
     overflow: hidden;
@@ -425,6 +270,13 @@ export default {
     width: 100px;
     height: 40px;
     background: dodgerblue;
+  }
+  .el-upload__tip{
+    height: 15px;
+  }
+  .el-upload-list__item{
+    margin-left: 150px;
+    width: 500px;
   }
 </style>
 
