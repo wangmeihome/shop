@@ -11,8 +11,8 @@
           <div>
             <p v-if="item.content">{{item.content}}</p>
             <img v-if="item.photo" :src="item.photo" style="width: 200px;height: 200px">
-            <div v-for="photoDetails in item.picture">
-              <img v-if="photoDetails" :src="photoDetails" style="width:100px;height:100px;">
+            <div v-for="(photoDetails,index) in item.picture">
+              <img v-if="photoDetails && index < 5" :src="photoDetails" style="width:100px;height:100px;">
             </div>
           </div>
         </li>
@@ -262,7 +262,7 @@
       this.$axios.get('/entanduser/getEntAndUser.ajax')
         .then((res) => {
           let myData = JSON.parse(res.data.data);
-          console.log(myData);
+//          console.log(myData);
           /* 企业信息的获取 */
           this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
           this.conpanyName = myData.afwindEnterprise.enterpriseName;
@@ -291,6 +291,9 @@
               this.license = myData.afwindEnterprise.enterprisePicsList[i].url;
             }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
               this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
+//                console.log(myData.afwindEnterprise.enterprisePicsList[i].url)
+//              console.log(this.comInfo[9].picture.reverse().slice(0,5));
+//              console.log(this.comInfo[9].picture);
               this.others.push(myData.afwindEnterprise.enterprisePicsList[i].url);
             }
           }
@@ -335,7 +338,7 @@
           }
 //        console.log(INDUSTRY);
         }).catch(() => {
-        console.log("请求失败")
+        console.log("请求失败111")
       });
 //    请求供货范围下拉列表数据
       this.$axios.get('/entanduser/getEntityIndustryList.ajax')
