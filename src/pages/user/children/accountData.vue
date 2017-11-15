@@ -10,9 +10,9 @@
           <div class="com_account_title">{{item.title}}</div>
           <div>
             <p v-if="item.content">{{item.content}}</p>
-            <img v-if="item.content  === ''&& item.hidden" :src="item.photo" style="width: 200px;height: 200px">
+            <img v-if="item.photo" :src="item.photo" style="width: 200px;height: 200px">
             <div v-for="photoDetails in item.picture">
-              <img v-if="item.content ===''" :src="photoDetails" style="width:100px;height:100px;">
+              <img v-if="photoDetails" :src="photoDetails" style="width:100px;height:100px;">
             </div>
           </div>
         </li>
@@ -183,25 +183,24 @@
     },
     data(){
       return{
-        //模拟企业信息展示数据
-        othersArr:[],
+        //企业信息数据
         comInfo:[
-          {"title":'企业名称:',"content":'',"hidden":true},
-          {"title":"统一社会信用代码:","content":"","hidden":true},
-          {"title":"法人:","content":"","hidden":true},
-          {"title":"公司固定电话:","content":"","hidden":true},
-          {"title":"公司传真:","content":"","hidden":true},
-          {"title":"所属行业:","content":"","hidden":true},
-          {"title":"公司注册地址:","content":"","hidden":true},
-          {"title":"办公地址:","content":"","hidden":true},
-          {"title":"公司营业执照:","content":"","photo":'',"hidden":true},
-          {"title":"其他附件:", "content":"","hidden":false,"picture":[]},
-          {"title":"供货范围:","content":"","hidden":true},
-          {"title":"开户行名称:","content":"","hidden":true},
-          {"title":"开户行账号:","content":"","hidden":true},
-          {"title":"开户行信息:","content":"","hidden":true}
+          {"title":'企业名称:',"content":''},
+          {"title":"统一社会信用代码:","content":""},
+          {"title":"法人:","content":""},
+          {"title":"公司固定电话:","content":""},
+          {"title":"公司传真:","content":""},
+          {"title":"所属行业:","content":""},
+          {"title":"公司注册地址:","content":""},
+          {"title":"办公地址:","content":""},
+          {"title":"公司营业执照:","photo":''},
+          {"title":"其他附件:","picture":[]},
+          {"title":"供货范围:","content":""},
+          {"title":"开户行名称:","content":""},
+          {"title":"开户行账号:","content":""},
+          {"title":"开户行信息:","content":""}
         ],
-        //模拟个人信息展示数据
+        //个人信息数据
         perInfo:[
           {"title":"联系人姓名:","content":""},
           {"title":"性别:","content":""},
@@ -313,14 +312,14 @@
       this.$axios.get('/entanduser/getEntAndUser.ajax')
         .then((res) => {
           let myData = JSON.parse(res.data.data);
-//          console.log(myData);
+          console.log(myData);
           /* 企业信息的获取 */
           this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
           this.comInfo[1].content = myData.afwindEnterprise.creditCode;
           this.comInfo[2].content = myData.afwindEnterprise.owner;
           this.comInfo[3].content = myData.afwindEnterprise.phone;
           this.comInfo[4].content = myData.afwindEnterprise.fax;
-          this.comInfo[5].content = myData.afwindEnterprise.typei;
+          this.comInfo[5].content = myData.afwindEnterprise.config.valuei;
           for (let i = 0;i<myData.afwindEnterprise.addresseList.length;i++){
             if (myData.afwindEnterprise.addresseList[i].typei === '1'){
               this.comInfo[6].content = myData.afwindEnterprise.addresseList[i].address;
