@@ -2,8 +2,8 @@
   <div>
     <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-      <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">上传到服务器</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">点我上传到服务器</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传1张jpg/png文件，且不超过2MB</div>
     </el-upload>
     <el-dialog title="对不起" :visible.sync="licenseDialogVisible" width="30%" :before-close="licenseHandleClose">
       <span>您所上传的图片大小超出2MB，请您更换图片。</span>
@@ -33,14 +33,14 @@
       licenseOnChange(file, fileList) {
 //        此次控制台打印的为后缀名
 //        console.log(file.name.substring(file.name.length - 3));
-        if(file.size >= 2097152) {
+        if(file.size >= 2097152 || fileList.length !== 1) {
           this.licenseDialogVisible = true;
-          this.licenseBtn = true;
+          this.licenseBtn = true;//上传按钮不可用
           fileList.pop();
-          if(fileList.length === 0){
-            this.licenseBtn = true;
-          }else{
+          if(fileList.length === 1){
             this.licenseBtn = false;
+          }else{
+            this.licenseBtn = true;
           }
         } else {
           this.licenseBtn = false;

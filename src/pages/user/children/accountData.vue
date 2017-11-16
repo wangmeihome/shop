@@ -12,7 +12,7 @@
             <p v-if="item.content">{{item.content}}</p>
             <img v-if="item.photo" :src="item.photo" style="width: 200px;height: 200px">
             <div v-for="(photoDetails,index) in item.picture">
-              <img v-if="photoDetails && index < 5" :src="photoDetails" style="width:100px;height:100px;">
+              <img v-if="photoDetails" :src="photoDetails" style="width:100px;height:100px;">
             </div>
           </div>
         </li>
@@ -51,26 +51,22 @@
           </div>
           <div class="editComInfoList_item">
             <p>公司注册地址：</p>
-            <linkage @getAreaId="getRegAddr"></linkage>
+            <linkage :PRO="regpro" :CITY="regcity" :AREA="regarea" :REC="1" @getAreaId="getRegAddr"></linkage>
             <el-input :value="comRegAddrDetail" v-model="comRegAddrDetail"></el-input>
           </div>
           <div class="editComInfoList_item">
             <p>公司办公地址：</p>
-            <linkage @getAreaId="getWorkAddr"></linkage>
+            <linkage :PRO="workpro" :CITY="workcity" :AREA="workarea" :REC="2" @getAreaId="getWorkAddr"></linkage>
             <el-input :value="workAddrDetail" v-model="workAddrDetail"></el-input>
           </div>
           <div class="editComInfoList_item">
             <p>公司营业执照：</p>
             <div>
-              <img :src="license" style="width:200px;height:200px">
+              <img :src="license" style="width:200px;height:200px;">
             </div>
             <div style="margin-left: 130px">
               <div>更换公司营业执照：</div>
-              <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-              </el-upload>
+              <businessLicense @getOnePic="getLicense"></businessLicense>
             </div>
           </div>
           <div class="editComInfoList_item">
@@ -94,24 +90,20 @@
           <div class="editComInfoList_item">
             <p>其他附件：</p>
             <div>
-              <img v-for="item in others" :src="item" style="width: 100px;height: 100px;">
+              <img v-for="item in others" :src="item" style="width: 100px;height: 100px;margin-right: 10px">
             </div>
             <div style="margin-left: 130px">
               <div>更换其他附件：</div>
-              <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-              </el-upload>
+              <others @getMorePics="getOthers"></others>
             </div>
           </div>
         </div>
         <div class="el-dialog__footer">
            <span slot="footer" class="dialog-footer">
-             <el-button @click="editComInfo = false" style="text-align:center !important" class="cancel">取 消</el-button>
+             <el-button @click="editComInfo = false" style="text-align:center !important" class="cancel">取消</el-button>
              <el-tooltip placement="top">
                 <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
-                <el-button type="primary" @click="editComInfo = false" class="ensure">确定</el-button>
+                <el-button type="primary" @click="editcominfo" class="ensure">提交</el-button>
              </el-tooltip>
            </span>
         </div>
@@ -164,7 +156,7 @@
         <div class="el-dialog__footer">
              <span slot="footer" class="dialog-footer">
               <el-button @click="editPerInfoBtn = false" class="cancel">取 消</el-button>
-              <el-button type="primary" @click="editPerInfoBtn = false" class="ensure">确 定</el-button>
+              <el-button type="primary" @click="editperinfo" class="ensure">确 定</el-button>
              </span>
         </div>
       </el-dialog>
@@ -172,13 +164,24 @@
   </div>
 </template>
 <script>
-  import linkage from '../.././../components/linkage/linkage.vue'
+  import linkage from '../../../components/linkage/linkage.vue'
+  import businessLicense from '../../../components/upload/uploadOnePic.vue'
+  import others from '../../../components/upload/uploadMorePics.vue'
   export default{
     components:{
-      linkage
+      linkage,
+      businessLicense,
+      others
     },
     data(){
       return{
+//        省市区父组件传子组件默认参数
+        regpro:'',
+        regcity:'',
+        regarea:'',
+        workpro:'',
+        workcity:'',
+        workarea:'',
         //企业信息数据
         comInfo:[
           {"title":'企业名称:',"content":''},
@@ -232,18 +235,8 @@
         regAreaValue:'',
         workAreaValue:'',
         others:[],
-//    公司营业执照的路径
         licenseUrlArr:[],
-//    判断上传营业执照图片大小的文字提示框
-        licenseDialogVisible: false,
-//    判断上传营业执照大小的按钮
-        licenseBtn: true,
-//    其他附件的路径
         otherUrlArr:[],
-//    判断上传其他附件图片大小的文字提示框
-        otherDialogVisible: false,
-//    判断上传其他附件大小的按钮
-        otherBtn: true,
         //个人信息修改参数
         linkMan:'',
         gender:'',
@@ -291,9 +284,6 @@
               this.license = myData.afwindEnterprise.enterprisePicsList[i].url;
             }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
               this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
-//                console.log(myData.afwindEnterprise.enterprisePicsList[i].url)
-//              console.log(this.comInfo[9].picture.reverse().slice(0,5));
-//              console.log(this.comInfo[9].picture);
               this.others.push(myData.afwindEnterprise.enterprisePicsList[i].url);
             }
           }
@@ -326,7 +316,7 @@
           this.perInfo[6].content = myData.qqCode;
           this.qq = myData.qqCode;
         }).catch(() => {
-          console.log("数据请求失败");
+        console.log("数据请求失败");
       });
       //    请求所属行业下拉列表数据
       this.$axios.get('/entanduser/gettypei.ajax')
@@ -355,87 +345,90 @@
     },
     methods:{
 //      获取公司注册地址
-      getRegAddr(AreaValue){
-        this.regAreaValue = this.AreaValue;
-        console.log(AreaValue);
+      getRegAddr(regarea){
+        this.regAreaValue = regarea;
+//        console.log(regarea);
       },
-      getWorkAddr(AreaValue){
-        this.workAreaValue = this.AreaValue;
-        console.log(AreaValue);
+//      获取公司工作地址
+      getWorkAddr(workarea){
+        this.workAreaValue = workarea;
+//        console.log(workarea);
       },
-      //    当选取的文件大小超过2M的时候的钩子函数
-      licenseOnChange(file, fileList) {
-        if(file.size >= 2097152) {
-          this.licenseDialogVisible = true;
-          this.licenseBtn = true;
-          fileList.pop();
-          if(fileList.length === 0){
-            this.licenseBtn = true;
-          }else{
-            this.licenseBtn = false;
+//    获取公司营业执照
+      getLicense(licenseUrlArr){
+        this.licenseUrlArr = licenseUrlArr;
+      },
+//    获取附件
+      getOthers(otherUrlArr){
+        this.otherUrlArr = otherUrlArr;
+      },
+//      修改企业信息
+      editcominfo(){
+        this.editComInfo = false;
+        let reqParams = {
+          afwindEnterprise:{
+            owner:this.legalPerson,//法人
+            phone:this.fixedLine,//公司固定电话
+            fax:this.fax,//传真
+            typei:this.industry,//所属行业
+            addresseList:[
+              {
+                regionId:this.regAreaValue,//公司注册地址省市区的区id
+                address:this.comRegAddrDetail,//公司详细的注册地址
+                typei:'1'
+              },
+              {
+                regionId:this.workAreaValue,//公司办公地址省市区的区id
+                address:this.workAddrDetail,//公司详细的办公地址
+                typei:'2'
+              }
+            ],
+            enterprisePicsList:[
+              {
+                urlList:this.licenseUrlArr.reverse().slice(0,1),//公司营业执照
+                typei:'1'
+              },
+              {
+                urlList:this.otherUrlArr.reverse().slice(0,5),//公司附件
+                typei:'2'
+              }
+            ],
+            entityIndustry:this.supplyScope,//供货范围
+            accountList:[
+              {
+                bankName:this.bankName,//银行名称
+                account:this.bankAccount,//银行账号
+                bankNemark:this.bankInfo//银行信息
+              }
+            ],
           }
-        } else {
-          this.licenseBtn = false;
         }
-      },
-//    上传公司营业执照
-      licenseSubmitUpload() {
-        this.$refs.licenseUpload.submit();
-      },
-//    上传营业执照成功后的钩子函数
-      licenseSuccess(response, file, fileList) {
-        this.licenseUrlArr.push(response.data);
-        console.log(this.licenseUrlArr);
-      },
-//    移除列表文件时的钩子函数
-      licenseHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-        this.licenseBtn = true;
-      },
-//    点击已上传文件的钩子函数
-      licenseHandlePreview(file) {
-//      目前无逻辑
-      },
-      //    当选取的文件大小超过2M的时候的钩子函数
-      otherOnChange(file, fileList) {
-        if(file.size >= 2097152) {
-          this.otherDialogVisible = true;
-          this.otherBtn = true;
-          fileList.pop();
-          if(fileList.length === 0){
-            this.otherBtn = true;
-          }else{
-            this.otherBtn = false;
-          }
-        } else {
-          this.otherBtn = false;
-        }
-      },
-//    上传其他附件
-      otherSubmitUpload() {
-        this.$refs.otherUpload.submit();
-      },
-      otherSuccess(response, file, fileList) {
-        this.otherUrlArr.push(response.data);
-        console.log(this.otherUrlArr);
-      },
-//    移除列表文件时的钩子函数
-      otherHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-        this.otherBtn = true;
-      },
-//    点击已上传文件的钩子函数
-      otherHandlePreview(file) {
+        this.$axios.post('/entanduser/updateEnt.ajax',reqParams)
+          .then((res) => {
 
+          }).catch(() => {
+            console.log("更改企业信息失败")
+        })
       },
-//    点击营业执照大于2M的文字提示框的关闭按钮的钩子函数
-      licenseHandleClose() {
-        this.licenseDialogVisible = false;
+//      修改个人信息
+      editperinfo(){
+        this.editPerInfoBtn = false;
+        let reqParams = {
+          realname:this.linkMan,//联系人姓名
+          sex:this.gender,//性别
+          userPost:this.duty,//职务
+          telphone:this.tel,//办公电话
+          email:this.email,//右键
+          qqCode:this.qq//qq号码
+        }
+        this.$axios.post('/entanduser/updateUser.ajax',reqParams)
+          .then((res) => {
+
+          }).catch(() => {
+            console.log("修改个人信息失败")
+        })
       },
-//    点击其他附件大于2M的文字提示框的关闭按钮的钩子函数
-      otherHandleClose() {
-        this.otherDialogVisible = false;
-      },
+
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {

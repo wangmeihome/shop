@@ -1,9 +1,9 @@
 <template>
     <div>
-      <el-upload multiple class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :on-remove="otherHandleRemove" :auto-upload="false">
+      <el-upload multiple :limit="5" class="upload-demo" list-type="picture" ref="otherUpload" action="/entanduser/upload.ajax" :on-success="otherSuccess" :on-change="otherOnChange" :on-preview="otherHandlePreview" :auto-upload="false">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">上传到服务器</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="otherSubmitUpload" :disabled="otherBtn">点我上传到服务器</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传5张jpg/png文件，且不超过2MB</div>
       </el-upload>
       <el-dialog title="对不起" :visible.sync="otherDialogVisible" width="30%" :before-close="otherHandleClose">
         <span>您所上传的图片中有大小超出2MB的图片，请您更换图片。</span>
@@ -30,6 +30,11 @@ export default {
   methods:{
     //    当选取的文件大小超过2M的时候的钩子函数
     otherOnChange(file, fileList) {
+
+//      console.log(file);
+      console.log(fileList);
+
+
       if(file.size >= 2097152) {
         this.otherDialogVisible = true;
         this.otherBtn = true;
@@ -53,10 +58,11 @@ export default {
       console.log(this.otherUrlArr);
     },
 //    移除列表文件时的钩子函数
-    otherHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-      this.otherBtn = true;
-    },
+//    otherHandleRemove(file, fileList) {
+////      console.log(file, fileList);
+//      this.otherBtn = true;
+////      console.log(fileList)
+//    },
 //    点击已上传文件的钩子函数
     otherHandlePreview(file) {
 

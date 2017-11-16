@@ -24,24 +24,6 @@
         AreaOptions:{}
       }
     },
-    props:{
-      PRO:{
-        type:String,
-        default:''
-      },
-      CITY:{
-        type:String,
-        default:''
-      },
-      AREA:{
-        type:String,
-        default:''
-      },
-      REC:{
-        type:Number,
-        default:''
-      }
-    },
     methods:{
       choosePro(){
         this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.ProValue)
@@ -60,6 +42,7 @@
         })
       },
       chooseArea(){
+//        console.log(this.AreaValue);
         this.$emit("getAreaId",this.AreaValue);
       }
     },
@@ -69,29 +52,6 @@
           this.ProvinceOptions = JSON.parse(res.data.data);
         }).catch(() => {
         console.log("请求失败");
-      });
-      this.$axios.get('/entanduser/getEntAndUser.ajax')
-        .then((res) => {
-//          console.log(this.REC);
-          if(this.REC === 1){
-            this.ProValue = this.PRO;
-            this.CityValue = this.CITY;
-            this.AreaValue = this.AREA;
-            let myData = (JSON.parse(res.data.data).afwindEnterprise.addresseList[1].afwindRegion.fullName.split(','));
-            this.AreaValue = myData[2];
-            this.CityValue = myData[1];
-            this.ProValue = myData[0];
-          }else if(this.REC === 2){
-            this.ProValue = this.PRO;
-            this.CityValue = this.CITY;
-            this.AreaValue = this.AREA;
-            let myData = (JSON.parse(res.data.data).afwindEnterprise.addresseList[0].afwindRegion.fullName.split(','));
-            this.AreaValue = myData[2];
-            this.CityValue = myData[1];
-            this.ProValue = myData[0];
-          }
-        }).catch(() => {
-        console.log("省市区请求数据失败");
       });
     }
   }

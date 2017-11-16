@@ -109,7 +109,7 @@
 </template>
 
 <script>
-  import linkage from '../../components/linkage/linkage.vue'
+  import linkage from '../../components/linkage/linkageRegAddr.vue'
   import businessLicense from '../../components/upload/uploadOnePic.vue'
   import others from '../../components/upload/uploadMorePics.vue'
 export default {
@@ -263,7 +263,7 @@ export default {
         .then((res) => {
           console.log(res)
         }).catch(() => {
-
+          console.log('完善信息失败');
       })
     }
   }
@@ -333,6 +333,9 @@ export default {
   .el-upload-list__item{
     margin-left: 150px;
     width: 500px;
+  }
+  .upload-demo .el-icon-close:before{
+    display: none;
   }
 </style>
 
