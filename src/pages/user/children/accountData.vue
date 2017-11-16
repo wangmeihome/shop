@@ -156,7 +156,10 @@
         <div class="el-dialog__footer">
              <span slot="footer" class="dialog-footer">
               <el-button @click="editPerInfoBtn = false" class="cancel">取 消</el-button>
-              <el-button type="primary" @click="editperinfo" class="ensure">确 定</el-button>
+               <el-tooltip placement="top">
+                <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
+                <el-button type="primary" @click="editperinfo" class="ensure">提交</el-button>
+             </el-tooltip>
              </span>
         </div>
       </el-dialog>
@@ -405,7 +408,7 @@
         }
         this.$axios.post('/entanduser/updateEnt.ajax',reqParams)
           .then((res) => {
-
+            console.log(res)
           }).catch(() => {
             console.log("更改企业信息失败")
         })
@@ -423,7 +426,7 @@
         }
         this.$axios.post('/entanduser/updateUser.ajax',reqParams)
           .then((res) => {
-
+            console.log(res)
           }).catch(() => {
             console.log("修改个人信息失败")
         })
