@@ -47,6 +47,8 @@
         this.$axios.get('/region/region.ajax?typei=CITY&provinceId='+this.ProValue)
           .then((res) => {
             this.CityOptions = JSON.parse(res.data.data);
+            this.CityValue = '';
+            this.AreaValue = '';
           }).catch(() => {
           console.log("请求失败");
         })
