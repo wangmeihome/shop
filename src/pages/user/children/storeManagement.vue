@@ -5,8 +5,8 @@
       </div>
       <div class="store_nav">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="店铺详情" name="first">店铺详情</el-tab-pane>
-          <el-tab-pane label="店铺设置" name="second">
+          <el-tab-pane label="店铺详情" name="storeDetails">店铺详情</el-tab-pane>
+          <el-tab-pane label="店铺设置" name="storeSet">
             <div class="setStore_wrapper">
               <div class="store_wrapper_item">
                 <p>店铺名称：</p>
@@ -32,12 +32,6 @@
                 <p class="storeInfo">店铺简介：</p>
                 <el-input resize="none" type="textarea" :rows="3" placeholder="请输入店铺简介" v-model="aboutStore"></el-input>
               </div>
-              <!--<div class="store_wrapper_item" style="overflow: inherit">-->
-                <!--<p class="storeDetails">店铺详情：</p>-->
-                <!--<div style="float: left">-->
-                  <!---->
-                <!--</div>-->
-              <!--</div>-->
               <div>
                 <p style="float: left;width: 110px;text-align: right">店铺详情：</p>
                 <div style="float: left;width: 800px">
@@ -62,7 +56,7 @@
   export default {
     data() {
       return {
-        activeName: 'first',
+        activeName: 'storeDetails',
         storeName:'',
 //    公司营业执照的路径
         logoUrlArr:[],

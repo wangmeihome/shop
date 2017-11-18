@@ -48,14 +48,37 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane label="新增品牌" name="addBrand">新增品牌</el-tab-pane>
+          <el-tab-pane label="新增品牌" name="newBrand">
+            <div class="newBrand">
+              <div class="newBrand_item">
+                <p>品牌名称：</p>
+                <el-input v-model="brandName" placeholder="请输入内容"></el-input>
+              </div>
+              <div class="newBrand_item">
+                <p>品牌LOGO：</p>
+                <brandLogo @getOnePic="getLogo"></brandLogo>
+              </div>
+              <div class="newBrand_item">
+                <p>品牌简介：</p>
+                <el-input resize="none" type="textarea" :rows="3" placeholder="请输入品牌简介" v-model="aboutBrand"></el-input>
+              </div>
+              <div class="newBrand_btn">
+                <el-button @click="submitBrand" type="primary">提交</el-button>
+                <el-button type="primary">取消</el-button>
+              </div>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
 </template>
 
 <script>
+  import brandLogo from '../../../components/upload/uploadOnePic.vue'
 export default {
+    components:{
+      brandLogo
+    },
   data(){
     return {
       activeName: 'brandList',
@@ -98,15 +121,20 @@ export default {
         info:'审核未通过'
       }],
       multipleSelection: [],
+      brandName:'',
+      logoUrlArr:[],
+      aboutBrand:''
     }
   },
   methods:{
+//    nav导航切换
     handleClick(tab, event) {
       console.log(tab, event);
     },
+//    品牌列表CheckBox选取
     handleSelectionChange(val) {
       this.multipleSelection = val;
-//      console.log(val)
+      console.log(val)
     },
 //    查看操作
     examine(index, row){
@@ -127,6 +155,14 @@ export default {
 //    筛选审核状态
     filterTag(value, row) {
       return row.info === value;
+    },
+//    获取logo的url地址
+    getLogo(logoUrl){
+      this.logoUrlArr = logoUrl
+    },
+//    提交品牌信息
+    submitBrand(){
+      alert("提交品牌信息")
     }
   }
 }
@@ -156,6 +192,33 @@ export default {
   }
   .brand_nav .has-gutter tr th{
     text-align: center;
+  }
+  .newBrand_item{
+    overflow: hidden;
+    padding: 5px 0;
+  }
+  .newBrand_btn{
+    overflow: hidden;
+    padding: 5px 0;
+    width: 160px;
+    margin: 0 auto;
+  }
+  .newBrand_item p{
+    float: left;
+    width: 120px;
+    line-height: 40px;
+    text-align: right;
+  }
+  .newBrand_item .el-input{
+    float: left;
+    width: 300px;
+  }
+  .newBrand_item .el-textarea{
+    float: left;
+    width: 666px;
+  }
+  .newBrand_item .el-upload__tip{
+    height: 15px;
   }
 </style>
 
