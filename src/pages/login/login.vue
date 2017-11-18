@@ -192,6 +192,7 @@ export default {
         .then((res) => {
           console.log(res)
           this.$router.go(-1)
+          sessionStorage.setItem('loginStatus',1);
         }).catch((res) => {
         console.log(res)
       })

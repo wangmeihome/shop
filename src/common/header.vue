@@ -9,7 +9,7 @@
       </div>
       <div class="right_wrapper">
         <div class="login">
-          <router-link to="/login">
+          <router-link :to="sessData ? '/user/order':'/login'">
             <el-popover ref="login_info" placement="bottom" width="200" trigger="hover" :disabled="showUserInfo">
               <ul class="userInfoList">
                 <li><a href="#">用户名字</a></li>
@@ -76,14 +76,21 @@ export default {
   data(){
     return {
       numBgc:"",
-      showUserInfo:false,
+      showUserInfo:true,
       goodNum:1,
+      sessData:''
     }
   },
   computed:{
     totalNum(){
       let num = 0;
       return num
+    }
+  },
+  mounted(){
+    if (sessionStorage.getItem('loginStatus')){
+      this.showUserInfo = false;
+      this.sessData = sessionStorage.getItem('loginStatus');
     }
   },
   methods:{

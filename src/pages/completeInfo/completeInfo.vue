@@ -193,8 +193,8 @@ export default {
     this.$axios.get('/entanduser/getEntAndUser.ajax')
       .then((res) => {
       let info = JSON.parse(res.data.data);
-      this.companyName = info.afwindEnterprise.enterpriseName;
-      this.creditCode = info.afwindEnterprise.creditCode;
+      this.companyName = info.afwindEnterpriseAlter.enterpriseName;
+      this.creditCode = info.afwindEnterpriseAlter.creditCode;
       this.personalTel = info.mobile;
 //        console.log(info)
       }).catch(() => {
@@ -251,7 +251,7 @@ export default {
             }
           ],
           entityIndustry:this.supplyScope,//供货范围
-          accountList:[
+          altAccountList:[
             {
               bankName:this.bankName,//银行名称
               account:this.bankAccount,//银行账号
