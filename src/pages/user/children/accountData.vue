@@ -28,7 +28,7 @@
             <el-input disabled :value="conpanyName" v-model="conpanyName"></el-input>
           </div>
           <div class="editComInfoList_item">
-            <p>社会统一信用代码：</p>
+            <p>纳税人识别号：</p>
             <el-input disabled :value="creditCode" v-model="creditCode"></el-input>
           </div>
           <div class="editComInfoList_item">
@@ -89,10 +89,10 @@
           </div>
           <div class="editComInfoList_item">
             <p>其他附件：</p>
-            <div>
-              <img v-for="item in others" :src="item" style="width: 100px;height: 100px;margin-right: 10px">
+            <div style="float: left" v-for="(item,index) in others">
+              <img :src="item" style="width: 100px;height: 100px;margin-right: 10px">
             </div>
-            <div style="margin-left: 130px">
+            <div style="margin-left: 130px;float: left;width: 540px">
               <div>更换其他附件：</div>
               <others @getMorePics="getOthers"></others>
             </div>
@@ -100,7 +100,7 @@
         </div>
         <div class="el-dialog__footer">
            <span slot="footer" class="dialog-footer">
-             <el-button @click="editComInfo = false" style="text-align:center !important" class="cancel">取消</el-button>
+             <el-button @click="cancelEditcominfo" style="text-align:center !important" class="cancel">取消</el-button>
              <el-tooltip placement="top">
                 <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
                 <el-button type="primary" @click="editcominfo" class="ensure">提交</el-button>
@@ -108,7 +108,10 @@
            </span>
         </div>
       </el-dialog>
-      <!--个人信息-->
+    </div>
+    <!--个人信息-->
+    <div class="account_detail">
+
       <ul class="personal_list">
         <li v-for="item in perInfo">
           <div class="per_account_title">{{item.title}}</div>
@@ -188,7 +191,7 @@
         //企业信息数据
         comInfo:[
           {"title":'企业名称:',"content":''},
-          {"title":"统一社会信用代码:","content":""},
+          {"title":"纳税人识别号:","content":""},
           {"title":"法人:","content":""},
           {"title":"公司固定电话:","content":""},
           {"title":"公司传真:","content":""},
@@ -409,9 +412,15 @@
         this.$axios.post('/entanduser/updateEnt.ajax',reqParams)
           .then((res) => {
             console.log(res)
+//            this.$router.go(0);
           }).catch(() => {
             console.log("更改企业信息失败")
         })
+      },
+      //取消修改企业信息
+      cancelEditcominfo(){
+        this.editComInfo = false;
+        this.$router.go(0);
       },
 //      修改个人信息
       editperinfo(){
@@ -431,7 +440,11 @@
             console.log("修改个人信息失败")
         })
       },
-
+//      取消修改个人信息
+      cancelEditperinfo(){
+        this.editPerInfoBtn = false;
+        this.$router.go(0);
+      },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {

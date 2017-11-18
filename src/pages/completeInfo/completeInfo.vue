@@ -1,5 +1,6 @@
 <template>
     <div class="completeInfo_wrapper">
+      <!-- 完善企业信息 -->
       <div class="companyInfo">
         <h1>①请您完善企业信息</h1>
         <div class="companyInfo_item">
@@ -7,7 +8,7 @@
           <el-input :value="companyName" v-model="companyName" :disabled="true"></el-input>
         </div>
         <div class="companyInfo_item">
-          <p>社会统一信用代码：</p>
+          <p>纳税人识别号：</p>
           <el-input :value="creditCode" v-model="creditCode" :disabled="true"></el-input>
         </div>
         <div class="companyInfo_item">
@@ -30,12 +31,12 @@
         </div>
         <div class="companyInfo_item">
           <p>公司注册地址：</p>
-          <linkage @getAreaId="getRegArea"></linkage>
+          <linkage :PRO="nullPro" :CITY="nullCity" :AREA="nullArea" :REC="0" @getAreaId="getRegArea"></linkage>
           <el-input class="regRoad" placeholder="请输入街道地址" v-model="comRegAddrDetail"></el-input>
         </div>
         <div class="companyInfo_item">
           <p>办公地址：</p>
-          <linkage @getAreaId="getWorkArea"></linkage>
+          <linkage :PRO="nullPro" :CITY="nullCity" :AREA="nullArea" :REC="0" @getAreaId="getWorkArea"></linkage>
           <el-input class="workRoad" placeholder="请输入街道地址" v-model="workAddrDetail"></el-input>
         </div>
         <div class="companyInfo_item">
@@ -65,6 +66,7 @@
           <others @getMorePics="getOthers"></others>
         </div>
       </div>
+      <!-- 完善个人信息 -->
       <div class="personalInfo">
         <h1>②请您完善个人信息</h1>
         <div class="personalInfo_item">
@@ -109,7 +111,7 @@
 </template>
 
 <script>
-  import linkage from '../../components/linkage/linkageRegAddr.vue'
+  import linkage from '../../components/linkage/linkage.vue'
   import businessLicense from '../../components/upload/uploadOnePic.vue'
   import others from '../../components/upload/uploadMorePics.vue'
 export default {
@@ -120,6 +122,11 @@ export default {
     },
   data(){
     return {
+      //省市区父组件向子组件传递的空参数
+      nullPro:'',
+      nullCity:'',
+      nullArea:'',
+//      完善信息所需参数
       companyName:'',
       creditCode:'',
       legalPerson:'',

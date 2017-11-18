@@ -36,7 +36,7 @@
           {name: '账户资料', path: 'accountData'},
           {name: '品牌管理', path: 'brandManagement'},
           {name: '店铺管理', path: 'storeManagement'},
-          {name: '售后服务', path: 'saleService'},
+          {name: '账户管理', path: 'accountMag'},
           {name: '以旧换新', path: 'oldForNew'}
         ],
       }
@@ -60,7 +60,7 @@
 //    例如将要跳转到 127.0.0.1:8080/user/coupon  to.path指的就是/user/coupon
     watch:{
       $route(to){
-        console.log(to);
+//        console.log(to);
         let path = to.path.split('/')[2];
         this.nav.forEach(item => {
           if (item.path === path) {

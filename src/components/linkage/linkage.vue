@@ -39,7 +39,7 @@
       },
       REC:{
         type:Number,
-        default:''
+        default:0
       }
     },
     methods:{
@@ -91,6 +91,10 @@
             this.AreaValue = myData[2];
             this.CityValue = myData[1];
             this.ProValue = myData[0];
+          }else{
+            this.ProValue = '';
+            this.CityValue = '';
+            this.AreaValue = '';
           }
         }).catch(() => {
         console.log("省市区请求数据失败");

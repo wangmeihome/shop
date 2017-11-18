@@ -50,7 +50,7 @@
               </div>
               <div>
                 <p style="color:red;height: 16px"><span v-show="creditCodeTip"><i class="el-icon-warning"></i><span>{{ creditCodeTip }}</span></span></p>
-                <el-input @input="creditCodeCheck" v-model="creditCode" placeholder="请输入社会统一信用代码"></el-input>
+                <el-input @input="creditCodeCheck" v-model="creditCode" placeholder="纳税人识别号"></el-input>
               </div>
               <div>
                 <p style="color:red;height: 16px"><span v-show="usernameTip"><i class="el-icon-warning"></i><span>{{ usernameTip }}</span></span></p>
@@ -294,12 +294,12 @@ export default {
         })
       }
     },
-//    验证社会统一信用代码是否被注册或是否为空
+//    验证纳税人识别号是否被注册或是否为空
     creditCodeCheck(){
       let status;
       if (this.creditCode.length < 18){
         status = false;
-        this.creditCodeTip = "社会统一信用代码不足18位";
+        this.creditCodeTip = "纳税人识别号不足18位";
         this.creditCodeStatus = true;
       }
       if (this.creditCode.length === 18){
@@ -310,7 +310,7 @@ export default {
         }).then((res) => {
           if (!res.data.data){
             status = false;
-            this.creditCodeTip = "社会统一信用代码已被注册";
+            this.creditCodeTip = "此纳税人识别号已被注册";
             this.creditCodeStatus = true;
           }else if(/^\d{18}$/.test(this.creditCode)){
             status = true;
@@ -323,7 +323,7 @@ export default {
       }
       if (this.creditCode.length > 18){
         status = false;
-        this.creditCodeTip = "您输入的社会统一信用代码位数不正确";
+        this.creditCodeTip = "您输入的纳税人识别号位数不正确";
         this.creditCodeStatus = true;
       }
     },

@@ -11,7 +11,7 @@ import Order from '../pages/user/children/order.vue'
 import AccountData from '../pages/user/children/accountData.vue'
 import brandManagement from '../pages/user/children/brandManagement.vue'
 import storeManagement from '../pages/user/children/storeManagement.vue'
-import SaleService from '../pages/user/children/saleService.vue'
+import accountMag from '../pages/user/children/accountMag.vue'
 import oldForNew from '../pages/user/children/oldForNew.vue'
 
 Vue.use(Router);
@@ -42,7 +42,7 @@ export default new Router({
         {path:'accountData',name:'账号资料',component:AccountData},
         {path:'brandManagement',name:'品牌管理',component:brandManagement},
         {path:'storeManagement',name:'店铺管理',component:storeManagement},
-        {path:'saleService',name:'售后服务',component:SaleService},
+        {path:'accountMag',name:'账户管理',component:accountMag},
         {path:'oldForNew',name:'以旧换新',component:oldForNew}
       ]
     }

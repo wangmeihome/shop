@@ -4,7 +4,6 @@
         <h1>品牌管理</h1>
       </div>
       <div class="brand_nav">
-
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="品牌列表" name="brandList">
             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
@@ -107,7 +106,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(val)
+//      console.log(val)
     },
 //    查看操作
     examine(index, row){
@@ -125,12 +124,9 @@ export default {
     cancelApply(index,row){
       console.log(index, row);
     },
+//    筛选审核状态
     filterTag(value, row) {
       return row.info === value;
-    },
-//    选择品牌审核状态
-    getStatus(){
-      console.log(this.selectValue)
     }
   }
 }

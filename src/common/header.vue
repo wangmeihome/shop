@@ -17,7 +17,7 @@
                 <li><router-link to="/user/accountData">账号资料</router-link></li>
                 <li><router-link to="/user/brandManagement">品牌管理</router-link></li>
                 <li><router-link to="/user/storeManagement">店铺管理</router-link></li>
-                <li><router-link to="/user/saleService">售后服务</router-link></li>
+                <li><router-link to="/user/accountMag">账户管理</router-link></li>
                 <li><router-link to="/user/oldForNew">以旧换新</router-link></li>
                 <li><a href="#">退出</a></li>
               </ul>
