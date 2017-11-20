@@ -132,7 +132,7 @@
   }
   .store_wrapper_item .el-upload__tip{
     height: 15px;
-    margin-left: 102px;
+    margin-left: 110px;
   }
   .store_wrapper_item p{
     float: left;
