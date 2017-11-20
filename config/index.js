@@ -143,6 +143,20 @@ module.exports = {
         pathRewrite:{
           '^/entanduser/updateUser.ajax':'/entanduser/updateUser.ajax'
         }
+      },
+      '/store/insertstore':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/store/insertstore':'/store/insertstore'
+        }
+      },
+      '/store/upload.ajax':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/store/upload.ajax':'/store/upload.ajax'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
