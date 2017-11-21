@@ -41,7 +41,7 @@
         </div>
         <div class="companyInfo_item">
           <p>公司营业执照：</p>
-          <businessLicense :licenseAction="licenseAction" @getOnePic="getLicense"></businessLicense>
+          <businessLicense :theAction="completeAction" @getOnePic="getLicense"></businessLicense>
         </div>
         <div class="companyInfo_item">
           <p>供货范围：</p>
@@ -63,7 +63,7 @@
         </div>
         <div class="personalInfo_item">
           <p>其他附件：</p>
-          <others @getMorePics="getOthers"></others>
+          <others :theAction="completeAction" @getMorePics="getOthers"></others>
         </div>
       </div>
       <!-- 完善个人信息 -->
@@ -122,7 +122,7 @@ export default {
     },
   data(){
     return {
-      licenseAction:'/entanduser/upload.ajax',
+      completeAction:'/entanduser/upload.ajax',
       //省市区父组件向子组件传递的空参数
       nullPro:'',
       nullCity:'',

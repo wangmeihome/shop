@@ -25,6 +25,14 @@ export default {
       otherDialogVisible: false,
 //    判断上传图片大小的按钮
       otherBtn: true,
+      //        图片上传地址
+      actionUrl:'',
+    }
+  },
+  props:{
+    theAction:{
+      type:String,
+      default:''
     }
   },
   methods:{
@@ -46,6 +54,7 @@ export default {
         }
       } else {
         this.otherBtn = false;
+        this.actionUrl = this.theAction;
       }
     },
 //    上传图片

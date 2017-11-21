@@ -4,172 +4,6 @@
       <h1>我的账户</h1>
     </div>
     <el-tabs v-model="editComInfoTab" type="card" @tab-click="handleClick">
-      <el-tab-pane label="基本信息" name="basicInfo">
-        <!--企业信息-->
-        <div class="account_detail">
-          <ul class="account_list">
-            <li v-for="item in comInfo">
-              <div class="com_account_title">{{item.title}}</div>
-              <div>
-                <p v-if="item.content">{{item.content}}</p>
-                <img v-if="item.photo" :src="item.photo" style="width: 200px;height: 200px">
-                <div v-for="(photoDetails,index) in item.picture">
-                  <img v-if="photoDetails" :src="photoDetails" style="width:100px;height:100px;">
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div style="width: 126px;height: 40px;margin-left:160px">
-            <el-button @click="editComInfo=true" type="primary">修改企业信息</el-button>
-          </div>
-          <!-- 修改企业信息弹框 -->
-          <el-dialog :visible.sync="editComInfo" size="full" :before-close="handleClose">
-            <div class="editComInfoList">
-              <div class="editComInfoList_item">
-                <p>企业名称：</p>
-                <el-input disabled :value="conpanyName" v-model="conpanyName"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>纳税人识别号：</p>
-                <el-input disabled :value="creditCode" v-model="creditCode"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>法人：</p>
-                <el-input :value="legalPerson" v-model="legalPerson"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>公司固定电话：</p>
-                <el-input :value="fixedLine" v-model="fixedLine"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>公司传真：</p>
-                <el-input :value="fax" v-model="fax"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>所属行业：</p>
-                <el-select v-model="industry">
-                  <el-option v-for="item in industries" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-              </div>
-              <div class="editComInfoList_item">
-                <p>公司注册地址：</p>
-                <linkage :PRO="regpro" :CITY="regcity" :AREA="regarea" :REC="1" @getAreaId="getRegAddr"></linkage>
-                <el-input :value="comRegAddrDetail" v-model="comRegAddrDetail"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>公司办公地址：</p>
-                <linkage :PRO="workpro" :CITY="workcity" :AREA="workarea" :REC="2" @getAreaId="getWorkAddr"></linkage>
-                <el-input :value="workAddrDetail" v-model="workAddrDetail"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>公司营业执照：</p>
-                <div>
-                  <img :src="license" style="width:200px;height:200px;">
-                </div>
-                <div style="margin-left: 130px">
-                  <div>更换公司营业执照：</div>
-                  <businessLicense @getOnePic="getLicense"></businessLicense>
-                </div>
-              </div>
-              <div class="editComInfoList_item">
-                <p>供货范围：</p>
-                <el-select v-model="supplyScope">
-                  <el-option v-for="item in supplyScopes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-              </div>
-              <div class="editComInfoList_item">
-                <p>开户行名称：</p>
-                <el-input :value="bankName" v-model="bankName"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>开户行账号：</p>
-                <el-input :value="bankAccount" v-model="bankAccount"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>开户行信息：</p>
-                <el-input :value="bankInfo" v-model="bankInfo"></el-input>
-              </div>
-              <div class="editComInfoList_item">
-                <p>其他附件：</p>
-                <div style="float: left" v-for="(item,index) in others">
-                  <img :src="item" style="width: 100px;height: 100px;margin-right: 10px">
-                </div>
-                <div style="margin-left: 130px;float: left;width: 540px">
-                  <div>更换其他附件：</div>
-                  <others @getMorePics="getOthers"></others>
-                </div>
-              </div>
-            </div>
-            <div class="el-dialog__footer">
-           <span slot="footer" class="dialog-footer">
-             <el-button @click="cancelEditcominfo" style="text-align:center !important" class="cancel">取消</el-button>
-             <el-tooltip placement="top">
-                <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
-                <el-button type="primary" @click="editcominfo" class="ensure">提交</el-button>
-             </el-tooltip>
-           </span>
-            </div>
-          </el-dialog>
-        </div>
-        <!--个人信息-->
-        <div class="account_detail">
-
-          <ul class="personal_list">
-            <li v-for="item in perInfo">
-              <div class="per_account_title">{{item.title}}</div>
-              <div>
-                <p>{{item.content}}</p>
-              </div>
-            </li>
-          </ul>
-          <div style="width: 126px;height: 40px;margin-left: 160px">
-            <el-button @click="editPerInfoBtn=true" type="primary">修改个人信息</el-button>
-          </div>
-          <!-- 修改个人信息弹框 -->
-          <el-dialog class="personalDialog" :visible.sync="editPerInfoBtn" size="tiny" :before-close="handleClose">
-            <div class="editPerInfoList">
-              <div class="editPerInfoList_item">
-                <p>联系人姓名：</p>
-                <el-input :value="linkMan" v-model="linkMan"></el-input>
-              </div>
-              <div style="line-height: 40px" class="editPerInfoList_item">
-                <p>性别：</p>
-                <el-radio v-model="gender" label="1">男</el-radio>
-                <el-radio v-model="gender" label="2">女</el-radio>
-              </div>
-              <div class="editPerInfoList_item">
-                <p>职务：</p>
-                <el-input :value="duty" v-model="duty"></el-input>
-              </div>
-              <div class="editPerInfoList_item">
-                <p>手机号：</p>
-                <el-input disabled :value="personalTel" v-model="personalTel"></el-input>
-              </div>
-              <div class="editPerInfoList_item">
-                <p>办公电话：</p>
-                <el-input :value="tel" v-model="tel"></el-input>
-              </div>
-              <div class="editPerInfoList_item">
-                <p>邮箱：</p>
-                <el-input :value="email" v-model="email"></el-input>
-              </div>
-              <div class="editPerInfoList_item">
-                <p>QQ号码：</p>
-                <el-input :value="qq" v-model="qq"></el-input>
-              </div>
-            </div>
-            <div class="el-dialog__footer">
-             <span slot="footer" class="dialog-footer">
-              <el-button @click="editPerInfoBtn = false" class="cancel">取 消</el-button>
-               <el-tooltip placement="top">
-                <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
-                <el-button type="primary" @click="editperinfo" class="ensure">提交</el-button>
-             </el-tooltip>
-             </span>
-            </div>
-          </el-dialog>
-        </div>
-      </el-tab-pane>
       <el-tab-pane label="审理信息" name="hearInfo">
         <!--企业信息-->
         <div class="account_detail">
@@ -336,6 +170,172 @@
           </el-dialog>
         </div>
       </el-tab-pane>
+      <el-tab-pane label="基本信息" name="basicInfo">
+        <!--企业信息-->
+        <div class="account_detail">
+          <ul class="account_list">
+            <li v-for="item in comInfo">
+              <div class="com_account_title">{{item.title}}</div>
+              <div>
+                <p v-if="item.content">{{item.content}}</p>
+                <img v-if="item.photo" :src="item.photo" style="width: 200px;height: 200px">
+                <div v-for="(photoDetails,index) in item.picture">
+                  <img v-if="photoDetails" :src="photoDetails" style="width:100px;height:100px;">
+                </div>
+              </div>
+            </li>
+          </ul>
+          <div style="width: 126px;height: 40px;margin-left:160px">
+            <el-button @click="editComInfo=true" type="primary">修改企业信息</el-button>
+          </div>
+          <!-- 修改企业信息弹框 -->
+          <el-dialog :visible.sync="editComInfo" size="full" :before-close="handleClose">
+            <div class="editComInfoList">
+              <div class="editComInfoList_item">
+                <p>企业名称：</p>
+                <el-input disabled :value="conpanyName" v-model="conpanyName"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>纳税人识别号：</p>
+                <el-input disabled :value="creditCode" v-model="creditCode"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>法人：</p>
+                <el-input :value="legalPerson" v-model="legalPerson"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>公司固定电话：</p>
+                <el-input :value="fixedLine" v-model="fixedLine"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>公司传真：</p>
+                <el-input :value="fax" v-model="fax"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>所属行业：</p>
+                <el-select v-model="industry">
+                  <el-option v-for="item in industries" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </div>
+              <div class="editComInfoList_item">
+                <p>公司注册地址：</p>
+                <linkage :PRO="regpro" :CITY="regcity" :AREA="regarea" :REC="1" @getAreaId="getRegAddr"></linkage>
+                <el-input :value="comRegAddrDetail" v-model="comRegAddrDetail"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>公司办公地址：</p>
+                <linkage :PRO="workpro" :CITY="workcity" :AREA="workarea" :REC="2" @getAreaId="getWorkAddr"></linkage>
+                <el-input :value="workAddrDetail" v-model="workAddrDetail"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>公司营业执照：</p>
+                <div>
+                  <img :src="license" style="width:200px;height:200px;">
+                </div>
+                <div style="margin-left: 130px">
+                  <div>更换公司营业执照：</div>
+                  <businessLicense @getOnePic="getLicense"></businessLicense>
+                </div>
+              </div>
+              <div class="editComInfoList_item">
+                <p>供货范围：</p>
+                <el-select v-model="supplyScope">
+                  <el-option v-for="item in supplyScopes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </div>
+              <div class="editComInfoList_item">
+                <p>开户行名称：</p>
+                <el-input :value="bankName" v-model="bankName"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>开户行账号：</p>
+                <el-input :value="bankAccount" v-model="bankAccount"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>开户行信息：</p>
+                <el-input :value="bankInfo" v-model="bankInfo"></el-input>
+              </div>
+              <div class="editComInfoList_item">
+                <p>其他附件：</p>
+                <div style="float: left" v-for="(item,index) in others">
+                  <img :src="item" style="width: 100px;height: 100px;margin-right: 10px">
+                </div>
+                <div style="margin-left: 130px;float: left;width: 540px">
+                  <div>更换其他附件：</div>
+                  <others @getMorePics="getOthers"></others>
+                </div>
+              </div>
+            </div>
+            <div class="el-dialog__footer">
+           <span slot="footer" class="dialog-footer">
+             <el-button @click="cancelEditcominfo" style="text-align:center !important" class="cancel">取消</el-button>
+             <el-tooltip placement="top">
+                <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
+                <el-button type="primary" @click="editcominfo" class="ensure">提交</el-button>
+             </el-tooltip>
+           </span>
+            </div>
+          </el-dialog>
+        </div>
+        <!--个人信息-->
+        <div class="account_detail">
+
+          <ul class="personal_list">
+            <li v-for="item in perInfo">
+              <div class="per_account_title">{{item.title}}</div>
+              <div>
+                <p>{{item.content}}</p>
+              </div>
+            </li>
+          </ul>
+          <div style="width: 126px;height: 40px;margin-left: 160px">
+            <el-button @click="editPerInfoBtn=true" type="primary">修改个人信息</el-button>
+          </div>
+          <!-- 修改个人信息弹框 -->
+          <el-dialog class="personalDialog" :visible.sync="editPerInfoBtn" size="tiny" :before-close="handleClose">
+            <div class="editPerInfoList">
+              <div class="editPerInfoList_item">
+                <p>联系人姓名：</p>
+                <el-input :value="linkMan" v-model="linkMan"></el-input>
+              </div>
+              <div style="line-height: 40px" class="editPerInfoList_item">
+                <p>性别：</p>
+                <el-radio v-model="gender" label="1">男</el-radio>
+                <el-radio v-model="gender" label="2">女</el-radio>
+              </div>
+              <div class="editPerInfoList_item">
+                <p>职务：</p>
+                <el-input :value="duty" v-model="duty"></el-input>
+              </div>
+              <div class="editPerInfoList_item">
+                <p>手机号：</p>
+                <el-input disabled :value="personalTel" v-model="personalTel"></el-input>
+              </div>
+              <div class="editPerInfoList_item">
+                <p>办公电话：</p>
+                <el-input :value="tel" v-model="tel"></el-input>
+              </div>
+              <div class="editPerInfoList_item">
+                <p>邮箱：</p>
+                <el-input :value="email" v-model="email"></el-input>
+              </div>
+              <div class="editPerInfoList_item">
+                <p>QQ号码：</p>
+                <el-input :value="qq" v-model="qq"></el-input>
+              </div>
+            </div>
+            <div class="el-dialog__footer">
+             <span slot="footer" class="dialog-footer">
+              <el-button @click="editPerInfoBtn = false" class="cancel">取 消</el-button>
+               <el-tooltip placement="top">
+                <div slot="content" style="font-size:16px;">您所修改的信息<br/>需要审核三天</div>
+                <el-button type="primary" @click="editperinfo" class="ensure">提交</el-button>
+             </el-tooltip>
+             </span>
+            </div>
+          </el-dialog>
+        </div>
+      </el-tab-pane>
     </el-tabs>
 
   </div>
@@ -352,7 +352,7 @@
     },
     data(){
       return{
-        editComInfoTab: 'basicInfo',
+        editComInfoTab: 'hearInfo',
 //        省市区父组件传子组件默认参数
         regpro:'',
         regcity:'',

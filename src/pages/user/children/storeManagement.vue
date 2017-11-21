@@ -5,7 +5,7 @@
     </div>
     <div class="store_nav">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="店铺详情" name="storeDetails">店铺详情</el-tab-pane>
+        <!--<el-tab-pane label="店铺详情" name="storeDetails">店铺详情</el-tab-pane>-->
         <el-tab-pane label="店铺设置" name="storeSet">
           <div class="setStore_wrapper">
             <div class="store_wrapper_item">
