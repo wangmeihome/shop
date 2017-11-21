@@ -146,7 +146,7 @@ export default {
       email:'',
       qq:'',
       wc:'',
-      licenseUrlArr:[],
+      licenseUrl:'',
       otherUrlArr:[],
       industries: [
         {value: '', label: ''},
@@ -214,8 +214,8 @@ export default {
       console.log(this.workAreaValue)
     },
 //    获取公司营业执照
-    getLicense(licenseUrlArr){
-      this.licenseUrlArr = licenseUrlArr;
+    getLicense(licenseUrl){
+      this.licenseUrl = licenseUrl;
     },
 //    获取附件
     getOthers(otherUrlArr){
@@ -243,7 +243,7 @@ export default {
           ],
           enterprisePicsList:[
             {
-              urlList:this.licenseUrlArr.reverse().slice(0,1),//公司营业执照
+              url:this.licenseUrl,//公司营业执照
               typei:'1'
             },
             {
