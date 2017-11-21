@@ -503,11 +503,13 @@
     },
     created(){
 //      console.log(this.comInfo)
-      this.$axios.get('/entanduser/getEntAndUser.ajax')
+      this.$axios.get('/entanduser/getEntAndUser.ajax?typei=all')
         .then((res) => {
           let myData = JSON.parse(res.data.data);
-//          console.log(myData)
-          if (myData.afwindEnterprise === null){
+          console.log(myData.afwindEnterprise.enterpriseName);
+
+
+//            审理信息部分
             this.aftercomInfo[0].content = myData.afwindEnterpriseAlter.enterpriseName;
             this.afterconpanyName = myData.afwindEnterpriseAlter.enterpriseName;
             this.aftercomInfo[1].content = myData.afwindEnterpriseAlter.creditCode;
@@ -566,7 +568,12 @@
             this.afteremail = myData.email;
             this.afterperInfo[6].content = myData.qqCode;
             this.afterqq = myData.qqCode;
-          }else if(myData.afwindEnterpriseAlter === null){
+
+
+
+
+
+//          基本信息部分
             this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
             this.conpanyName = myData.afwindEnterprise.enterpriseName;
             this.comInfo[1].content = myData.afwindEnterprise.creditCode;
@@ -625,7 +632,11 @@
             this.email = myData.email;
             this.perInfo[6].content = myData.qqCode;
             this.qq = myData.qqCode;
-          }
+
+
+
+
+
         }).catch(() => {
         console.log("数据请求失败");
       });
