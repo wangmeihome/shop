@@ -41,7 +41,7 @@
         </div>
         <div class="companyInfo_item">
           <p>公司营业执照：</p>
-          <businessLicense @getOnePic="getLicense"></businessLicense>
+          <businessLicense :licenseAction="licenseAction" @getOnePic="getLicense"></businessLicense>
         </div>
         <div class="companyInfo_item">
           <p>供货范围：</p>
@@ -122,6 +122,7 @@ export default {
     },
   data(){
     return {
+      licenseAction:'/entanduser/upload.ajax',
       //省市区父组件向子组件传递的空参数
       nullPro:'',
       nullCity:'',
@@ -223,7 +224,7 @@ export default {
 //    提交完善信息按钮
     submitInfo(){
       let reqParams = {
-        afwindEnterprise:{
+        afwindEnterpriseAlter:{
           owner:this.legalPerson,//法人
           phone:this.fixedLine,//公司固定电话
           fax:this.fax,//传真

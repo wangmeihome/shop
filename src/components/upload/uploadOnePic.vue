@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" action="/entanduser/upload.ajax" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
+    <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" :action="actionUrl" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
       <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">点我上传到服务器</el-button>
       <div slot="tip" class="el-upload__tip">只能上传1张jpg/png文件，且不超过2MB</div>
@@ -26,6 +26,14 @@
         licenseDialogVisible: false,
 //    判断上传图片大小的按钮
         licenseBtn: true,
+//        图片上传地址
+        actionUrl:'',
+      }
+    },
+    props:{
+      theAction:{
+        type:String,
+        default:''
       }
     },
     methods:{
@@ -44,6 +52,8 @@
           }
         } else {
           this.licenseBtn = false;
+          this.actionUrl = this.theAction;
+//          console.log(this.theAction)
         }
       },
 //    上传图片

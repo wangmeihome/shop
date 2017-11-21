@@ -303,7 +303,9 @@ export default {
         this.creditCodeTip = "纳税人识别号不足18位";
         this.creditCodeStatus = true;
       }
+
       if (this.creditCode.length === 18){
+//        console.log(this.creditCode.length)
         this.$axios.get('/regist/countcreditcode.ajax',{
           params:{
             creditCode:this.creditCode

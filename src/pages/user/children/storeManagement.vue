@@ -90,7 +90,7 @@
           ],
           instruct:this.aboutStore
         }
-        this.$axios.post('/store/insertstore',reqParams)
+        this.$axios.post('/store/insertstore.ajax',reqParams)
           .then((res) => {
             console.log(res);
             console.log('店铺信息提交成功');
@@ -98,8 +98,8 @@
             console.log("店铺信息提交失败");
         })
 //        console.log(this.storeName);
-//        console.log(this.bannerUrl);
-//        console.log(this.logoUrl);
+//        console.log(this.bannerUrlArr[0]);
+//        console.log(this.logoUrlArr[0]);
 //        console.log(this.aboutStore);
 //        console.log(this.content);
       }

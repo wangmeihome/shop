@@ -144,7 +144,7 @@ module.exports = {
           '^/entanduser/updateUser.ajax':'/entanduser/updateUser.ajax'
         }
       },
-      '/store/insertstore':{
+      '/store/insertstore.ajax':{
         target:'http://192.168.1.2:8082/commerce-web',
         changeOrigin: true,
         pathRewrite:{
