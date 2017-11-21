@@ -157,6 +157,13 @@ module.exports = {
         pathRewrite:{
           '^/store/upload.ajax':'/store/upload.ajax'
         }
+      },
+      '/brand/savebrand.ajax':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brand/savebrand.ajax':'/brand/savebrand.ajax'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

@@ -56,7 +56,7 @@
               </div>
               <div class="newBrand_item">
                 <p>品牌LOGO：</p>
-                <brandLogo @getOnePic="getLogo"></brandLogo>
+                <brandLogo :theAction="brandAction" @getOnePic="getLogo"></brandLogo>
               </div>
               <div class="newBrand_item">
                 <p>品牌简介：</p>
@@ -81,6 +81,7 @@ export default {
     },
   data(){
     return {
+      brandAction:'/store/upload.ajax',
       activeName: 'brandList',
       tableData: [
         {
@@ -122,7 +123,7 @@ export default {
       }],
       multipleSelection: [],
       brandName:'',
-      logoUrlArr:[],
+      logoUrl:'',
       aboutBrand:''
     }
   },
@@ -158,11 +159,27 @@ export default {
     },
 //    获取logo的url地址
     getLogo(logoUrl){
-      this.logoUrlArr = logoUrl
+      this.logoUrl = logoUrl
     },
 //    提交品牌信息
     submitBrand(){
-      alert("提交品牌信息")
+//      console.log(this.brandName);
+//      console.log(this.logoUrl);
+//      console.log(this.aboutBrand);
+      let reqParams = {
+        brandname:this.brandName,
+        logo:this.logoUrl,
+        information:this.aboutBrand,
+        eng_name:'',
+        first_eng:'',
+        remark:''
+      }
+      this.$axios.post('/brand/savebrand.ajax',reqParams)
+        .then((res) => {
+          console.log(res)
+        }).catch(() => {
+          console.log("品牌数据添加失败")
+      })
     }
   }
 }
