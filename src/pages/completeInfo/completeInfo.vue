@@ -146,7 +146,7 @@ export default {
       email:'',
       qq:'',
       wc:'',
-      licenseUrl:'',
+      licenseUrlArr:'',
       otherUrlArr:[],
       industries: [
         {value: '', label: ''},
@@ -243,7 +243,7 @@ export default {
           ],
           enterprisePicsList:[
             {
-              url:this.licenseUrl,//公司营业执照
+              urlList:this.licenseUrlArr.reverse().slice(0,1),//公司营业执照
               typei:'1'
             },
             {

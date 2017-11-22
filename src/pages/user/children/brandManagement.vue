@@ -64,7 +64,7 @@
               </div>
               <div class="newBrand_btn">
                 <el-button @click="submitBrand" type="primary">提交</el-button>
-                <el-button type="primary">取消</el-button>
+                <el-button type="primary">重置</el-button>
               </div>
             </div>
           </el-tab-pane>
@@ -130,7 +130,8 @@ export default {
   methods:{
 //    nav导航切换
     handleClick(tab, event) {
-      console.log(tab, event);
+//      console.log(tab.name);
+//      console.log(event);
     },
 //    品牌列表CheckBox选取
     handleSelectionChange(val) {
@@ -158,16 +159,14 @@ export default {
       return row.info === value;
     },
 //    获取logo的url地址
-    getLogo(logoUrl){
-      this.logoUrl = logoUrl
+    getLogo(picUrl){
+      this.logoUrl = picUrl
+//      console.log(picUrl)
     },
 //    提交品牌信息
     submitBrand(){
-//      console.log(this.brandName);
-//      console.log(this.logoUrl);
-//      console.log(this.aboutBrand);
       let reqParams = {
-        brandname:this.brandName,
+        brandName:this.brandName,
         logo:this.logoUrl,
         information:this.aboutBrand,
         eng_name:'',
@@ -177,6 +176,7 @@ export default {
       this.$axios.post('/brand/savebrand.ajax',reqParams)
         .then((res) => {
           console.log(res)
+          this.$router.go(0)
         }).catch(() => {
           console.log("品牌数据添加失败")
       })
@@ -236,6 +236,10 @@ export default {
   }
   .newBrand_item .el-upload__tip{
     height: 15px;
+  }
+  .newBrand_item .el-upload-list--picture{
+    width:300px;
+    margin-left:120px;
   }
 </style>
 

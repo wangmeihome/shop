@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-upload class="upload-demo" list-type="picture" ref="licenseUpload" :action="actionUrl" :on-success="licenseSuccess" :on-change="licenseOnChange" :on-preview="licenseHandlePreview" :on-remove="licenseHandleRemove" :auto-upload="false">
-      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-      <el-button style="margin-left: 10px;" size="small" type="success" @click="licenseSubmitUpload" :disabled="licenseBtn">点我上传到服务器</el-button>
+    <el-upload class="upload-demo" :limit="1" list-type="picture" :action="actionUrl" :before-upload="handleBefore" :on-success="handleSuccess" :on-remove="handleRemove" :on-exceed="handleExceed">
+      <el-button size="small" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip">只能上传1张jpg/png文件，且不超过2MB</div>
     </el-upload>
-    <el-dialog title="对不起" :visible.sync="licenseDialogVisible" width="30%" :before-close="licenseHandleClose">
-      <span>您所上传的图片大小超出2MB，请您更换图片。</span>
+
+    <el-dialog title="对不起" :visible.sync="DialogVisible" width="30%" :before-close="handleClose">
+      <span>您所上传的图片中有大小超出2MB的图片，请您更换图片。</span>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="licenseDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="licenseDialogVisible = false">确 定</el-button>
+          <el-button @click="DialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="DialogVisible = false">确 定</el-button>
         </span>
     </el-dialog>
   </div>
@@ -21,13 +21,10 @@
     data(){
       return {
 //    上传图片的路径
-        licenseUrlArr:[],
-//    判断上传图片大小的文字提示框
-        licenseDialogVisible: false,
-//    判断上传图片大小的按钮
-        licenseBtn: true,
-//        图片上传地址
+        picUrl:'',
+//    图片上传地址
         actionUrl:'',
+        DialogVisible:false
       }
     },
     props:{
@@ -36,48 +33,37 @@
         default:''
       }
     },
+    created(){
+      this.actionUrl = this.theAction;
+    },
     methods:{
-//    当选取的文件大小超过2M的时候的钩子函数
-      licenseOnChange(file, fileList) {
-//        此次控制台打印的为后缀名
-//        console.log(file.name.substring(file.name.length - 3));
-        if(file.size >= 2097152 || fileList.length !== 1) {
-          this.licenseDialogVisible = true;
-          this.licenseBtn = true;//上传按钮不可用
-          fileList.pop();
-          if(fileList.length === 1){
-            this.licenseBtn = false;
-          }else{
-            this.licenseBtn = true;
-          }
-        } else {
-          this.licenseBtn = false;
-          this.actionUrl = this.theAction;
-//          console.log(this.theAction)
+      //文件上传之前   如大于2M 就会执行移除文件的方法
+      handleBefore(file) {
+        if(file.size > 2097152){
+          this.DialogVisible = true;
+          return false;
+        }else{
+          console.log("上传成功");
         }
       },
-//    上传图片
-      licenseSubmitUpload() {
-        this.$refs.licenseUpload.submit();
+      //上传成功调用的函数
+      handleSuccess(response, file, fileList) {
+        this.picUrl = response.data
+//        console.log(this.picUrl)
+        this.$emit("getOnePic",this.picUrl);
       },
-//    上传图片成功后的钩子函数
-      licenseSuccess(response, file, fileList) {
-        this.licenseUrlArr.push(response.data);
-        this.$emit("getOnePic",this.licenseUrlArr);
-        console.log(this.licenseUrlArr);
+      //移除文件调用的函数
+      handleRemove(file, fileList) {
+        console.log('删除图片成功');
+//        console.log(fileList);
       },
-//    移除列表文件时的钩子函数
-      licenseHandleRemove(file, fileList) {
-//      console.log(file, fileList);
-        this.licenseBtn = true;
-      },
-//    点击已上传文件的钩子函数
-      licenseHandlePreview(file) {
-//      目前无逻辑
+      //上传文件个数超过限制调用的函数
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
 //    点击图片大于2M的文字提示框的关闭按钮的钩子函数
-      licenseHandleClose() {
-        this.licenseDialogVisible = false;
+      handleClose() {
+        this.DialogVisible = false;
       }
     }
   }
