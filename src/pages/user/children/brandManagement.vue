@@ -6,47 +6,59 @@
       <div class="brand_nav">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="品牌列表" name="brandList">
+            <div class="setBrand_wrapper">
+              <div class="setBrand_wrapper_item">
+                <el-input placeholder="请输入品牌名称" v-model="brandSearch" class="input-with-select">
+                  <el-select @change="editStatus" v-model="selectStatus" slot="prepend" placeholder="审核状态">
+                    <el-option label="重置" value="3"></el-option>
+                    <el-option label="审核未通过" value="0"></el-option>
+                    <el-option label="已审核" value="1"></el-option>
+                    <el-option label="审核中" value="2"></el-option>
+                  </el-select>
+                  <el-button @click="searchBrandName" slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+              </div>
+            </div>
             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column prop="num" label="序号" width="55"></el-table-column>
+              <el-table-column prop="id" label="序号" width="55"></el-table-column>
               <el-table-column prop="brandName" label="品牌名称" width="120"></el-table-column>
-              <el-table-column label="品牌LOGO" width="120">
-                <template slot-scope="scope">
-                  <img :src="scope.row.brandImg" style="width: 120px;height: 50px">
-                </template>
-              </el-table-column>
+              <!--<el-table-column label="品牌LOGO" width="120">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<img :src="scope.row.logo" style="width: 120px;height: 50px">-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column label="审核状态" width="200">
                 <template slot-scope="scope">
                   <p>
-                    <span v-if="scope.row.auditStatus === 0">审核未通过</span>
-                    <span v-if="scope.row.auditStatus === 1">已审核</span>
-                    <span v-if="scope.row.auditStatus === 2">审核中</span>
+                    <span v-if="scope.row.status === 0">审核未通过</span>
+                    <span v-if="scope.row.status === 1">已审核</span>
+                    <span v-if="scope.row.status === 2">审核中</span>
                   </p>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <div v-if="scope.row.auditStatus === 1">
+                  <div v-if="scope.row.status === 1">
                     <el-button @click="examine(scope.$index, scope.row)" type="primary" size="mini">查看</el-button>
                   </div>
-                  <div v-if="scope.row.auditStatus === 2">
+                  <div v-if="scope.row.status === 2">
                     <el-button @click="cancel(scope.$index, scope.row)" type="danger" size="mini">取消</el-button>
                   </div>
-                  <div v-if="scope.row.auditStatus === 0">
+                  <div v-if="scope.row.status === 0">
                     <el-button @click="reapply(scope.$index, scope.row)" type="warning" size="mini">重新申请</el-button>
                     <el-button @click="cancelApply(scope.$index, scope.row)" type="danger" size="mini">取消</el-button>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="info" label="状态" width="120"
-                               :filters="[{ text: '审核未通过', value: '审核未通过' }, { text: '已审核', value: '已审核' },{ text: '审核中', value: '审核中' }]"
-                               :filter-method="filterTag"
-                               filter-placement="bottom-end">
-                <template slot-scope="scope">
-                  <el-tag :type="scope.row.info === '审核未通过' ? 'danger' : scope.row.info === '已审核' ? 'success' : 'warning'" close-transition>{{scope.row.info}}</el-tag>
-                </template>
-              </el-table-column>
             </el-table>
+            <div class="delAllBtn">
+              <el-button v-show="showCheckBox" @click="deleteAll" type="danger">全部取消</el-button>
+            </div>
+
+            <div class="pagination">
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="parseInt(pageSize)" layout="total, prev, pager, next, jumper" :total="parseInt(total)"></el-pagination>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="新增品牌" name="newBrand">
             <div class="newBrand">
@@ -83,51 +95,33 @@ export default {
     return {
       brandAction:'/store/upload.ajax',
       activeName: 'brandList',
-      tableData: [
-        {
-        num: 1,
-        brandName: '品牌1',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:0,
-        info:'审核未通过'
-      }, {
-        num: 2,
-        brandName: '品牌2',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:1,
-        info:'已审核'
-      }, {
-        num: 3,
-        brandName: '品牌3',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:2,
-        info:'审核中'
-      }, {
-        num: 4,
-        brandName: '品牌4',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:2,
-        info:'审核中'
-      }, {
-        num: 5,
-        brandName: '品牌5',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:1,
-        info:'已审核'
-      }, {
-        num: 6,
-        brandName: '品牌6',
-        brandImg: require('../../../assets/partnerImgs/atlas.jpg'),
-        auditStatus:0,
-        info:'审核未通过'
-      }],
+      tableData: [],
       multipleSelection: [],
       brandName:'',
       logoUrl:'',
-      aboutBrand:''
+      aboutBrand:'',
+      brandSearch:'',
+      selectStatus:'',
+      currentPage:1,//当前页
+      pageSize:'',//每页条数
+      total:'',//共有多少条数据
+      brandID:[],
+      showCheckBox:false
     }
   },
+  created(){
+    this.filter('','','');
+  },
   methods:{
+//    全删除
+    deleteAll(){
+      this.$axios.get('/brandrequest/deleteByExample?ids=' + this.brandID)
+        .then((res) => {
+          this.$router.go(0);
+        }).catch(() => {
+        console.log("取消审核操作失败");
+      })
+    },
 //    nav导航切换
     handleClick(tab, event) {
 //      console.log(tab.name);
@@ -135,32 +129,36 @@ export default {
     },
 //    品牌列表CheckBox选取
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(val)
+//      console.log(this.multipleSelection);
+      val.forEach((currentValue) => {
+//        console.log(currentValue.status)
+        if (currentValue.status !== 1){
+//          console.log(currentValue.status)
+//          this.multipleSelection = val;
+//          this.brandID.push(currentValue.id);
+        }
+      })
+
     },
 //    查看操作
     examine(index, row){
-      console.log(index, row);
+      this.searchBrandDet(row.id);
     },
 //    取消审核操作
     cancel(index,row){
-      console.log(index, row);
+      this.cancelBrand(row.id);
     },
 //    重新审核操作
     reapply(index,row){
-      console.log(index, row);
+      this.reAudit(row.id);
     },
 //    取消重新申请
     cancelApply(index,row){
-      console.log(index, row);
-    },
-//    筛选审核状态
-    filterTag(value, row) {
-      return row.info === value;
+      this.cancelBrand(row.id);
     },
 //    获取logo的url地址
     getLogo(picUrl){
-      this.logoUrl = picUrl
+      this.logoUrl = picUrl;
 //      console.log(picUrl)
     },
 //    提交品牌信息
@@ -179,6 +177,79 @@ export default {
           this.$router.go(0)
         }).catch(() => {
           console.log("品牌数据添加失败")
+      })
+    },
+//    根据品牌名称进行筛选
+    searchBrandName(){
+      if (this.brandSearch === ''){
+        this.filter('','','');
+      }else{
+        this.filter('','',this.brandSearch);
+      }
+
+    },
+//    切换审核状态
+    editStatus(){
+      if (this.selectStatus === '3'){
+        this.showCheckBox = false;
+        this.filter('','','');
+      }else if(this.selectStatus === '1'){
+        this.showCheckBox = false;
+        this.filter('',this.selectStatus,'');
+      }else{
+        this.showCheckBox = true;
+        this.filter('',this.selectStatus,'');
+      }
+    },
+//    点击前往某页
+    handleSizeChange(val) {
+      this.filter(val,this.selectStatus,'');
+//      console.log(`每页 ${val} 条`);
+    },
+//    直接前往某页
+    handleCurrentChange(val) {
+      this.filter(val,this.selectStatus,'');
+//      console.log(`当前页: ${val}`);
+    },
+//    筛选函数  第一个参数当前页  当二个参数审核状态  第三个参数  品牌名称
+    filter(current_page,the_status,the_brandName){
+      this.$axios.get('/brandrequest/selectByExample?pageNum=' + current_page + '&status=' + the_status + '&brandName=' + the_brandName)
+        .then((res) => {
+          let brandData = JSON.parse(res.data.data);
+          this.tableData = brandData.rows;
+          this.total = brandData.total;
+          this.pageSize = brandData.pageSize;
+        }).catch(() => {
+        console.log("请求品牌列表失败");
+      })
+    },
+//    查看品牌详情函数
+    searchBrandDet(brandID){
+      this.$axios.get('/brandrequest/selectByPrimaryKeyadmin.ajax?id=' + brandID)
+        .then((res) => {
+          console.log(res)
+        }).catch(() => {
+        console.log("查看操作失败");
+      })
+    },
+//    重新审核品牌函数
+    reAudit(brandID){
+      this.$axios.get('/brandrequest/updateStatus?type=ALREADYAUDIT&id=' + brandID)
+        .then((res) => {
+//          console.log(res)
+          this.$router.go(0)
+        }).catch(() => {
+        console.log("重新申请操作失败");
+      })
+    },
+//    取消审核品牌函数
+    cancelBrand(brandID){
+      this.$axios.get('/brand/deletebrand?id=' + brandID)
+        .then((res) => {
+//          console.log(res)
+          this.$router.go(0)
+        }).catch(() => {
+        console.log("取消审核操作失败");
       })
     }
   }
@@ -240,6 +311,23 @@ export default {
   .newBrand_item .el-upload-list--picture{
     width:300px;
     margin-left:120px;
+  }
+  .setBrand_wrapper_item{
+    text-align: center;
+  }
+  .setBrand_wrapper_item .el-input-group__prepend{
+    width: 80px;
+  }
+  .setBrand_wrapper_item .input-with-select{
+    width: 500px;
+  }
+  .delAllBtn{
+    text-align: right;
+    margin: 10px 210px 0 0;
+  }
+  .pagination{
+    margin-top: 10px;
+    text-align: center;
   }
 </style>
 

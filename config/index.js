@@ -164,6 +164,41 @@ module.exports = {
         pathRewrite:{
           '^/brand/savebrand.ajax':'/brand/savebrand.ajax'
         }
+      },
+      '/brandrequest/selectByExample':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brandrequest/selectByExample':'/brandrequest/selectByExample'
+        }
+      },
+      '/brandrequest/updateStatus':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brandrequest/updateStatus':'/brandrequest/updateStatus'
+        }
+      },
+      '/brandrequest/selectByPrimaryKeyadmin.ajax':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brandrequest/selectByPrimaryKeyadmin.ajax':'/brandrequest/selectByPrimaryKeyadmin.ajax'
+        }
+      },
+      '/brand/deletebrand':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brand/deletebrand':'/brand/deletebrand'
+        }
+      },
+      '/brandrequest/deleteByExample':{
+        target:'http://192.168.1.2:8082/commerce-web',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/brandrequest/deleteByExample':'/brandrequest/deleteByExample'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

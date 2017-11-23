@@ -360,6 +360,7 @@
         workpro:'',
         workcity:'',
         workarea:'',
+
         //企业信息数据
         comInfo:[
           {"title":'企业名称:',"content":''},
@@ -506,137 +507,138 @@
       this.$axios.get('/entanduser/getEntAndUser.ajax?typei=all')
         .then((res) => {
           let myData = JSON.parse(res.data.data);
-          console.log(myData.afwindEnterprise.enterpriseName);
+          //console.log(myData.afwindEnterprise.enterpriseName);
+          console.log(myData);
+          //审理信息部分
+          this.aftercomInfo[0].content = myData.afwindEnterpriseAlter.enterpriseName;
+          this.afterconpanyName = myData.afwindEnterpriseAlter.enterpriseName;
+          this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
+          this.conpanyName = myData.afwindEnterprise.enterpriseName;
+          this.aftercomInfo[1].content = myData.afwindEnterpriseAlter.creditCode;
+          this.aftercreditCode = myData.afwindEnterpriseAlter.creditCode;
+          this.comInfo[1].content = myData.afwindEnterprise.creditCode;
+          this.creditCode = myData.afwindEnterprise.creditCode;
+          this.aftercomInfo[2].content = myData.afwindEnterpriseAlter.owner;
+          this.afterlegalPerson = myData.afwindEnterpriseAlter.owner;
+          this.comInfo[2].content = myData.afwindEnterprise.owner;
+          this.legalPerson = myData.afwindEnterprise.owner;
+          this.aftercomInfo[3].content = myData.afwindEnterpriseAlter.phone;
+          this.afterfixedLine = myData.afwindEnterpriseAlter.phone;
+          this.comInfo[3].content = myData.afwindEnterprise.phone;
+          this.fixedLine = myData.afwindEnterprise.phone;
+          this.aftercomInfo[4].content =myData.afwindEnterpriseAlter.fax;
+          this.afterfax = myData.afwindEnterpriseAlter.fax;
+          this.comInfo[4].content = myData.afwindEnterprise.fax;
+          this.fax = myData.afwindEnterprise.fax;
+          this.aftercomInfo[5].content = myData.afwindEnterpriseAlter.config.valuei;
+          this.afterindustry = myData.afwindEnterpriseAlter.config.valuei;
+          this.comInfo[5].content = myData.afwindEnterprise.config.valuei;
+          this.industry = myData.afwindEnterprise.config.valuei;
+          this.aftercomInfo[10].content = myData.afwindEnterpriseAlter.categorie.name;
+          this.aftersupplyScope = myData.afwindEnterpriseAlter.categorie.name;
+          this.comInfo[10].content = myData.afwindEnterprise.categorie.name;
+          this.supplyScope = myData.afwindEnterprise.categorie.name;
+          //个人信息的获取
+          this.afterperInfo[0].content = myData.realname;
+          this.afterlinkMan = myData.realname;
+          this.perInfo[0].content = myData.realname;
+          this.linkMan = myData.realname;
+          if (myData.sex === '1'){
+            this.afterperInfo[1].content ='男';
+            this.aftergender = '1';
+          }else if(myData.sex === '2'){
+            this.afterperInfo[1].content ='女';
+            this.aftergender = '2';
+          }
+          if (myData.sex === '1'){
+            this.perInfo[1].content = '男';
+            this.gender = '1';
+          }else if(myData.sex === '2'){
+            this.perInfo[1].content = '女';
+            this.gender = '2';
+          }
+          this.afterperInfo[2].content = myData.userPost;
+          this.afterduty = myData.userPost;
+          this.perInfo[2].content = myData.userPost;
+          this.duty = myData.userPost;
+          this.afterperInfo[3].content = myData.mobile;
+          this.afterpersonalTel = myData.mobile;
+          this.perInfo[3].content = myData.mobile;
+          this.personalTel = myData.mobile;
+          this.afterperInfo[4].content = myData.telphone;
+          this.aftertel = myData.telphone;
+          this.perInfo[4].content = myData.telphone;
+          this.tel = myData.telphone;
+          this.afterperInfo[5].content = myData.email;
+          this.afteremail = myData.email;
+          this.perInfo[5].content = myData.email;
+          this.email = myData.email;
+          this.afterperInfo[6].content = myData.qqCode;
+          this.afterqq = myData.qqCode;
+          this.perInfo[6].content = myData.qqCode;
+          this.qq = myData.qqCode;
+          //企业信息(地址)
+          for (let i = 0;i<myData.afwindEnterpriseAlter.addresseList.length;i++){
+            if (myData.afwindEnterpriseAlter.addresseList[i].typei === '1'){
+              this.aftercomInfo[6].content =
+                myData.afwindEnterpriseAlter.addresseList[1].afwindRegion.fatherRegion.fullName+
+                myData.afwindEnterpriseAlter.addresseList[i].address;
 
+              this.aftercomRegAddrDetail =
+                myData.afwindEnterpriseAlter.addresseList[i].address;
+            }else if(myData.afwindEnterpriseAlter.addresseList[i].typei === '2'){
+              this.aftercomInfo[7].content =
+                myData.afwindEnterpriseAlter.addresseList[1].afwindRegion.fatherRegion.fullName+
+                myData.afwindEnterpriseAlter.addresseList[i].address;
+              this.afterworkAddrDetail =  myData.afwindEnterpriseAlter.addresseList[i].address
 
-//            审理信息部分
-            this.aftercomInfo[0].content = myData.afwindEnterpriseAlter.enterpriseName;
-            this.afterconpanyName = myData.afwindEnterpriseAlter.enterpriseName;
-            this.aftercomInfo[1].content = myData.afwindEnterpriseAlter.creditCode;
-            this.aftercreditCode = myData.afwindEnterpriseAlter.creditCode;
-            this.aftercomInfo[2].content = myData.afwindEnterpriseAlter.owner;
-            this.afterlegalPerson = myData.afwindEnterpriseAlter.owner;
-            this.aftercomInfo[3].content = myData.afwindEnterpriseAlter.phone;
-            this.afterfixedLine = myData.afwindEnterpriseAlter.phone;
-            this.aftercomInfo[4].content = myData.afwindEnterpriseAlter.fax;
-            this.afterfax = myData.afwindEnterpriseAlter.fax;
-            this.aftercomInfo[5].content = myData.afwindEnterpriseAlter.config.valuei;
-            this.afterindustry = myData.afwindEnterpriseAlter.config.valuei;
-            for (let i = 0;i<myData.afwindEnterpriseAlter.addresseList.length;i++){
-              if (myData.afwindEnterpriseAlter.addresseList[i].typei === '1'){
-                this.aftercomInfo[6].content = myData.afwindEnterpriseAlter.addresseList[i].address;
-                this.aftercomRegAddrDetail = myData.afwindEnterpriseAlter.addresseList[i].address;
-              }else if(myData.afwindEnterpriseAlter.addresseList[i].typei === '2'){
-                this.aftercomInfo[7].content = myData.afwindEnterpriseAlter.addresseList[i].address;
-                this.afterworkAddrDetail = myData.afwindEnterpriseAlter.addresseList[i].address;
-              }
             }
-            for (let i =0;i<myData.afwindEnterpriseAlter.enterprisePicsList.length;i++){
-              if (myData.afwindEnterpriseAlter.enterprisePicsList[i].typei === '1'){
-                this.aftercomInfo[8].photo = myData.afwindEnterpriseAlter.enterprisePicsList[i].url;
-                this.afterlicense = myData.afwindEnterpriseAlter.enterprisePicsList[i].url;
-              }else if(myData.afwindEnterpriseAlter.enterprisePicsList[i].typei === '2'){
-                this.aftercomInfo[9].picture.push(myData.afwindEnterpriseAlter.enterprisePicsList[i].url);
-                this.afterothers.push(myData.afwindEnterpriseAlter.enterprisePicsList[i].url);
-              }
+          }
+          for (let i =0;i<myData.afwindEnterpriseAlter.enterprisePicsList.length;i++){
+            if (myData.afwindEnterpriseAlter.enterprisePicsList[i].typei === '1'){
+              this.aftercomInfo[8].photo = myData.afwindEnterpriseAlter.enterprisePicsList[i].url;
+              this.afterlicense = myData.afwindEnterpriseAlter.enterprisePicsList[i].url;
+            }else if(myData.afwindEnterpriseAlter.enterprisePicsList[i].typei === '2'){
+              this.aftercomInfo[9].picture.push(myData.afwindEnterpriseAlter.enterprisePicsList[i].url);
+              this.afterothers.push(myData.afwindEnterpriseAlter.enterprisePicsList[i].url);
             }
-            this.aftercomInfo[10].content = myData.afwindEnterpriseAlter.categorie.name;
-            this.aftersupplyScope = myData.afwindEnterpriseAlter.categorie.name;
-            this.aftercomInfo[11].content = myData.afwindEnterpriseAlter.accountList[0].account;
-            this.afterbankAccount =  myData.afwindEnterpriseAlter.accountList[0].account;
-            this.aftercomInfo[12].content = myData.afwindEnterpriseAlter.accountList[0].bankName;
-            this.afterbankName = myData.afwindEnterpriseAlter.accountList[0].bankName;
-            this.aftercomInfo[13].content = myData.afwindEnterpriseAlter.accountList[0].bankRemark;
-            this.afterbankInfo = myData.afwindEnterpriseAlter.accountList[0].bankRemark;
-//          个人信息的获取
-            this.afterperInfo[0].content = myData.realname;
-            this.afterlinkMan = myData.realname;
-            if (myData.sex === '1'){
-              this.afterperInfo[1].content = '男';
-              this.aftergender = '1';
-            }else if(myData.sex === '2'){
-              this.afterperInfo[1].content = '女';
-              this.aftergender = '2';
+          }
+          //审理信息(开户行)
+          this.aftercomInfo[12].content = myData.afwindEnterpriseAlter.altAccountList[0].bankName;
+          this.afterbankName = myData.afwindEnterpriseAlter.altAccountList[0].bankName;
+          this.aftercomInfo[11].content = myData.afwindEnterpriseAlter.altAccountList[0].account;
+          this.afterbankAccount =  myData.afwindEnterpriseAlter.altAccountList[0].account;
+          this.aftercomInfo[13].content = myData.afwindEnterpriseAlter.altAccountList[0].bankRemark;
+          this.afterbankInfo = myData.afwindEnterpriseAlter.altAccountList[0].bankRemark;
+          //基本信息部分(公司地址)
+          //基本信息的获取(开户行)
+          this.comInfo[12].content = myData.afwindEnterprise.accountList[0].bankName;
+          this.bankName = myData.afwindEnterprise.accountList[0].bankName;
+          this.comInfo[11].content = myData.afwindEnterprise.accountList[0].account;
+          this.bankAccount =  myData.afwindEnterprise.accountList[0].account;
+          this.comInfo[13].content = myData.afwindEnterprise.accountList[0].bankRemark;
+          this.bankInfo = myData.afwindEnterprise.accountList[0].bankRemark;
+          for (let i = 0;i<myData.afwindEnterprise.addresseList.length;i++){
+            if (myData.afwindEnterprise.addresseList[i].typei === '1'){
+              this.comInfo[6].content =myData.afwindEnterpriseAlter.addresseList[1].afwindRegion.fatherRegion.fullName+
+                myData.afwindEnterprise.addresseList[i].address;
+              this.comRegAddrDetail = myData.afwindEnterprise.addresseList[i].address;
+            }else if(myData.afwindEnterprise.addresseList[i].typei === '2'){
+              this.comInfo[7].content =
+                myData.afwindEnterpriseAlter.addresseList[1].afwindRegion.fatherRegion.fullName+
+                myData.afwindEnterprise.addresseList[i].address;
+              this.workAddrDetail = myData.afwindEnterprise.addresseList[i].address;
             }
-            this.afterperInfo[2].content = myData.userPost;
-            this.afterduty = myData.userPost;
-            this.afterperInfo[3].content = myData.mobile;
-            this.afterpersonalTel = myData.mobile;
-            this.afterperInfo[4].content = myData.telphone;
-            this.aftertel = myData.telphone;
-            this.afterperInfo[5].content = myData.email;
-            this.afteremail = myData.email;
-            this.afterperInfo[6].content = myData.qqCode;
-            this.afterqq = myData.qqCode;
-
-
-
-
-
-//          基本信息部分
-            this.comInfo[0].content = myData.afwindEnterprise.enterpriseName;
-            this.conpanyName = myData.afwindEnterprise.enterpriseName;
-            this.comInfo[1].content = myData.afwindEnterprise.creditCode;
-            this.creditCode = myData.afwindEnterprise.creditCode;
-            this.comInfo[2].content = myData.afwindEnterprise.owner;
-            this.legalPerson = myData.afwindEnterprise.owner;
-            this.comInfo[3].content = myData.afwindEnterprise.phone;
-            this.fixedLine = myData.afwindEnterprise.phone;
-            this.comInfo[4].content = myData.afwindEnterprise.fax;
-            this.fax = myData.afwindEnterprise.fax;
-            this.comInfo[5].content = myData.afwindEnterprise.config.valuei;
-            this.industry = myData.afwindEnterprise.config.valuei;
-            for (let i = 0;i<myData.afwindEnterprise.addresseList.length;i++){
-              if (myData.afwindEnterprise.addresseList[i].typei === '1'){
-                this.comInfo[6].content = myData.afwindEnterprise.addresseList[i].address;
-                this.comRegAddrDetail = myData.afwindEnterprise.addresseList[i].address;
-              }else if(myData.afwindEnterprise.addresseList[i].typei === '2'){
-                this.comInfo[7].content = myData.afwindEnterprise.addresseList[i].address;
-                this.workAddrDetail = myData.afwindEnterprise.addresseList[i].address;
-              }
+          }
+          for (let i =0;i<myData.afwindEnterprise.enterprisePicsList.length;i++){
+            if (myData.afwindEnterprise.enterprisePicsList[i].typei === '1'){
+              this.comInfo[8].photo = myData.afwindEnterprise.enterprisePicsList[i].url;
+              this.license = myData.afwindEnterprise.enterprisePicsList[i].url;
+            }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
+              this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
+              this.others.push(myData.afwindEnterprise.enterprisePicsList[i].url);
             }
-            for (let i =0;i<myData.afwindEnterprise.enterprisePicsList.length;i++){
-              if (myData.afwindEnterprise.enterprisePicsList[i].typei === '1'){
-                this.comInfo[8].photo = myData.afwindEnterprise.enterprisePicsList[i].url;
-                this.license = myData.afwindEnterprise.enterprisePicsList[i].url;
-              }else if(myData.afwindEnterprise.enterprisePicsList[i].typei === '2'){
-                this.comInfo[9].picture.push(myData.afwindEnterprise.enterprisePicsList[i].url);
-                this.others.push(myData.afwindEnterprise.enterprisePicsList[i].url);
-              }
-            }
-            this.comInfo[10].content = myData.afwindEnterprise.categorie.name;
-            this.supplyScope = myData.afwindEnterprise.categorie.name;
-            this.comInfo[11].content = myData.afwindEnterprise.accountList[0].account;
-            this.bankAccount =  myData.afwindEnterprise.accountList[0].account;
-            this.comInfo[12].content = myData.afwindEnterprise.accountList[0].bankName;
-            this.bankName = myData.afwindEnterprise.accountList[0].bankName;
-            this.comInfo[13].content = myData.afwindEnterprise.accountList[0].bankRemark;
-            this.bankInfo = myData.afwindEnterprise.accountList[0].bankRemark;
-//          个人信息的获取
-            this.perInfo[0].content = myData.realname;
-            this.linkMan = myData.realname;
-            if (myData.sex === '1'){
-              this.perInfo[1].content = '男';
-              this.gender = '1';
-            }else if(myData.sex === '2'){
-              this.perInfo[1].content = '女';
-              this.gender = '2';
-            }
-            this.perInfo[2].content = myData.userPost;
-            this.duty = myData.userPost;
-            this.perInfo[3].content = myData.mobile;
-            this.personalTel = myData.mobile;
-            this.perInfo[4].content = myData.telphone;
-            this.tel = myData.telphone;
-            this.perInfo[5].content = myData.email;
-            this.email = myData.email;
-            this.perInfo[6].content = myData.qqCode;
-            this.qq = myData.qqCode;
-
-
-
-
-
+          }
         }).catch(() => {
         console.log("数据请求失败");
       });
@@ -739,7 +741,7 @@
             console.log(res)
 //            this.$router.go(0);
           }).catch(() => {
-            console.log("更改企业信息失败")
+          console.log("更改企业信息失败")
         })
       },
       //取消修改企业信息
@@ -762,7 +764,7 @@
           .then((res) => {
             console.log(res)
           }).catch(() => {
-            console.log("修改个人信息失败")
+          console.log("修改个人信息失败")
         })
       },
 //      取消修改个人信息
@@ -777,44 +779,6 @@
           })
           .catch(_ => {});
       },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       //      获取公司注册地址
       aftergetRegAddr(regarea){
         this.regAreaValue = regarea;
@@ -909,8 +873,9 @@
       aftercancelEditperinfo(){
         this.editPerInfoBtn = false;
         this.$router.go(0);
-      },
+      }
     }
+
   }
 </script>
 <style>
@@ -982,5 +947,17 @@
   }
   .account_detail .el-dialog__footer{
     text-align: center;
+  }
+  #divTips{
+    filter:alpha(opacity=30); /*IE滤镜，透明度50%*/
+    -moz-opacity:0.3; /*Firefox私有，透明度50%*/
+    opacity:0.3;/*其他，透明度50%*/
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    display:none;
+    color:red;
+    z-index:10;
+    padding:10px;
   }
 </style>
