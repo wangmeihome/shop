@@ -115,30 +115,19 @@ export default {
   methods:{
 //    全删除
     deleteAll(){
-      this.$axios.get('/brandrequest/deleteByExample?ids=' + this.brandID)
-        .then((res) => {
-          this.$router.go(0);
-        }).catch(() => {
-        console.log("取消审核操作失败");
-      })
+      this.deleteMore(this.brandID);
     },
 //    nav导航切换
     handleClick(tab, event) {
 //      console.log(tab.name);
 //      console.log(event);
     },
-//    品牌列表CheckBox选取
+//    品牌列表CheckBox全选   传索引值
     handleSelectionChange(val) {
-//      console.log(this.multipleSelection);
+//      console.log(val)
       val.forEach((currentValue) => {
-//        console.log(currentValue.status)
-        if (currentValue.status !== 1){
-//          console.log(currentValue.status)
-//          this.multipleSelection = val;
-//          this.brandID.push(currentValue.id);
-        }
+        this.brandID.push(currentValue.id)
       })
-
     },
 //    查看操作
     examine(index, row){
@@ -248,6 +237,15 @@ export default {
         .then((res) => {
 //          console.log(res)
           this.$router.go(0)
+        }).catch(() => {
+        console.log("取消审核操作失败");
+      })
+    },
+//    多选删除
+    deleteMore(brandID){
+      this.$axios.get('/brandrequest/deleteByExample?ids=' + brandID)
+        .then((res) => {
+          this.$router.go(0);
         }).catch(() => {
         console.log("取消审核操作失败");
       })
